@@ -88,6 +88,20 @@ plain generated JS the actual site loads. It's not a build step you need before 
 deploy (the generated files are committed, plain, and load instantly like everything
 else) — just something to re-run after you change what's in an `assets/` folder.
 
+**You don't have to run it yourself.** `.github/workflows/scan-clearview-deck.yml` runs
+the scan automatically on every push that touches an `assets/` folder, a `meta.json`, or
+a `videos.json` under `clearview-deck/versions/` — including files added straight through
+GitHub's web "Upload files" button, which is a real push/commit like any other and fires
+this the same way. If the scan produces a different result, the workflow commits the
+regenerated `data.js`/`versions-index.js` back to the same branch itself, so `./scripts/scan.sh`
+is only needed for previewing the result locally before you push, not as a required manual
+step. Two things worth knowing:
+- It commits straight to the branch it ran on — if that branch has protection rules
+  blocking direct pushes (required reviews, etc.), the workflow's push step will fail;
+  either exempt `github-actions[bot]`, or run the scan locally and commit yourself.
+- It watches inputs only (`assets/**`, `meta.json`, `videos.json`, `scripts/**`) and never
+  the generated outputs, specifically so its own commit can't retrigger itself.
+
 ## Adding a new design version
 
 1. Copy `versions/_template/` to `versions/your-id/` (e.g. `versions/v6/`).
