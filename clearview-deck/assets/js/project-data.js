@@ -31,7 +31,7 @@ window.PROJECT = {
   // 2) heroVideoIds: an array of standalone video IDs, cycled in order then looped.
   // 3) heroVideoId: a single video ID, looped on itself.
   // Leave all three empty/blank to fall back to heroImage as a static hero background.
-  heroPlaylistId: "",
+  heroPlaylistId: "PLFgzgcOzYDN0",
   heroVideoIds: [],
   heroVideoId: "",
   heroImage: "./assets/images/v5-2b-wide.jpg",
