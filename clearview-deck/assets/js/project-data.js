@@ -40,7 +40,7 @@ window.PROJECT = {
   heroVideoIds: [],
   heroVideoId: "",
   // Homepage-only, so it can stay relative to index.html directly.
-  heroImage: "./versions/v5-2b/assets/wide.jpg",
+  heroImage: "./versions/v5-2b/assets/poolside-terrace.jpg",
 
   // Local download by default (works immediately, no setup). Once the PDF is uploaded
   // to the Google Drive folder below, swap this for the Drive "download" link, e.g.

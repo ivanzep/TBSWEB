@@ -19,42 +19,89 @@ clearview-deck/
       main.js                    Homepage renderer
       version-page.js            Renderer for every versions/<id>/index.html subpage
     downloads/                   Downloadable concept-deck PDF
+  scripts/
+    generate-version-data.js     ← THE SCAN TOOL — run this after touching any assets/ folder
+    scan.sh                      Thin wrapper: `./scripts/scan.sh`
+    lib/read-image-title.js      Dependency-free JPEG Title-metadata reader it uses
   versions/
-    versions-index.js            ← registry: which version folders exist and in what order
+    versions-index.js            AUTO-GENERATED — do not hand-edit
     _template/                   Starter folder — copy this to add a new version
-      data.js                    Template: id, label, note, thumb, images[], videos[]
+      meta.json                  Hand-authored: { "label": "...", "note": "..." }
       index.html                 Generic subpage shell (identical for every version, no per-version edits)
       assets/                    Empty — drop that version's images/videos here
     v5/                          One real folder per concept direction
-      data.js
+      meta.json                  Hand-authored label/note
+      data.js                    AUTO-GENERATED — do not hand-edit
       index.html                 (copy of _template/index.html)
-      assets/                    6 renderings (aerial/wide/detail-a/detail-b/side-a/side-b)
+      assets/                    Renderings — whatever's in here becomes the gallery
     v5-2/, v5-2b/, v5-3/, v5-4/, v5-5/, v5-6/    Same pattern
 ```
 
-Each design version now lives entirely in its own folder — its content (`data.js`), its
-own subpage (`index.html`), and its own assets, all together. The homepage grid links
-each card straight to that version's subpage, which shows a full image gallery (with a
-lightbox) and, if provided, a video gallery — plus prev/next navigation between versions.
+Each design version lives entirely in its own folder — its content, its own subpage
+(`index.html`), and its own assets, all together. The homepage grid links each card
+straight to that version's subpage, which shows a full image gallery (with a lightbox)
+and, if provided, a video gallery — plus prev/next navigation between versions.
+
+## The scan tool
+
+`versions/<id>/data.js` and `versions/versions-index.js` are **generated files** — never
+edit them by hand, edits get overwritten. Instead, run the scan tool whenever you add,
+remove, or rename a file in any `versions/<id>/assets/` folder, or add/remove a whole
+version folder:
+
+```
+./scripts/scan.sh
+```
+
+(equivalently `node scripts/generate-version-data.js`). It walks `versions/`, and for
+every subfolder (except `_template`) it:
+
+- Rebuilds `versions-index.js` from whatever version folders exist — natural-sorted by
+  folder name, which is the display order everywhere. Add a folder, it's on the homepage
+  after the next scan; delete a folder, it drops off.
+- Rebuilds that version's `images[]` from whatever image files (`.jpg/.jpeg/.png/.webp/.gif`)
+  are in its `assets/` folder — any number, in natural-sorted order. Caption comes from
+  the image's embedded **Title metadata** if it has any (checks XMP `dc:title`, IPTC
+  Object Name, then EXIF XPTitle/ImageDescription — i.e. whatever Photoshop, Bridge,
+  Lightroom or `exiftool` write when you set a file's "Title"), otherwise a humanized
+  version of the filename (`pool-terrace.jpg` → "Pool Terrace"). None of the current
+  renders carry title metadata, so today every caption is filename-derived — embed a
+  Title on a file whenever you want a caption that doesn't have to match the filename.
+- Picks the thumbnail: a file named `thumb.*`/`cover.*` if present, else the first image
+  in sorted order (name files starting with e.g. `01-` if you want a specific one first).
+- Rebuilds `videos[]` from any video files (`.mp4/.webm/.mov/.m4v`) in the same `assets/`
+  folder (poster = a same-basename image if one exists, else the version's thumbnail).
+  For videos that aren't local files (YouTube), add them in an optional
+  `versions/<id>/videos.json`: `[{ "type": "youtube", "youtubeId": "...", "caption": "..." }]`
+  — the scan merges these in alongside the discovered local files.
+
+The one thing that has no natural source in a folder of images is narrative copy, so
+`versions/<id>/meta.json` (`{ "label": "...", "note": "..." }`) stays hand-authored — it's
+the only file you ever type into by hand for an existing version.
+
+**Why a scan step exists at all**, rather than the browser just reading the folder live:
+a static site with no server and no build step has no way to list a folder's contents or
+read a file's metadata at page-load time — `fetch()` of local files is CORS-blocked when
+the site is opened via `file://`, and there's no directory-listing API in the browser at
+all. Node can do both, so the scan step is what turns "drop files in a folder" into the
+plain generated JS the actual site loads. It's not a build step you need before every
+deploy (the generated files are committed, plain, and load instantly like everything
+else) — just something to re-run after you change what's in an `assets/` folder.
 
 ## Adding a new design version
 
 1. Copy `versions/_template/` to `versions/your-id/` (e.g. `versions/v6/`).
-2. Edit `versions/your-id/data.js` — set `id`, `label`, `note`, `thumb`, and the `images[]`
-   list (each `{ src, caption }`, paths relative to that folder — just `assets/whatever.jpg`).
-   Add `videos[]` too if you have any (YouTube: `{ type: "youtube", youtubeId, caption }`;
-   local file: `{ type: "file", src, poster, caption }`) — omit or leave empty otherwise.
-3. Drop the image/video files into `versions/your-id/assets/`.
-4. Add `"your-id"` to the array in `versions/versions-index.js`.
+2. Edit `versions/your-id/meta.json` — set `label` and `note`.
+3. Drop image/video files into `versions/your-id/assets/` — any names, any quantity.
+4. Run `./scripts/scan.sh`.
 
-`versions/your-id/index.html` needs **no edits** — it's a pure copy of the template; the
-page figures out which version it's showing from its own folder name at runtime. Step 4
-is the only "central" touch — a static site with no build step and no server-side
-directory listing needs the homepage to be told what versions exist somehow, and this is
-the smallest way to do that (one line, versus touching a big shared data file).
+That's it — no `data.js` to write, no line to add anywhere else; the scan discovers the
+new folder and generates everything. `versions/your-id/index.html` needs **no edits**
+either — it's a pure copy of the template; the page figures out which version it's
+showing from its own folder name at runtime.
 
-Removing a version: delete its folder and its line in `versions-index.js`.
-Reordering: reorder the lines in `versions-index.js` — that's the display order everywhere.
+Removing a version: delete its folder, then run the scan tool.
+Reordering: rename folders to change natural-sort order (e.g. `v5-2` before `v5-3`), then scan.
 
 ## Reusing this template for a new project
 
@@ -87,11 +134,13 @@ tool, the lightboxes and the download/contact sections — renders itself from t
   three to fall back to the static `heroImage`, at any time in `project-data.js`.
 - **Images**: hosted locally, one folder per version under `versions/<id>/assets/`
   (extracted from the concept PDF at print quality) so the site works immediately with
-  no external dependency. A Google Drive folder was created for the full-resolution
+  no external dependency, and discovered by the scan tool rather than listed by hand —
+  see "The scan tool" above. A Google Drive folder was created for the full-resolution
   archive/handoff — see `driveFolderUrl` in `project-data.js`.
 - **Videos**: no per-version walkthrough videos were supplied yet, so every version's
-  `videos: []` is empty and each subpage's Video Gallery section stays hidden. Fill in
-  a version's `data.js` `videos[]` array to switch it on for that version.
+  `assets/` folder has no video files and each subpage's Video Gallery section stays
+  hidden. Drop a video file into a version's `assets/` folder (or add a YouTube entry to
+  its `videos.json`) and re-run the scan tool to switch it on for that version.
 - **Download PDF**: `assets/downloads/Clearview-Deck-Concept-Studies.pdf` is a
   web-sized rebuild of the concept deck (~1.3 MB) so the download button works out of
   the box. Swap in the original full-resolution PDF, or a Drive link, at any time via
