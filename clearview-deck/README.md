@@ -80,6 +80,12 @@ every subfolder (except `_template`) it:
   params) or an already-bare video ID; either way the scan resolves it to a clean ID
   before writing `data.js`, so the browser never parses a URL at runtime.
 
+  **Don't want to hand-write that JSON?** Open `tools/add-videos.html` directly in a
+  browser (no server needed). Pick the version, paste links, and it builds the file for
+  you — with a live thumbnail preview per link, and either a one-click save straight into
+  the version's folder (Chrome/Edge, via a native folder picker) or a copy/download for
+  pasting into GitHub's web UI. It's a standalone page, not part of the published site.
+
 The one thing that has no natural source in a folder of images is narrative copy, so
 `versions/<id>/meta.json` (`{ "label": "...", "note": "..." }`) stays hand-authored — it's
 the only file you ever type into by hand for an existing version.
