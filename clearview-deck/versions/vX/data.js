@@ -15,7 +15,7 @@ window.VERSIONS["vX"] = {
   // Title-header hero video — checked in this order, first non-empty wins,
   // falls back to the thumb image (above) as a static background if all
   // three are empty. See assets/js/common.js buildYouTubeHeroSrc().
-  heroPlaylistId: "",
+  heroPlaylistId: "PLFgzgcOzYDN0",
   heroVideoIds: [],
   heroVideoId: "",
   images: [
