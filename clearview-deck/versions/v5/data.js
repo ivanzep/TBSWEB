@@ -9,16 +9,16 @@ window.VERSIONS["v5"] = {
   id: "v5",
   label: "Version 5",
   note: "Staggered pergola runs bridge the main house to a sculptural concrete fireplace tower, framing the pool in dappled light.",
-  thumb: "assets/aerial-overview.jpg",
+  thumb: "assets/CLEARVIEW DECK-20260430-V5-01.jpg",
   images: [
-    { src: "assets/aerial-overview.jpg", caption: "Aerial Overview" },
-    { src: "assets/courtyard-view.jpg", caption: "Courtyard View" },
-    { src: "assets/dining-terrace.jpg", caption: "Dining Terrace" },
-    { src: "assets/evening-terrace.jpg", caption: "Evening Terrace" },
-    { src: "assets/fireplace-detail.jpg", caption: "Fireplace Detail" },
-    { src: "assets/fireplace-passage.jpg", caption: "Fireplace Passage" },
-    { src: "assets/interior-transition.jpg", caption: "Interior Transition" },
-    { src: "assets/poolside-terrace.jpg", caption: "Poolside Terrace" }
+    { src: "assets/CLEARVIEW DECK-20260430-V5-01.jpg", caption: "CLEARVIEW DECK 20260430 V5 01" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-02.jpg", caption: "CLEARVIEW DECK 20260430 V5 02" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-03.jpg", caption: "CLEARVIEW DECK 20260430 V5 03" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-04.jpg", caption: "CLEARVIEW DECK 20260430 V5 04" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-05.jpg", caption: "CLEARVIEW DECK 20260430 V5 05" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-05b.jpg", caption: "CLEARVIEW DECK 20260430 V5 05b" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-06.jpg", caption: "CLEARVIEW DECK 20260430 V5 06" },
+    { src: "assets/CLEARVIEW DECK-20260430-V5-07.jpg", caption: "CLEARVIEW DECK 20260430 V5 07" }
   ],
   videos: [
 
