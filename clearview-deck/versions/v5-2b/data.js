@@ -14,6 +14,7 @@ window.VERSIONS["v5-2b"] = {
     { src: "assets/aerial-overview.jpg", caption: "Aerial Overview" },
     { src: "assets/courtyard-view.jpg", caption: "Courtyard View" },
     { src: "assets/dining-terrace.jpg", caption: "Dining Terrace" },
+    { src: "assets/evening-terrace.jpg", caption: "Evening Terrace" },
     { src: "assets/fireplace-detail.jpg", caption: "Fireplace Detail" },
     { src: "assets/interior-transition.jpg", caption: "Interior Transition" },
     { src: "assets/poolside-terrace.jpg", caption: "Poolside Terrace" }
