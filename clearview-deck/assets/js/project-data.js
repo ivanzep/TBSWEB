@@ -32,9 +32,12 @@ window.PROJECT = {
     "roof plane, shade coverage and outdoor rooms can be organized around the pool.",
 
   // Hero reel — checked in this order, first match wins. All three loop forever.
-  // 1) heroPlaylistId: an actual YouTube playlist ID (from a "...list=PL..." URL).
-  // 2) heroVideoIds: an array of standalone video IDs, cycled in order then looped.
-  // 3) heroVideoId: a single video ID, looped on itself.
+  // Each accepts either a full YouTube link (any youtube.com/youtu.be URL —
+  // watch, playlist, shorts, whatever's in the address bar) or a bare ID;
+  // paste straight from the browser, no need to extract IDs by hand.
+  // 1) heroPlaylistId: an actual YouTube playlist link or ID.
+  // 2) heroVideoIds: an array of standalone video links/IDs, cycled then looped.
+  // 3) heroVideoId: a single video link/ID, looped on itself.
   // Leave all three empty/blank to fall back to heroImage as a static hero background.
   heroPlaylistId: "PLFgzgcOzYDN0",
   heroVideoIds: [],

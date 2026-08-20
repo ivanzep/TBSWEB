@@ -17,7 +17,9 @@
  * Per version folder, only versions/<id>/meta.json is hand-authored
  * ({ label, note }) — there's no way to derive narrative copy from
  * filenames. Optionally add versions/<id>/videos.json for videos that
- * aren't local files (e.g. YouTube). Everything else — which images exist,
+ * aren't local files, e.g. YouTube:
+ *   [{ "type": "youtube", "url": "<any youtube.com/youtu.be link, or a bare video ID>", "caption": "..." }]
+ * Everything else — which images exist,
  * their order, their captions, the thumbnail, which folders exist at all —
  * is derived from the filesystem:
  *   - Caption: the image's embedded Title metadata (XMP dc:title > IPTC
@@ -36,6 +38,7 @@
 const fs = require("fs");
 const path = require("path");
 const { readImageTitle } = require("./lib/read-image-title.js");
+const { parseVideoId } = require("../assets/js/youtube-url.js");
 
 const VERSIONS_DIR = path.join(__dirname, "..", "versions");
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif)$/i;
@@ -118,6 +121,27 @@ function jsStringLiteral(s) {
   return JSON.stringify(s);
 }
 
+// videos.json entries can give a YouTube link in `url` (any watch/youtu.be/
+// embed/shorts/live link, or a bare ID) instead of a pre-extracted
+// `youtubeId` — resolve either to a clean ID here so the browser never has
+// to parse a URL at runtime. Non-YouTube entries (type: "file") pass through
+// unchanged.
+function resolveExtraVideos(versionId, rawVideos) {
+  return rawVideos.map((v, i) => {
+    if (v.type !== "youtube") return v;
+    const source = v.url || v.youtubeId;
+    const id = parseVideoId(source);
+    if (!id) {
+      console.warn(
+        "[warn] " + versionId + ": videos.json entry #" + (i + 1) +
+        " has an unrecognized YouTube url/youtubeId (" + JSON.stringify(source) + ") — skipped"
+      );
+      return null;
+    }
+    return { type: "youtube", youtubeId: id, caption: v.caption || "" };
+  }).filter(Boolean);
+}
+
 function renderDataJs(id, meta, thumb, images, videos) {
   const imagesJs = images.map((img) =>
     `    { src: ${jsStringLiteral(img.src)}, caption: ${jsStringLiteral(img.caption)} }`
@@ -191,7 +215,8 @@ function main() {
     const images = buildImages(assetsDir);
     const thumb = pickThumb(images, assetsDir);
     const localVideos = buildLocalVideos(assetsDir, images, thumb || "");
-    const extraVideos = readJsonIfExists(path.join(dir, "videos.json"), []);
+    const rawExtraVideos = readJsonIfExists(path.join(dir, "videos.json"), []);
+    const extraVideos = resolveExtraVideos(id, rawExtraVideos);
     const videos = localVideos.concat(extraVideos);
 
     const dataJs = renderDataJs(id, meta, thumb, images, videos);

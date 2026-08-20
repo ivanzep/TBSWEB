@@ -54,17 +54,24 @@
     var params = "autoplay=1&mute=1&loop=1&controls=0&showinfo=0&modestbranding=1" +
       "&rel=0&playsinline=1&iv_load_policy=3&disablekb=1";
 
+    // Every field below accepts either a full YouTube link (watch/youtu.be/
+    // embed/shorts/playlist, with or without extra tracking params) or an
+    // already-bare ID — YouTubeUrl resolves either the same way, so you can
+    // just paste what's in the browser address bar.
+
     // A real YouTube playlist loops natively via videoseries + loop=1.
-    if (P.heroPlaylistId) {
-      return "https://www.youtube-nocookie.com/embed/videoseries?list=" + P.heroPlaylistId + "&" + params;
+    var playlistId = window.YouTubeUrl.parsePlaylistId(P.heroPlaylistId);
+    if (playlistId) {
+      return "https://www.youtube-nocookie.com/embed/videoseries?list=" + playlistId + "&" + params;
     }
 
-    // Otherwise cycle through one or more standalone video IDs. The first ID is
+    // Otherwise cycle through one or more standalone videos. The first ID is
     // the embed path; the full ID list (including the first) goes in `playlist`,
     // which is what makes loop=1 wrap back to the start once the last one ends —
     // YouTube requires that even for a single video looping on itself.
-    var ids = (P.heroVideoIds && P.heroVideoIds.length) ? P.heroVideoIds :
+    var rawIds = (P.heroVideoIds && P.heroVideoIds.length) ? P.heroVideoIds :
       (P.heroVideoId ? [P.heroVideoId] : []);
+    var ids = rawIds.map(window.YouTubeUrl.parseVideoId).filter(Boolean);
     if (!ids.length) return null;
 
     return "https://www.youtube-nocookie.com/embed/" + ids[0] + "?" + params +

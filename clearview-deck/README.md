@@ -15,6 +15,7 @@ clearview-deck/
     js/
       project-data.js            Site-level data (studio, hero reel, PDF/Drive links) — see below
       common.js                  Shared header/nav/scroll/reveal/modal helpers, used by every page
+      youtube-url.js             Turns any YouTube link into a bare video/playlist ID
       version-loader.js          Loads versions-index.js + each version's data.js as <script> tags
       main.js                    Homepage renderer
       version-page.js            Renderer for every versions/<id>/index.html subpage
@@ -72,8 +73,12 @@ every subfolder (except `_template`) it:
 - Rebuilds `videos[]` from any video files (`.mp4/.webm/.mov/.m4v`) in the same `assets/`
   folder (poster = a same-basename image if one exists, else the version's thumbnail).
   For videos that aren't local files (YouTube), add them in an optional
-  `versions/<id>/videos.json`: `[{ "type": "youtube", "youtubeId": "...", "caption": "..." }]`
-  — the scan merges these in alongside the discovered local files.
+  `versions/<id>/videos.json`:
+  `[{ "type": "youtube", "url": "<paste any youtube.com/youtu.be link>", "caption": "..." }]`
+  — the scan merges these in alongside the discovered local files. `url` accepts a full
+  link in any form (watch, `youtu.be`, shorts, embed, with or without extra tracking
+  params) or an already-bare video ID; either way the scan resolves it to a clean ID
+  before writing `data.js`, so the browser never parses a URL at runtime.
 
 The one thing that has no natural source in a folder of images is narrative copy, so
 `versions/<id>/meta.json` (`{ "label": "...", "note": "..." }`) stays hand-authored — it's
@@ -125,11 +130,12 @@ Reordering: rename folders to change natural-sort order (e.g. `v5-2` before `v5-
 3. Edit `assets/js/project-data.js`:
    - `studio` — firm name/tagline/email (leave as-is if same firm).
    - `name`, `subtitle`, `client`, `location`, `scope`, `status`, `summary`.
-   - Hero reel — set **one** of, in priority order:
-     - `heroPlaylistId` — an actual YouTube playlist ID, loops the whole playlist.
-     - `heroVideoIds` — an array of standalone video IDs; cycles through them in
+   - Hero reel — set **one** of, in priority order (each accepts a full YouTube link
+     pasted straight from the address bar, or a bare ID — same as `videos.json` above):
+     - `heroPlaylistId` — a YouTube playlist link/ID, loops the whole playlist.
+     - `heroVideoIds` — an array of standalone video links/IDs; cycles through them in
        order, then loops back to the first.
-     - `heroVideoId` — a single video ID, loops on itself.
+     - `heroVideoId` — a single video link/ID, loops on itself.
      - Leave all three empty to fall back to `heroImage` as a static hero background.
    - `pdfDownloadUrl` — root-relative local path by default (e.g. `assets/downloads/foo.pdf`,
      no leading `./` — both the homepage and subpages prefix it correctly for their depth);
