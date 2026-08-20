@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clearview Deck — Concept Studies | The Brown Studio</title>
+<meta name="description" content="Design concept studies for the Clearview Deck project by The Brown Studio — seven pergola and pool terrace directions, renderings, and downloadable deck.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#home" class="logo">
+      <span class="logo-name" id="logoName">The Brown Studio</span>
+      <span class="logo-tag" id="logoTag">Design + Build</span>
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="#overview">Overview</a>
+      <a href="#versions">Design Versions</a>
+      <a href="#compare">Compare</a>
+      <a href="#download">Download</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-media" id="heroMedia"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow" id="heroEyebrow">The Brown Studio — Design + Build</p>
+    <h1 id="heroTitle">Clearview Deck</h1>
+    <p class="hero-sub" id="heroSubtitle">Concept Studies</p>
+    <a href="#versions" class="btn btn-outline">View Design Versions</a>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<section class="overview" id="overview">
+  <div class="container">
+    <div class="grid">
+      <div data-reveal>
+        <p class="eyebrow">Project Overview</p>
+        <p class="lede" id="overviewText"></p>
+      </div>
+      <div data-reveal>
+        <ul class="stat-list" id="statList"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="versions" id="versions">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Concept Directions</p>
+        <h2>Design Versions</h2>
+      </div>
+      <p>Browse each rendering set, then select any two or more to compare side by side.</p>
+    </div>
+    <div class="versions-grid" id="versionsGrid"></div>
+  </div>
+</section>
+
+<section id="compare"></section>
+
+<section class="download" id="download">
+  <div class="container">
+    <p class="eyebrow">Take It With You</p>
+    <h2 id="downloadTitle">Full Concept Deck</h2>
+    <p id="downloadText">Every version, side elevation and material call-out in a single downloadable PDF.</p>
+    <div class="download-actions">
+      <a class="btn btn-primary" id="downloadBtn" href="#" download>
+        Download PDF
+      </a>
+      <a class="btn btn-outline" id="driveBtn" href="#" target="_blank" rel="noopener" style="border-color:rgba(255,255,255,.7);color:#fff;">
+        Full-Res Renderings (Drive)
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <p class="eyebrow">Next Step</p>
+    <h2>Let's Land on a Direction</h2>
+    <p id="contactText">Questions on any version, or ready to combine elements from a few? Reach out and we'll set up a walkthrough.</p>
+    <a class="btn btn-dark-outline" id="contactBtn" href="#">Email The Studio</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName">The Brown Studio · Design + Build</span>
+    <span id="footerMeta">© <span id="footerYear"></span> — Clearview Deck Concept Studies</span>
+  </div>
+</footer>
+
+<!-- Floating compare bar -->
+<div class="compare-bar" id="compareBar">
+  <div class="thumbs" id="compareThumbs"></div>
+  <div class="count" id="compareCount">0 selected</div>
+  <div class="actions">
+    <button class="link-btn" id="compareClear">Clear</button>
+    <button class="btn btn-primary" id="compareOpen" style="padding:0.6rem 1.1rem;">Compare</button>
+  </div>
+</div>
+
+<!-- Compare modal -->
+<div class="modal-overlay compare-modal" id="compareModal">
+  <button class="modal-close" id="compareModalClose">Close ✕</button>
+  <div class="compare-modal-inner">
+    <h3>Comparing <span id="compareModalCount">0</span> Versions</h3>
+    <div class="compare-columns" id="compareColumns"></div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="modal-overlay" id="lightbox">
+  <button class="modal-close" id="lightboxClose">Close ✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-stage">
+      <img id="lightboxImg" src="" alt="">
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image">›</button>
+    </div>
+    <div class="lightbox-meta">
+      <div>
+        <div class="label" id="lightboxLabel"></div>
+        <div class="note" id="lightboxNote"></div>
+      </div>
+      <label class="compare-toggle" style="color:#fff;">
+        <input type="checkbox" id="lightboxCompareToggle">
+        <span class="box"></span>
+        Add to Compare
+      </label>
+    </div>
+  </div>
+</div>
+
+<script src="./assets/js/project-data.js"></script>
+<script src="./assets/js/main.js"></script>
+</body>
+</html>
