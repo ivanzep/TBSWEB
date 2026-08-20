@@ -37,11 +37,23 @@
     font-size: 1.7rem;
     margin: 0 0 0.3rem;
   }
-  .subtitle { color: var(--color-ink-soft); margin: 0 0 2.2rem; font-size: 0.95rem; }
+  .subtitle { color: var(--color-ink-soft); margin: 0 0 1.6rem; font-size: 0.95rem; }
   .eyebrow {
     font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--color-accent); margin: 0 0 0.4rem;
   }
+
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.8rem; border-bottom: 1px solid var(--color-line); }
+  .tab-btn {
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--color-ink-soft); font: inherit; font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; padding: 0.8rem 0.3rem;
+    margin-bottom: -1px; cursor: pointer;
+  }
+  .tab-btn.is-active { color: var(--color-ink); border-bottom-color: var(--color-accent); }
+  .tab-panel { display: none; }
+  .tab-panel.is-active { display: block; }
+
   section.card {
     background: var(--color-card);
     border: 1px solid var(--color-line);
@@ -77,6 +89,13 @@
   .preview img { width: 96px; height: 54px; object-fit: cover; border-radius: 2px; background: #ddd; }
   .preview .id { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-ink-soft); }
 
+  .mode-toggle { display: flex; gap: 1.6rem; margin-bottom: 1.2rem; }
+  .mode-toggle label {
+    display: flex; align-items: center; gap: 0.4rem; font-weight: 600;
+    font-size: 0.85rem; color: var(--color-ink); cursor: pointer;
+  }
+  .mode-toggle input { width: auto; margin: 0; }
+
   button {
     font: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
     text-transform: uppercase; cursor: pointer; border-radius: var(--radius);
@@ -88,20 +107,20 @@
   button.subtle { background: none; color: var(--color-ink-soft); border-color: var(--color-line); padding: 0.4rem 0.7rem; font-size: 0.72rem; }
   button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  ol#entryList { list-style: none; margin: 0; padding: 0; }
-  ol#entryList li {
+  ol.entry-list { list-style: none; margin: 0; padding: 0; }
+  ol.entry-list li {
     display: flex; align-items: center; gap: 0.8rem;
     padding: 0.7rem 0; border-bottom: 1px solid var(--color-line);
   }
-  ol#entryList li:last-child { border-bottom: none; }
-  ol#entryList img { width: 64px; height: 36px; object-fit: cover; border-radius: 2px; flex: none; background: #ddd; }
-  ol#entryList .meta { flex: 1; min-width: 0; }
-  ol#entryList .caption { font-weight: 600; font-size: 0.88rem; }
-  ol#entryList .idline { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-ink-soft); }
-  ol#entryList .actions { display: flex; gap: 0.4rem; flex: none; }
+  ol.entry-list li:last-child { border-bottom: none; }
+  ol.entry-list img { width: 64px; height: 36px; object-fit: cover; border-radius: 2px; flex: none; background: #ddd; }
+  ol.entry-list .meta { flex: 1; min-width: 0; }
+  ol.entry-list .caption { font-weight: 600; font-size: 0.88rem; }
+  ol.entry-list .idline { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-ink-soft); }
+  ol.entry-list .actions { display: flex; gap: 0.4rem; flex: none; }
   .empty-note { color: var(--color-ink-soft); font-size: 0.85rem; padding: 0.6rem 0; }
 
-  pre#output {
+  pre.output {
     font-family: var(--font-mono); font-size: 0.8rem; white-space: pre-wrap;
     word-break: break-word; background: var(--color-bg-alt); padding: 1rem;
     border-radius: var(--radius); max-height: 320px; overflow: auto; margin: 0 0 1rem;
@@ -120,92 +139,175 @@
   <p class="eyebrow">Clearview Deck — local tool</p>
   <h1>Add Video Links</h1>
   <p class="subtitle">
-    Builds a <code>videos.json</code> for one design version's video gallery. Paste any
-    YouTube link — watch, youtu.be, shorts, whatever's in the address bar — no need to
-    dig out the video ID yourself. Runs entirely in your browser; nothing is uploaded
-    anywhere by this page.
+    Paste any YouTube link — watch, youtu.be, shorts, whatever's in the address bar — no
+    need to dig out the video ID yourself. Runs entirely in your browser; nothing is
+    uploaded anywhere by this page.
   </p>
 
-  <section class="card">
-    <div class="eyebrow">1. Choose the version</div>
-    <div class="row">
-      <div class="field" style="flex: 2;">
-        <label for="versionSelect">Design version</label>
-        <select id="versionSelect"></select>
-      </div>
-      <div class="field" style="flex: 1;">
-        <label for="versionCustom">…or type an id</label>
-        <input type="text" id="versionCustom" placeholder="e.g. v5">
-      </div>
-    </div>
-    <p class="hint" id="versionListStatus"></p>
+  <div class="tabs">
+    <button type="button" class="tab-btn is-active" data-tab="version">Version Gallery</button>
+    <button type="button" class="tab-btn" data-tab="hero">Hero Reel (homepage)</button>
+  </div>
 
-    <details>
-      <summary>Already have a videos.json for this version? Paste it here to add to it.</summary>
-      <div class="field" style="margin-top: 0.8rem;">
-        <textarea id="existingJson" rows="4" placeholder='[{ "type": "youtube", "url": "...", "caption": "..." }]'></textarea>
-        <p class="status" id="existingStatus"></p>
-        <button type="button" class="secondary" id="loadExistingBtn">Load into list below</button>
-      </div>
-    </details>
-  </section>
+  <!-- ============ VERSION GALLERY TAB ============ -->
+  <div class="tab-panel is-active" id="panel-version">
+    <p class="subtitle" style="margin-top:-0.6rem;">
+      Builds <code>videos.json</code> for one design version's Video Gallery section.
+    </p>
 
-  <section class="card">
-    <div class="eyebrow">2. Add a video</div>
-    <div class="field">
-      <label for="videoUrl">YouTube link</label>
-      <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=…">
-      <div class="preview" id="preview">
-        <img id="previewImg" alt="">
-        <div>
-          <div class="id" id="previewId"></div>
+    <section class="card">
+      <div class="eyebrow">1. Choose the version</div>
+      <div class="row">
+        <div class="field" style="flex: 2;">
+          <label for="versionSelect">Design version</label>
+          <select id="versionSelect"></select>
+        </div>
+        <div class="field" style="flex: 1;">
+          <label for="versionCustom">…or type an id</label>
+          <input type="text" id="versionCustom" placeholder="e.g. v5">
         </div>
       </div>
-      <p class="status" id="urlStatus"></p>
-    </div>
-    <div class="field">
-      <label for="videoCaption">Caption</label>
-      <input type="text" id="videoCaption" placeholder="e.g. Walkthrough">
-    </div>
-    <button type="button" id="addBtn">Add to list</button>
-  </section>
+      <p class="hint" id="versionListStatus"></p>
 
-  <section class="card">
-    <div class="eyebrow">3. Videos for this version</div>
-    <ol id="entryList"></ol>
-    <p class="empty-note" id="emptyNote">No videos added yet.</p>
-  </section>
+      <details>
+        <summary>Already have a videos.json for this version? Paste it here to add to it.</summary>
+        <div class="field" style="margin-top: 0.8rem;">
+          <textarea id="existingJson" rows="4" placeholder='[{ "type": "youtube", "url": "...", "caption": "..." }]'></textarea>
+          <p class="status" id="existingStatus"></p>
+          <button type="button" class="secondary" id="loadExistingBtn">Load into list below</button>
+        </div>
+      </details>
+    </section>
 
-  <section class="card">
-    <div class="eyebrow">4. Save it</div>
-    <pre id="output">[]</pre>
-    <div class="output-actions">
-      <button type="button" id="copyBtn">Copy JSON</button>
-      <button type="button" id="downloadBtn" class="secondary">Download videos.json</button>
-      <button type="button" id="saveToRepoBtn" class="secondary" hidden>Save into repo folder…</button>
-      <span class="status" id="saveStatus"></span>
-    </div>
+    <section class="card">
+      <div class="eyebrow">2. Add a video</div>
+      <div class="field">
+        <label for="videoUrl">YouTube link</label>
+        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=…">
+        <div class="preview" id="preview">
+          <img id="previewImg" alt="">
+          <div><div class="id" id="previewId"></div></div>
+        </div>
+        <p class="status" id="urlStatus"></p>
+      </div>
+      <div class="field">
+        <label for="videoCaption">Caption</label>
+        <input type="text" id="videoCaption" placeholder="e.g. Walkthrough">
+      </div>
+      <button type="button" id="addBtn">Add to list</button>
+    </section>
 
-    <details open id="instructions">
-      <summary>What do I do with this?</summary>
-      <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
-      <ol class="steps">
-        <li>Click <strong>Save into repo folder…</strong> (Chrome/Edge) and pick this version's
-          <code>versions/&lt;id&gt;/</code> folder — it writes <code>videos.json</code> straight there.
-          Otherwise, click <strong>Download</strong> and move the file into
-          <code>versions/&lt;id&gt;/videos.json</code> yourself.</li>
-        <li>Run <code>./scripts/scan.sh</code> (or push — the CI workflow will regenerate it for you).</li>
-        <li>Commit and push.</li>
-      </ol>
-      <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
-      <ol class="steps">
-        <li>Click <strong>Copy JSON</strong>.</li>
-        <li>On GitHub, open <code>versions/&lt;id&gt;/</code>, click <strong>Add file → Create new file</strong>,
-          name it <code>videos.json</code>, paste the copied content, and commit.</li>
-        <li>The scan workflow picks it up automatically within about a minute — no local steps needed.</li>
-      </ol>
-    </details>
-  </section>
+    <section class="card">
+      <div class="eyebrow">3. Videos for this version</div>
+      <ol class="entry-list" id="entryList"></ol>
+      <p class="empty-note" id="emptyNote">No videos added yet.</p>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">4. Save it</div>
+      <pre class="output" id="output">[]</pre>
+      <div class="output-actions">
+        <button type="button" id="copyBtn">Copy JSON</button>
+        <button type="button" id="downloadBtn" class="secondary">Download videos.json</button>
+        <button type="button" id="saveToRepoBtn" class="secondary" hidden>Save into repo folder…</button>
+        <span class="status" id="saveStatus"></span>
+      </div>
+
+      <details open>
+        <summary>What do I do with this?</summary>
+        <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Save into repo folder…</strong> (Chrome/Edge) and pick this version's
+            <code>versions/&lt;id&gt;/</code> folder — it writes <code>videos.json</code> straight there.
+            Otherwise, click <strong>Download</strong> and move the file into
+            <code>versions/&lt;id&gt;/videos.json</code> yourself.</li>
+          <li>Run <code>./scripts/scan.sh</code> (or push — the CI workflow will regenerate it for you).</li>
+          <li>Commit and push.</li>
+        </ol>
+        <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Copy JSON</strong>.</li>
+          <li>On GitHub, open <code>versions/&lt;id&gt;/</code>, click <strong>Add file → Create new file</strong>,
+            name it <code>videos.json</code>, paste the copied content, and commit.</li>
+          <li>The scan workflow picks it up automatically within about a minute — no local steps needed.</li>
+        </ol>
+      </details>
+    </section>
+  </div>
+
+  <!-- ============ HERO REEL TAB ============ -->
+  <div class="tab-panel" id="panel-hero">
+    <p class="subtitle" style="margin-top:-0.6rem;">
+      Sets the looping video reel behind the homepage hero — lives in
+      <code>assets/js/project-data.js</code>, not a per-version file, so this builds just
+      the three lines that control it rather than a whole file.
+    </p>
+
+    <section class="card">
+      <div class="eyebrow">1. Pick a mode</div>
+      <div class="mode-toggle">
+        <label><input type="radio" name="heroMode" value="videos" checked> One or more videos</label>
+        <label><input type="radio" name="heroMode" value="playlist"> A YouTube playlist</label>
+      </div>
+
+      <div id="heroVideosMode">
+        <div class="field">
+          <label for="heroVideoUrl">YouTube link</label>
+          <input type="url" id="heroVideoUrl" placeholder="https://www.youtube.com/watch?v=…">
+          <div class="preview" id="heroPreview">
+            <img id="heroPreviewImg" alt="">
+            <div><div class="id" id="heroPreviewId"></div></div>
+          </div>
+          <p class="status" id="heroUrlStatus"></p>
+        </div>
+        <button type="button" id="heroAddBtn">Add to list</button>
+
+        <div style="margin-top:1.4rem;">
+          <div class="eyebrow" style="margin-top:0;">Videos (played in this order, then looped)</div>
+          <ol class="entry-list" id="heroEntryList"></ol>
+          <p class="empty-note" id="heroEmptyNote">No videos added yet.</p>
+        </div>
+      </div>
+
+      <div id="heroPlaylistMode" style="display:none;">
+        <div class="field">
+          <label for="heroPlaylistUrl">YouTube playlist link</label>
+          <input type="url" id="heroPlaylistUrl" placeholder="https://www.youtube.com/playlist?list=…">
+          <p class="status" id="heroPlaylistStatus"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">2. Save it</div>
+      <pre class="output" id="heroOutput"></pre>
+      <div class="output-actions">
+        <button type="button" id="heroCopyBtn">Copy snippet</button>
+        <button type="button" id="heroSaveToFileBtn" class="secondary" hidden>Save into project-data.js…</button>
+        <span class="status" id="heroSaveStatus"></span>
+      </div>
+
+      <details open>
+        <summary>What do I do with this?</summary>
+        <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Save into project-data.js…</strong> (Chrome/Edge) and pick that exact file —
+            it updates just these three lines in place and leaves everything else in the file untouched.
+            Otherwise, click <strong>Copy snippet</strong> and paste it over the matching three lines
+            in <code>assets/js/project-data.js</code> yourself.</li>
+          <li>Commit and push. (No scan step needed — this doesn't touch <code>versions/</code>.)</li>
+        </ol>
+        <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Copy snippet</strong>.</li>
+          <li>On GitHub, open <code>assets/js/project-data.js</code>, click the pencil (Edit) icon,
+            find the three lines starting with <code>heroPlaylistId:</code>, <code>heroVideoIds:</code>
+            and <code>heroVideoId:</code>, and replace them with the copied snippet.</li>
+          <li>Commit directly (or via a PR, whichever this repo uses).</li>
+        </ol>
+      </details>
+    </section>
+  </div>
 </div>
 
 <script src="../assets/js/youtube-url.js"></script>
@@ -213,7 +315,114 @@
 (function () {
   "use strict";
 
-  var entries = []; // { youtubeId, caption }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /* ---- reusable add/reorder/remove list of { youtubeId, caption? } ---- */
+
+  function createEntryList(opts) {
+    var entries = [];
+    var listEl = opts.listEl;
+    var emptyEl = opts.emptyEl;
+    var withCaption = !!opts.withCaption;
+    var onChange = opts.onChange || function () {};
+
+    function render() {
+      listEl.innerHTML = "";
+      emptyEl.style.display = entries.length ? "none" : "block";
+      entries.forEach(function (e, i) {
+        var li = document.createElement("li");
+        li.innerHTML =
+          '<img src="https://img.youtube.com/vi/' + e.youtubeId + '/mqdefault.jpg" alt="">' +
+          '<div class="meta">' +
+            (withCaption ? '<div class="caption">' + escapeHtml(e.caption || "(no caption)") + "</div>" : "") +
+            '<div class="idline">' + e.youtubeId + "</div>" +
+          "</div>" +
+          '<div class="actions">' +
+            (i > 0 ? '<button type="button" class="subtle" data-up="' + i + '">↑</button>' : "") +
+            (i < entries.length - 1 ? '<button type="button" class="subtle" data-down="' + i + '">↓</button>' : "") +
+            '<button type="button" class="subtle" data-remove="' + i + '">Remove</button>' +
+          "</div>";
+        listEl.appendChild(li);
+      });
+      onChange(entries);
+    }
+
+    listEl.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t.dataset.remove !== undefined) {
+        entries.splice(Number(t.dataset.remove), 1);
+      } else if (t.dataset.up !== undefined) {
+        var i = Number(t.dataset.up);
+        var tmp = entries[i - 1]; entries[i - 1] = entries[i]; entries[i] = tmp;
+      } else if (t.dataset.down !== undefined) {
+        var j = Number(t.dataset.down);
+        var tmp2 = entries[j + 1]; entries[j + 1] = entries[j]; entries[j] = tmp2;
+      } else {
+        return;
+      }
+      render();
+    });
+
+    return {
+      add: function (entry) { entries.push(entry); render(); },
+      loadMany: function (arr) { entries = entries.concat(arr); render(); },
+      get: function () { return entries; },
+      render: render
+    };
+  }
+
+  /* ---- shared URL-field validator/preview wiring ---- */
+
+  function wireUrlField(input, statusEl, previewEl, previewImgEl, previewIdEl) {
+    function validate() {
+      var raw = input.value.trim();
+      if (!raw) {
+        statusEl.textContent = "";
+        statusEl.className = "status";
+        if (previewEl) previewEl.classList.remove("is-visible");
+        return null;
+      }
+      var id = window.YouTubeUrl.parseVideoId(raw);
+      if (!id) {
+        statusEl.textContent = "Doesn't look like a YouTube video link.";
+        statusEl.className = "status err";
+        if (previewEl) previewEl.classList.remove("is-visible");
+        return null;
+      }
+      statusEl.textContent = "Looks good.";
+      statusEl.className = "status ok";
+      if (previewEl) {
+        previewImgEl.src = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+        previewIdEl.textContent = id;
+        previewEl.classList.add("is-visible");
+      }
+      return id;
+    }
+    input.addEventListener("input", validate);
+    return validate;
+  }
+
+  /* =====================================================================
+     TABS
+     ===================================================================== */
+
+  var tabBtns = document.querySelectorAll(".tab-btn");
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      tabBtns.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      document.querySelectorAll(".tab-panel").forEach(function (p) {
+        p.classList.toggle("is-active", p.id === "panel-" + btn.dataset.tab);
+      });
+    });
+  });
+
+  /* =====================================================================
+     VERSION GALLERY TAB
+     ===================================================================== */
 
   var versionSelect = document.getElementById("versionSelect");
   var versionCustom = document.getElementById("versionCustom");
@@ -225,8 +434,6 @@
   var previewImg = document.getElementById("previewImg");
   var previewId = document.getElementById("previewId");
   var addBtn = document.getElementById("addBtn");
-  var entryList = document.getElementById("entryList");
-  var emptyNote = document.getElementById("emptyNote");
   var output = document.getElementById("output");
   var copyBtn = document.getElementById("copyBtn");
   var downloadBtn = document.getElementById("downloadBtn");
@@ -236,11 +443,18 @@
   var existingStatus = document.getElementById("existingStatus");
   var loadExistingBtn = document.getElementById("loadExistingBtn");
 
-  /* ---- version list (loaded from the real registry, no hardcoding) ---- */
+  var versionList = createEntryList({
+    listEl: document.getElementById("entryList"),
+    emptyEl: document.getElementById("emptyNote"),
+    withCaption: true,
+    onChange: function (entries) { output.textContent = buildVersionJson(entries); }
+  });
 
-  var s = document.createElement("script");
-  s.src = "../versions/versions-index.js";
-  s.onload = function () {
+  var validateVersionUrl = wireUrlField(urlInput, urlStatus, preview, previewImg, previewId);
+
+  var s1 = document.createElement("script");
+  s1.src = "../versions/versions-index.js";
+  s1.onload = function () {
     var ids = window.VERSION_IDS || [];
     versionSelect.innerHTML = ids.map(function (id) {
       return '<option value="' + id + '">' + id + "</option>";
@@ -249,110 +463,28 @@
       ? "Loaded " + ids.length + " version(s) from versions-index.js."
       : "";
   };
-  s.onerror = function () {
+  s1.onerror = function () {
     versionListStatus.textContent =
       "Couldn't load versions-index.js (open this file through a local server, or just type an id on the right).";
   };
-  document.head.appendChild(s);
+  document.head.appendChild(s1);
 
   function currentVersionId() {
     return (versionCustom.value.trim()) || versionSelect.value || "";
   }
 
-  /* ---- URL validation / preview ---- */
-
-  function validateUrl() {
-    var raw = urlInput.value.trim();
-    if (!raw) {
-      urlStatus.textContent = "";
-      urlStatus.className = "status";
-      preview.classList.remove("is-visible");
-      return null;
-    }
-    var id = window.YouTubeUrl.parseVideoId(raw);
-    if (!id) {
-      urlStatus.textContent = "Doesn't look like a YouTube video link.";
-      urlStatus.className = "status err";
-      preview.classList.remove("is-visible");
-      return null;
-    }
-    urlStatus.textContent = "Looks good.";
-    urlStatus.className = "status ok";
-    previewImg.src = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
-    previewId.textContent = id;
-    preview.classList.add("is-visible");
-    return id;
-  }
-  urlInput.addEventListener("input", validateUrl);
-
-  /* ---- entry list ---- */
-
-  function render() {
-    entryList.innerHTML = "";
-    emptyNote.style.display = entries.length ? "none" : "block";
-    entries.forEach(function (e, i) {
-      var li = document.createElement("li");
-      li.innerHTML =
-        '<img src="https://img.youtube.com/vi/' + e.youtubeId + '/mqdefault.jpg" alt="">' +
-        '<div class="meta">' +
-          '<div class="caption">' + escapeHtml(e.caption || "(no caption)") + "</div>" +
-          '<div class="idline">' + e.youtubeId + "</div>" +
-        "</div>" +
-        '<div class="actions">' +
-          (i > 0 ? '<button type="button" class="subtle" data-up="' + i + '">↑</button>' : "") +
-          (i < entries.length - 1 ? '<button type="button" class="subtle" data-down="' + i + '">↓</button>' : "") +
-          '<button type="button" class="subtle" data-remove="' + i + '">Remove</button>' +
-        "</div>";
-      entryList.appendChild(li);
-    });
-    renderOutput();
-  }
-
-  entryList.addEventListener("click", function (e) {
-    var t = e.target;
-    if (t.dataset.remove !== undefined) {
-      entries.splice(Number(t.dataset.remove), 1);
-    } else if (t.dataset.up !== undefined) {
-      var i = Number(t.dataset.up);
-      var tmp = entries[i - 1]; entries[i - 1] = entries[i]; entries[i] = tmp;
-    } else if (t.dataset.down !== undefined) {
-      var j = Number(t.dataset.down);
-      var tmp2 = entries[j + 1]; entries[j + 1] = entries[j]; entries[j] = tmp2;
-    } else {
-      return;
-    }
-    render();
-  });
-
   addBtn.addEventListener("click", function () {
-    var id = validateUrl();
-    if (!id) {
-      urlInput.focus();
-      return;
-    }
-    entries.push({ youtubeId: id, caption: captionInput.value.trim() });
+    var id = validateVersionUrl();
+    if (!id) { urlInput.focus(); return; }
+    versionList.add({ youtubeId: id, caption: captionInput.value.trim() });
     urlInput.value = "";
     captionInput.value = "";
     urlStatus.textContent = "";
     preview.classList.remove("is-visible");
-    render();
     urlInput.focus();
   });
-
-  urlInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") { e.preventDefault(); addBtn.click(); }
-  });
-  captionInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") { e.preventDefault(); addBtn.click(); }
-  });
-
-  function escapeHtml(s) {
-    return s.replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
-
-  /* ---- load existing videos.json to prepopulate ---- */
+  urlInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addBtn.click(); } });
+  captionInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addBtn.click(); } });
 
   loadExistingBtn.addEventListener("click", function () {
     var raw = existingJson.value.trim();
@@ -370,35 +502,28 @@
       existingStatus.className = "status err";
       return;
     }
-    var loaded = 0, skipped = 0;
+    var toLoad = [], skipped = 0;
     parsed.forEach(function (v) {
       if (v.type !== "youtube") { skipped++; return; }
       var id = window.YouTubeUrl.parseVideoId(v.url || v.youtubeId);
       if (!id) { skipped++; return; }
-      entries.push({ youtubeId: id, caption: v.caption || "" });
-      loaded++;
+      toLoad.push({ youtubeId: id, caption: v.caption || "" });
     });
-    existingStatus.textContent = "Loaded " + loaded + " entr" + (loaded === 1 ? "y" : "ies") +
+    versionList.loadMany(toLoad);
+    existingStatus.textContent = "Loaded " + toLoad.length + " entr" + (toLoad.length === 1 ? "y" : "ies") +
       (skipped ? ", skipped " + skipped + " unrecognized" : "") + ".";
     existingStatus.className = "status ok";
-    render();
   });
 
-  /* ---- output ---- */
-
-  function buildJson() {
+  function buildVersionJson(entries) {
     var arr = entries.map(function (e) {
       return { type: "youtube", url: "https://www.youtube.com/watch?v=" + e.youtubeId, caption: e.caption || "" };
     });
     return JSON.stringify(arr, null, 2) + "\n";
   }
 
-  function renderOutput() {
-    output.textContent = buildJson();
-  }
-
   copyBtn.addEventListener("click", function () {
-    navigator.clipboard.writeText(buildJson()).then(function () {
+    navigator.clipboard.writeText(output.textContent).then(function () {
       saveStatus.textContent = "Copied.";
       saveStatus.className = "status ok";
       setTimeout(function () { saveStatus.textContent = ""; }, 2500);
@@ -409,7 +534,7 @@
   });
 
   downloadBtn.addEventListener("click", function () {
-    var blob = new Blob([buildJson()], { type: "application/json" });
+    var blob = new Blob([output.textContent], { type: "application/json" });
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
@@ -419,8 +544,6 @@
     a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   });
-
-  /* ---- direct save via File System Access API (Chrome/Edge only) ---- */
 
   if (window.showDirectoryPicker) {
     saveToRepoBtn.hidden = false;
@@ -435,7 +558,7 @@
         .then(function (dirHandle) {
           return dirHandle.getFileHandle("videos.json", { create: true }).then(function (fileHandle) {
             return fileHandle.createWritable().then(function (writable) {
-              return writable.write(buildJson()).then(function () { return writable.close(); });
+              return writable.write(output.textContent).then(function () { return writable.close(); });
             });
           });
         })
@@ -452,7 +575,161 @@
     });
   }
 
-  render();
+  versionList.render();
+
+  /* =====================================================================
+     HERO REEL TAB
+     ===================================================================== */
+
+  var heroModeRadios = document.querySelectorAll('input[name="heroMode"]');
+  var heroVideosMode = document.getElementById("heroVideosMode");
+  var heroPlaylistMode = document.getElementById("heroPlaylistMode");
+  var heroVideoUrl = document.getElementById("heroVideoUrl");
+  var heroUrlStatus = document.getElementById("heroUrlStatus");
+  var heroPreview = document.getElementById("heroPreview");
+  var heroPreviewImg = document.getElementById("heroPreviewImg");
+  var heroPreviewId = document.getElementById("heroPreviewId");
+  var heroAddBtn = document.getElementById("heroAddBtn");
+  var heroPlaylistUrl = document.getElementById("heroPlaylistUrl");
+  var heroPlaylistStatus = document.getElementById("heroPlaylistStatus");
+  var heroOutput = document.getElementById("heroOutput");
+  var heroCopyBtn = document.getElementById("heroCopyBtn");
+  var heroSaveToFileBtn = document.getElementById("heroSaveToFileBtn");
+  var heroSaveStatus = document.getElementById("heroSaveStatus");
+
+  function heroMode() {
+    var checked = document.querySelector('input[name="heroMode"]:checked');
+    return checked ? checked.value : "videos";
+  }
+
+  var heroList = createEntryList({
+    listEl: document.getElementById("heroEntryList"),
+    emptyEl: document.getElementById("heroEmptyNote"),
+    withCaption: false,
+    onChange: renderHeroOutput
+  });
+
+  var validateHeroVideoUrl = wireUrlField(heroVideoUrl, heroUrlStatus, heroPreview, heroPreviewImg, heroPreviewId);
+
+  heroAddBtn.addEventListener("click", function () {
+    var id = validateHeroVideoUrl();
+    if (!id) { heroVideoUrl.focus(); return; }
+    heroList.add({ youtubeId: id });
+    heroVideoUrl.value = "";
+    heroUrlStatus.textContent = "";
+    heroPreview.classList.remove("is-visible");
+    heroVideoUrl.focus();
+  });
+  heroVideoUrl.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); heroAddBtn.click(); } });
+
+  var heroPlaylistId = null;
+  heroPlaylistUrl.addEventListener("input", function () {
+    var raw = heroPlaylistUrl.value.trim();
+    if (!raw) {
+      heroPlaylistId = null;
+      heroPlaylistStatus.textContent = "";
+      heroPlaylistStatus.className = "status";
+      renderHeroOutput();
+      return;
+    }
+    var id = window.YouTubeUrl.parsePlaylistId(raw);
+    if (!id) {
+      heroPlaylistId = null;
+      heroPlaylistStatus.textContent = "Doesn't look like a YouTube playlist link.";
+      heroPlaylistStatus.className = "status err";
+    } else {
+      heroPlaylistId = id;
+      heroPlaylistStatus.textContent = "Looks good — resolved to list=" + id;
+      heroPlaylistStatus.className = "status ok";
+    }
+    renderHeroOutput();
+  });
+
+  heroModeRadios.forEach(function (r) {
+    r.addEventListener("change", function () {
+      heroVideosMode.style.display = heroMode() === "videos" ? "block" : "none";
+      heroPlaylistMode.style.display = heroMode() === "playlist" ? "block" : "none";
+      renderHeroOutput();
+    });
+  });
+
+  function buildHeroSnippet() {
+    var playlistVal = heroMode() === "playlist" ? (heroPlaylistId || "") : "";
+    var idsVal = heroMode() === "videos" ? heroList.get().map(function (e) { return e.youtubeId; }) : [];
+    var idsLiteral = "[" + idsVal.map(function (id) { return JSON.stringify(id); }).join(", ") + "]";
+    return (
+      "heroPlaylistId: " + JSON.stringify(playlistVal) + ",\n" +
+      "heroVideoIds: " + idsLiteral + ",\n" +
+      "heroVideoId: \"\","
+    );
+  }
+
+  function renderHeroOutput() {
+    heroOutput.textContent = buildHeroSnippet();
+  }
+  renderHeroOutput();
+
+  heroCopyBtn.addEventListener("click", function () {
+    navigator.clipboard.writeText(heroOutput.textContent).then(function () {
+      heroSaveStatus.textContent = "Copied.";
+      heroSaveStatus.className = "status ok";
+      setTimeout(function () { heroSaveStatus.textContent = ""; }, 2500);
+    }, function () {
+      heroSaveStatus.textContent = "Couldn't copy — select the text above and copy manually.";
+      heroSaveStatus.className = "status err";
+    });
+  });
+
+  /* Direct in-place edit of project-data.js: only the three hero fields are
+     touched via regex replacement, everything else in the file is preserved
+     byte-for-byte. Guards against saving into the wrong file by requiring
+     the picked file to already contain a heroPlaylistId declaration. */
+  if (window.showOpenFilePicker) {
+    heroSaveToFileBtn.hidden = false;
+    heroSaveToFileBtn.addEventListener("click", function () {
+      window.showOpenFilePicker({
+        id: "clearview-deck-project-data",
+        types: [{ description: "project-data.js", accept: { "text/javascript": [".js"] } }],
+        multiple: false
+      })
+        .then(function (handles) {
+          var handle = handles[0];
+          return handle.getFile().then(function (file) {
+            return file.text().then(function (text) { return { handle: handle, text: text }; });
+          });
+        })
+        .then(function (result) {
+          var text = result.text;
+          if (!/heroPlaylistId\s*:/.test(text)) {
+            throw new Error("That file doesn't look like project-data.js (no heroPlaylistId found) — picked the wrong file?");
+          }
+          var playlistVal = heroMode() === "playlist" ? (heroPlaylistId || "") : "";
+          var idsVal = heroMode() === "videos" ? heroList.get().map(function (e) { return e.youtubeId; }) : [];
+          var idsLiteral = "[" + idsVal.map(function (id) { return JSON.stringify(id); }).join(", ") + "]";
+
+          var updated = text
+            .replace(/heroPlaylistId\s*:\s*"[^"]*"/, "heroPlaylistId: " + JSON.stringify(playlistVal))
+            .replace(/heroVideoIds\s*:\s*\[[^\]]*\]/, "heroVideoIds: " + idsLiteral)
+            .replace(/heroVideoId\s*:\s*"[^"]*"/, 'heroVideoId: ""');
+
+          return result.handle.createWritable().then(function (writable) {
+            return writable.write(updated).then(function () { return writable.close(); });
+          });
+        })
+        .then(function () {
+          heroSaveStatus.textContent = "Updated project-data.js in place.";
+          heroSaveStatus.className = "status ok";
+        })
+        .catch(function (err) {
+          if (err.name !== "AbortError") {
+            heroSaveStatus.textContent = "Couldn't save: " + err.message;
+            heroSaveStatus.className = "status err";
+          }
+        });
+    });
+  }
+
+  heroList.render();
 })();
 </script>
 </body>
