@@ -48,40 +48,89 @@
     contactBtn.textContent = "Email " + P.studio.name;
   }
 
-  function buildHeroVideoSrc() {
-    var params = "autoplay=1&mute=1&loop=1&controls=0&showinfo=0&modestbranding=1" +
-      "&rel=0&playsinline=1&iv_load_policy=3&disablekb=1";
+  function buildHeroPlayerVars() {
+    var common = {
+      autoplay: 1, mute: 1, loop: 1, controls: 0, showinfo: 0, modestbranding: 1,
+      rel: 0, playsinline: 1, iv_load_policy: 3, disablekb: 1
+    };
 
-    // A real YouTube playlist loops natively via videoseries + loop=1.
+    // A real YouTube playlist loops natively via listType/list + loop=1.
     if (P.heroPlaylistId) {
-      return "https://www.youtube-nocookie.com/embed/videoseries?list=" + P.heroPlaylistId + "&" + params;
+      common.listType = "playlist";
+      common.list = P.heroPlaylistId;
+      return { videoId: undefined, playerVars: common };
     }
 
     // Otherwise cycle through one or more standalone video IDs. The first ID is
-    // the embed path; the full ID list (including the first) goes in `playlist`,
+    // the starting video; the full ID list (including the first) goes in `playlist`,
     // which is what makes loop=1 wrap back to the start once the last one ends —
     // YouTube requires that even for a single video looping on itself.
     var ids = (P.heroVideoIds && P.heroVideoIds.length) ? P.heroVideoIds :
       (P.heroVideoId ? [P.heroVideoId] : []);
     if (!ids.length) return null;
 
-    return "https://www.youtube-nocookie.com/embed/" + ids[0] + "?" + params +
-      "&playlist=" + ids.join(",");
+    common.playlist = ids.join(",");
+    return { videoId: ids[0], playerVars: common };
+  }
+
+  // Requests the highest quality tier YouTube currently has available for the
+  // playing video, and re-asserts it if the adaptive-bitrate algorithm drops it.
+  function forceMaxQuality(player) {
+    var levels = (player.getAvailableQualityLevels && player.getAvailableQualityLevels()) || [];
+    var best = levels.length ? levels[0] : "hd1080";
+    try { player.setPlaybackQuality(best); } catch (err) { /* noop */ }
+    return best;
+  }
+
+  function loadYouTubeApi(callback) {
+    if (window.YT && window.YT.Player) { callback(); return; }
+    var previous = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (typeof previous === "function") previous();
+      callback();
+    };
+    if (!document.getElementById("youtubeIframeApiScript")) {
+      var tag = document.createElement("script");
+      tag.id = "youtubeIframeApiScript";
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
   }
 
   function renderHero() {
     var wrap = document.getElementById("heroMedia");
-    var src = buildHeroVideoSrc();
-    if (src) {
-      var iframe = document.createElement("iframe");
-      iframe.src = src;
-      iframe.setAttribute("allow", "autoplay; encrypted-media");
-      iframe.setAttribute("title", P.name + " hero reel");
-      wrap.appendChild(iframe);
-    } else {
+    var config = buildHeroPlayerVars();
+    if (!config) {
       wrap.classList.add("is-static");
       wrap.style.backgroundImage = "url('" + P.heroImage + "')";
+      return;
     }
+
+    var target = document.createElement("div");
+    target.id = "heroYtPlayer";
+    wrap.appendChild(target);
+
+    loadYouTubeApi(function () {
+      new YT.Player("heroYtPlayer", {
+        videoId: config.videoId,
+        playerVars: config.playerVars,
+        events: {
+          onReady: function (e) {
+            e.target.mute();
+            forceMaxQuality(e.target);
+            e.target.playVideo();
+            var frame = e.target.getIframe();
+            if (frame) {
+              frame.setAttribute("title", P.name + " hero reel");
+              frame.setAttribute("tabindex", "-1");
+            }
+          },
+          onPlaybackQualityChange: function (e) {
+            forceMaxQuality(e.target);
+          }
+        }
+      });
+    });
   }
 
   function renderStats() {
