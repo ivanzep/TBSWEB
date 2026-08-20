@@ -53,11 +53,30 @@
     document.getElementById("versionEyebrow").textContent = P.name + " — " + P.subtitle;
     document.getElementById("versionTitle").textContent = v.label;
     document.getElementById("versionNote").textContent = v.note;
-    document.getElementById("versionHeroMedia").style.backgroundImage = "url('" + assetUrl(v.thumb) + "')";
-
+    renderHeroMedia();
     renderImages();
     renderVideos();
     renderPager();
+  }
+
+  function renderHeroMedia() {
+    var wrap = document.getElementById("versionHeroMedia");
+    // The thumb image is always set as the background — it's the immediate
+    // visual while a hero video's iframe is still loading, and the only
+    // visual at all when there's no hero video configured.
+    wrap.style.backgroundImage = "url('" + assetUrl(v.thumb) + "')";
+
+    var src = C.buildYouTubeHeroSrc(v.heroPlaylistId, v.heroVideoIds, v.heroVideoId);
+    if (src) {
+      var iframe = document.createElement("iframe");
+      iframe.src = src;
+      iframe.setAttribute("allow", "autoplay; encrypted-media");
+      iframe.setAttribute("title", v.label + " hero reel");
+      iframe.setAttribute("tabindex", "-1");
+      wrap.appendChild(iframe);
+    } else {
+      wrap.classList.add("is-static");
+    }
   }
 
   /* ---------------- Image gallery ---------------- */

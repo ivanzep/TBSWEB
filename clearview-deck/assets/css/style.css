@@ -754,7 +754,22 @@ section { position: relative; }
   position: absolute;
   inset: 0;
   background: #0d0c09 center/cover no-repeat;
+}
+
+.version-hero-media.is-static {
   animation: heroDrift 24s ease-in-out infinite alternate;
+}
+
+.version-hero-media iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 177.78vh;
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border: 0;
 }
 
 .version-hero-media::after {

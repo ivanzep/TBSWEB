@@ -90,6 +90,13 @@ The one thing that has no natural source in a folder of images is narrative copy
 `versions/<id>/meta.json` (`{ "label": "...", "note": "..." }`) stays hand-authored — it's
 the only file you ever type into by hand for an existing version.
 
+`meta.json` can also carry a looping video for that version's own title-header banner
+(the section at the top of its subpage) — same three fields, same priority, and same
+link-or-bare-ID handling as the homepage hero below: `heroPlaylistId`, `heroVideoIds`
+(array), `heroVideoId`. Leave all three empty/absent to keep the static thumbnail
+background. Built with `tools/add-videos.html`'s "Version Title Header" tab, same as
+the homepage hero and the gallery videos above.
+
 **Why a scan step exists at all**, rather than the browser just reading the folder live:
 a static site with no server and no build step has no way to list a folder's contents or
 read a file's metadata at page-load time — `fetch()` of local files is CORS-blocked when

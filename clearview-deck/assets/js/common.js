@@ -124,9 +124,32 @@ window.SiteCommon = (function () {
     });
   }
 
+  // Builds a looping, muted, autoplaying YouTube embed src from the same
+  // three-field shape used by both the homepage hero (project-data.js) and
+  // a version's title-header hero (that version's meta.json / data.js).
+  // Each argument accepts a full YouTube link or a bare ID (resolved via
+  // YouTubeUrl, which must be loaded first) — checked in this priority,
+  // first non-empty match wins. Returns null if none are set.
+  function buildYouTubeHeroSrc(rawPlaylistId, rawVideoIds, rawVideoId) {
+    var params = "autoplay=1&mute=1&loop=1&controls=0&showinfo=0&modestbranding=1" +
+      "&rel=0&playsinline=1&iv_load_policy=3&disablekb=1";
+
+    var playlistId = window.YouTubeUrl.parsePlaylistId(rawPlaylistId);
+    if (playlistId) {
+      return "https://www.youtube-nocookie.com/embed/videoseries?list=" + playlistId + "&" + params;
+    }
+
+    var raw = (rawVideoIds && rawVideoIds.length) ? rawVideoIds : (rawVideoId ? [rawVideoId] : []);
+    var ids = raw.map(window.YouTubeUrl.parseVideoId).filter(Boolean);
+    if (!ids.length) return null;
+
+    return "https://www.youtube-nocookie.com/embed/" + ids[0] + "?" + params + "&playlist=" + ids.join(",");
+  }
+
   return {
     renderChrome: renderChrome,
     bindHeaderScroll: bindHeaderScroll,
+    buildYouTubeHeroSrc: buildYouTubeHeroSrc,
     bindSectionNavHighlight: bindSectionNavHighlight,
     bindNavToggle: bindNavToggle,
     bindScrollProgress: bindScrollProgress,
