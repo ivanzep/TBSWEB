@@ -15,7 +15,7 @@ clearview-deck/
     js/
       project-data.js     ← the only file most edits touch (see below)
       main.js             Generic renderer: reads project-data.js, builds the DOM
-    images/                v5-hero.jpg / v5-detail.jpg pairs per version + cover.jpg
+    images/                6 renderings per version (aerial/wide/detail-a/detail-b/side-a/side-b)
     downloads/             Downloadable concept-deck PDF
 ```
 
@@ -27,7 +27,7 @@ clearview-deck/
    - `studio` — firm name/tagline/email (leave as-is if same firm).
    - `name`, `subtitle`, `client`, `location`, `scope`, `status`, `summary`.
    - `heroVideoId` — a YouTube ID for the looping background reel. Leave `""` to fall
-     back to `coverImage` as a static (subtly animated) hero background.
+     back to `heroImage` as a static (subtly animated) hero background.
    - `pdfDownloadUrl` — local path by default; swap for a Google Drive direct-download
      link once uploaded: `https://drive.google.com/uc?export=download&id=FILE_ID`.
    - `driveFolderUrl` — link to the full-resolution renderings archive.
@@ -40,7 +40,7 @@ the lightbox and the download/contact sections — renders itself from that data
 ## Notes on this build
 
 - **Hero video**: no client reel was supplied, so `heroVideoId` is left empty and the
-  hero falls back to the cover rendering. Paste a YouTube video ID into
+  hero falls back to the `heroImage` rendering. Paste a YouTube video ID into
   `project-data.js` to switch on the looping video reel — no other changes needed.
 - **Images**: hosted locally in `assets/images/` (extracted from the concept PDF at
   print quality) so the site works immediately with no external dependency. A Google
