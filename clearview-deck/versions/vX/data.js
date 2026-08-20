@@ -29,6 +29,11 @@ window.VERSIONS["vX"] = {
     { src: "assets/CLEARVIEW DECK-20260819-18-AI.jpg", caption: "CLEARVIEW DECK 20260819 18 AI" }
   ],
   videos: [
-
+    { type: "youtube", youtubeId: "as7UumMWGa0", caption: "Fire Pit" },
+    { type: "youtube", youtubeId: "B7Y6PoER8PU", caption: "Sun Study" },
+    { type: "youtube", youtubeId: "GIv6Fzz-06o", caption: "Projection Screen" },
+    { type: "youtube", youtubeId: "J14n4W3_BQ4", caption: "Flythrough 1" },
+    { type: "youtube", youtubeId: "xPEuINdMmh8", caption: "Flythrough 2" },
+    { type: "youtube", youtubeId: "SzfP0PZthf8", caption: "Projection Screen 2" }
   ]
 };
