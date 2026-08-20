@@ -26,8 +26,13 @@ window.PROJECT = {
     "freestanding concrete fireplace tower. Seven concept directions explore how the " +
     "roof plane, shade coverage and outdoor rooms can be organized around the pool.",
 
-  // YouTube video ID for the looping hero reel. Leave empty to fall back to
-  // heroImage as a static (subtly animated) hero background.
+  // Hero reel — checked in this order, first match wins. All three loop forever.
+  // 1) heroPlaylistId: an actual YouTube playlist ID (from a "...list=PL..." URL).
+  // 2) heroVideoIds: an array of standalone video IDs, cycled in order then looped.
+  // 3) heroVideoId: a single video ID, looped on itself.
+  // Leave all three empty/blank to fall back to heroImage as a static hero background.
+  heroPlaylistId: "",
+  heroVideoIds: [],
   heroVideoId: "",
   heroImage: "./assets/images/v5-2b-wide.jpg",
 
