@@ -10,15 +10,31 @@ window.VERSIONS = window.VERSIONS || {};
 window.VERSIONS["dv5-5-1"] = {
   id: "dv5-5-1",
   label: "DV5.5-1 — Patio Deck",
-  note: "Design-development drawing set for the pool deck: dimensioned plan, two building sections through the pergola bay, and a 3D massing study, developed from Concept Version 5.5.",
-  thumb: "assets/axonometric-massing-view.jpg",
+  note: "Design-development drawing set for the pool deck: dimensioned plan, two building sections through the pergola bay, and a 3D massing study, developed from Concept Version 5.5 — with the full rendering set and walkthrough videos.",
+  thumb: "assets/01-aerial-site-overview.jpg",
   // Title-header hero video — checked in this order, first non-empty wins,
   // falls back to the thumb image (above) as a static background if all
   // three are empty. See assets/js/common.js buildYouTubeHeroSrc().
-  heroPlaylistId: "",
+  heroPlaylistId: "PLFgzgcOzYDN0",
   heroVideoIds: [],
   heroVideoId: "",
   images: [
+    { src: "assets/01-aerial-site-overview.jpg", caption: "01 Aerial Site Overview" },
+    { src: "assets/02-aerial-deck-and-pool-view.jpg", caption: "02 Aerial Deck And Pool View" },
+    { src: "assets/03-aerial-deck-and-pool-dusk.jpg", caption: "03 Aerial Deck And Pool Dusk" },
+    { src: "assets/04-pergola-pool-terrace-view.jpg", caption: "04 Pergola Pool Terrace View" },
+    { src: "assets/05-pool-terrace-steps-view.jpg", caption: "05 Pool Terrace Steps View" },
+    { src: "assets/06-terrace-steps-to-pool.jpg", caption: "06 Terrace Steps To Pool" },
+    { src: "assets/07-pergola-shade-detail.jpg", caption: "07 Pergola Shade Detail" },
+    { src: "assets/08-deck-walkway-dusk-view.jpg", caption: "08 Deck Walkway Dusk View" },
+    { src: "assets/09-pool-corridor-view.jpg", caption: "09 Pool Corridor View" },
+    { src: "assets/10-dining-terrace-interior-view.jpg", caption: "10 Dining Terrace Interior View" },
+    { src: "assets/11-bbq-kitchen-detail.jpg", caption: "11 Bbq Kitchen Detail" },
+    { src: "assets/12-evening-terrace-view.jpg", caption: "12 Evening Terrace View" },
+    { src: "assets/13-outdoor-movie-night-fire-pit.jpg", caption: "13 Outdoor Movie Night Fire Pit" },
+    { src: "assets/14-outdoor-movie-night-screen-view.jpg", caption: "14 Outdoor Movie Night Screen View" },
+    { src: "assets/15-pool-terrace-at-dusk.jpg", caption: "15 Pool Terrace At Dusk" },
+    { src: "assets/16-outdoor-movie-night-twilight.jpg", caption: "16 Outdoor Movie Night Twilight" },
     { src: "assets/axonometric-massing-view.jpg", caption: "Axonometric Massing View" },
     { src: "assets/deck-and-pool-plan.jpg", caption: "Deck And Pool Plan" },
     { src: "assets/full-drawing-sheet.jpg", caption: "Full Drawing Sheet" },
@@ -26,6 +42,11 @@ window.VERSIONS["dv5-5-1"] = {
     { src: "assets/section-2.jpg", caption: "Section 2" }
   ],
   videos: [
-
+    { type: "youtube", youtubeId: "as7UumMWGa0", caption: "Fire Pit" },
+    { type: "youtube", youtubeId: "B7Y6PoER8PU", caption: "Sun Study" },
+    { type: "youtube", youtubeId: "GIv6Fzz-06o", caption: "Projection Screen" },
+    { type: "youtube", youtubeId: "J14n4W3_BQ4", caption: "Flythrough 1" },
+    { type: "youtube", youtubeId: "xPEuINdMmh8", caption: "Flythrough 2" },
+    { type: "youtube", youtubeId: "SzfP0PZthf8", caption: "Projection Screen 2" }
   ]
 };

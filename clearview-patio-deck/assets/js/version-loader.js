@@ -1,12 +1,8 @@
 /*
- * VERSION LOADER — loads an index script (e.g. versions/versions-index.js)
- * plus every listed item's data.js as plain <script> tags (works when the
+ * VERSION LOADER — loads an index script (versions/versions-index.js) plus
+ * every listed version's data.js as plain <script> tags (works when the
  * site is opened directly via file://, unlike fetch()/XHR which CORS-block
- * local files). Despite the name, this is generic over any "folder of
- * folders, each with a data.js, plus one index script listing the folder
- * names" collection — used for both versions/ (main.js, version-page.js)
- * and reference/ (reference-page.js), so there's one loader implementation
- * instead of two near-identical copies.
+ * local files). Used by both main.js and version-page.js.
  */
 window.VersionLoader = (function () {
   "use strict";
@@ -21,10 +17,8 @@ window.VersionLoader = (function () {
     });
   }
 
-  // basePath: relative path to the collection's folder from the current
-  // page, e.g. "./versions/" from the homepage. indexFile/idsGlobalName
-  // default to the versions/ collection's names; reference/ passes its own
-  // ("sections-index.js" / "SECTION_IDS").
+  // basePath: relative path to versions/ from the current page, e.g.
+  // "./versions/" from the homepage.
   function loadAll(basePath, indexFile, idsGlobalName) {
     indexFile = indexFile || "versions-index.js";
     idsGlobalName = idsGlobalName || "VERSION_IDS";

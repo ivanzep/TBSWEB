@@ -3,79 +3,70 @@
 Client showcase site for The Brown Studio, built from
 `CLEARVIEW_DECK-20260820-DV5.5-1-PATIO_DECK.pdf` — the design-development drawing set
 (dimensioned plan, two building sections, and a 3D massing study) for the pool deck,
-developed from Concept Version 5.5 of the `clearview-deck` concept-studies site.
+developed from Concept Version 5.5 of the `clearview-deck` concept-studies site — paired
+with the full rendering set and walkthrough videos for that same design.
 
-Duplicated from the `clearview-deck` template — see that project's README for the full
-scan-tool architecture and reuse instructions; this file only calls out what's specific
-to this build.
+Duplicated from the `clearview-deck` template, then trimmed down: this single-version
+site has no Overview, Compare, or Reference Images sections (see "Differences from the
+`clearview-deck` template" below). See that project's README for the full scan-tool
+architecture this site still shares.
 
 Static site, no build step — open `index.html` directly or serve the folder.
 
 ## Structure
 
 ```
-clearview-deck/
-  index.html                    Homepage (hero, overview, versions grid, compare, download, contact)
-  reference-images.html         Reference Images moodboard page — see below
+clearview-patio-deck/
+  index.html                    Homepage (hero, versions grid, download, contact)
   assets/
     css/style.css                Theme tokens at :root, then component styles
     js/
-      project-data.js            Site-level data (studio, hero reel, PDF/Drive links) — see below
+      project-data.js            Site-level data (studio, hero reel, PDF link) — see below
       common.js                  Shared header/nav/scroll/reveal/modal helpers, used by every page
       youtube-url.js             Turns any YouTube link into a bare video/playlist ID
-      version-loader.js          Loads an index script + each item's data.js as <script> tags
-                                  (used for both versions/ and reference/ — same collection shape)
+      version-loader.js          Loads an index script + each version's data.js as <script> tags
       main.js                    Homepage renderer
       version-page.js            Renderer for every versions/<id>/index.html subpage
-      reference-page.js          Renderer for reference-images.html
-    downloads/                   Downloadable concept-deck PDF
+    downloads/                   Downloadable DV5.5-1 drawing-set PDF
   scripts/
     generate-version-data.js     ← SCAN TOOL for versions/ — run after touching any assets/ folder
-    generate-reference-data.js   ← SCAN TOOL for reference/ — same idea, for reference sections
-    scan.sh                      Thin wrapper: `./scripts/scan.sh` runs both of the above
+    scan.sh                      Thin wrapper: `./scripts/scan.sh` runs the scan tool
     lib/
       read-image-title.js        Dependency-free JPEG Title-metadata reader
-      scan-common.js             Shared scan utilities (natural sort, humanize, etc.) both
-                                  generator scripts use, so the logic isn't duplicated
+      scan-common.js             Shared scan utilities (natural sort, humanize, etc.)
   versions/
     versions-index.js            AUTO-GENERATED — do not hand-edit
-    _template/                   Starter folder — copy this to add a new version
+    _template/                   Starter folder — copy this to add another version
       meta.json                  Hand-authored: { "label": "...", "note": "..." }
       index.html                 Generic subpage shell (identical for every version, no per-version edits)
       assets/                    Empty — drop that version's images/videos here
-    v5/                          One real folder per concept direction
-      meta.json                  Hand-authored label/note
+    dv5-5-1/                     The only version so far — DV5.5-1 drawing set + renderings
+      meta.json                  Hand-authored label/note/hero
       data.js                    AUTO-GENERATED — do not hand-edit
       index.html                 (copy of _template/index.html)
-      assets/                    Renderings — whatever's in here becomes the gallery
-    v5-2/, v5-2b/, v5-3/, v5-4/, v5-5/, v5-6/    Same pattern
-  reference/
-    sections-index.js            AUTO-GENERATED — do not hand-edit
-    _template/                   Starter folder — copy this to add a new reference section
-      meta.json                  Hand-authored: { "title": "...", "note": "" }
-      assets/                    Empty — drop that section's images here
-    (no real sections yet — see "Reference Images" below)
+      videos.json                Hand-authored YouTube walkthrough links
+      assets/                    Drawing-sheet crops + AI renderings — whatever's in here becomes the gallery
 ```
 
 Each design version lives entirely in its own folder — its content, its own subpage
 (`index.html`), and its own assets, all together. The homepage grid links each card
 straight to that version's subpage, which shows a full image gallery (with a lightbox)
-and, if provided, a video gallery — plus prev/next navigation between versions.
+and, if provided, a video gallery — plus prev/next navigation between versions (a no-op
+today with only one version).
 
 ## The scan tool
 
-`versions/<id>/data.js`, `versions/versions-index.js`, and their `reference/` equivalents
-are **generated files** — never edit them by hand, edits get overwritten. Instead, run the
-scan tool whenever you add, remove, or rename a file in any `assets/` folder under
-`versions/` or `reference/`, or add/remove a whole version/section folder:
+`versions/<id>/data.js` and `versions/versions-index.js` are **generated files** — never
+edit them by hand, edits get overwritten. Instead, run the scan tool whenever you add,
+remove, or rename a file in any `assets/` folder under `versions/`, or add/remove a
+whole version folder:
 
 ```
 ./scripts/scan.sh
 ```
 
-That runs both `node scripts/generate-version-data.js` and
-`node scripts/generate-reference-data.js` — run either individually if you only need one.
-The versions scanner walks `versions/`, and for every subfolder (except `_template`) it:
+That runs `node scripts/generate-version-data.js`. It walks `versions/`, and for every
+subfolder (except `_template`) it:
 
 - Rebuilds `versions-index.js` from whatever version folders exist — natural-sorted by
   folder name, which is the display order everywhere. Add a folder, it's on the homepage
@@ -83,11 +74,10 @@ The versions scanner walks `versions/`, and for every subfolder (except `_templa
 - Rebuilds that version's `images[]` from whatever image files (`.jpg/.jpeg/.png/.webp/.gif`)
   are in its `assets/` folder — any number, in natural-sorted order. Caption comes from
   the image's embedded **Title metadata** if it has any (checks XMP `dc:title`, IPTC
-  Object Name, then EXIF XPTitle/ImageDescription — i.e. whatever Photoshop, Bridge,
-  Lightroom or `exiftool` write when you set a file's "Title"), otherwise a humanized
-  version of the filename (`pool-terrace.jpg` → "Pool Terrace"). None of the current
-  renders carry title metadata, so today every caption is filename-derived — embed a
-  Title on a file whenever you want a caption that doesn't have to match the filename.
+  Object Name, then EXIF XPTitle/ImageDescription), otherwise a humanized version of the
+  filename (`pool-terrace.jpg` → "Pool Terrace"). None of the current images carry title
+  metadata, so every caption today is filename-derived — hence the numbered, hyphenated
+  filenames in `versions/dv5-5-1/assets/`, chosen to read well once humanized.
 - Picks the thumbnail: a file named `thumb.*`/`cover.*` if present, else the first image
   in sorted order (name files starting with e.g. `01-` if you want a specific one first).
 - Rebuilds `videos[]` from any video files (`.mp4/.webm/.mov/.m4v`) in the same `assets/`
@@ -95,7 +85,7 @@ The versions scanner walks `versions/`, and for every subfolder (except `_templa
   For videos that aren't local files (YouTube), add them in an optional
   `versions/<id>/videos.json`:
   `[{ "type": "youtube", "url": "<paste any youtube.com/youtu.be link>", "caption": "..." }]`
-  — the scan merges these in alongside the discovered local files. `url` accepts a full
+  — the scan merges these in alongside any discovered local files. `url` accepts a full
   link in any form (watch, `youtu.be`, shorts, embed, with or without extra tracking
   params) or an already-bare video ID; either way the scan resolves it to a clean ID
   before writing `data.js`, so the browser never parses a URL at runtime.
@@ -106,10 +96,6 @@ The versions scanner walks `versions/`, and for every subfolder (except `_templa
   the version's folder (Chrome/Edge, via a native folder picker) or a copy/download for
   pasting into GitHub's web UI. It's a standalone page, not part of the published site.
 
-The reference-sections scanner works the same way but simpler — no thumb, hero video,
-local-video, or `videos.json` concepts, just a folder of images and a title. See
-"Reference Images" further down.
-
 The one thing that has no natural source in a folder of images is narrative copy, so
 `versions/<id>/meta.json` (`{ "label": "...", "note": "..." }`) stays hand-authored — it's
 the only file you ever type into by hand for an existing version.
@@ -118,7 +104,8 @@ the only file you ever type into by hand for an existing version.
 (the section at the top of its subpage) — same three fields, same priority, and same
 link-or-bare-ID handling as the homepage hero below: `heroPlaylistId`, `heroVideoIds`
 (array), `heroVideoId`. Leave all three empty/absent to keep the static thumbnail
-background. Built with `tools/add-videos.html`'s "Version Title Header" tab, same as
+background. `versions/dv5-5-1/meta.json` sets `heroPlaylistId` to the same reel as the
+site-level hero. Built with `tools/add-videos.html`'s "Version Title Header" tab, same as
 the homepage hero and the gallery videos above.
 
 **Why a scan step exists at all**, rather than the browser just reading the folder live:
@@ -130,15 +117,14 @@ plain generated JS the actual site loads. It's not a build step you need before 
 deploy (the generated files are committed, plain, and load instantly like everything
 else) — just something to re-run after you change what's in an `assets/` folder.
 
-**You don't have to run it yourself.** `.github/workflows/scan-clearview-deck.yml` runs
-both scan scripts automatically on every push that touches an `assets/` folder or a
-`meta.json` under `clearview-deck/versions/` or `clearview-deck/reference/`, or a
-`videos.json` under `versions/` — including files added straight through GitHub's web
-"Upload files" button, which is a real push/commit like any other and fires this the same
-way. If either scan produces a different result, the workflow commits the regenerated
-files back to the same branch itself, so `./scripts/scan.sh` is only needed for previewing
-the result locally before you push, not as a required manual step. Two things worth
-knowing:
+**You don't have to run it yourself.** `.github/workflows/scan-clearview-patio-deck.yml`
+runs the scan script automatically on every push that touches an `assets/` folder or a
+`meta.json`/`videos.json` under `clearview-patio-deck/versions/` — including files added
+straight through GitHub's web "Upload files" button, which is a real push/commit like any
+other and fires this the same way. If the scan produces a different result, the workflow
+commits the regenerated files back to the same branch itself, so `./scripts/scan.sh` is
+only needed for previewing the result locally before you push, not as a required manual
+step. Two things worth knowing:
 - It commits straight to the branch it ran on — if that branch has protection rules
   blocking direct pushes (required reviews, etc.), the workflow's push step will fail;
   either exempt `github-actions[bot]`, or run the scan locally and commit yourself.
@@ -147,7 +133,7 @@ knowing:
 
 ## Adding a new design version
 
-1. Copy `versions/_template/` to `versions/your-id/` (e.g. `versions/v6/`).
+1. Copy `versions/_template/` to `versions/your-id/` (e.g. `versions/dv5-6-1/`).
 2. Edit `versions/your-id/meta.json` — set `label` and `note`.
 3. Drop image/video files into `versions/your-id/assets/` — any names, any quantity.
 4. Run `./scripts/scan.sh`.
@@ -158,57 +144,27 @@ either — it's a pure copy of the template; the page figures out which version 
 showing from its own folder name at runtime.
 
 Removing a version: delete its folder, then run the scan tool.
-Reordering: rename folders to change natural-sort order (e.g. `v5-2` before `v5-3`), then scan.
+Reordering: rename folders to change natural-sort order, then scan.
 
-## Reference Images
+## Differences from the `clearview-deck` template
 
-`reference-images.html` is a standalone moodboard page, separate from the versions —
-inspiration imagery organized into titled sections, each rendered as a genuine
-Pinterest-style masonry: images keep their natural aspect ratio (nothing is cropped to
-fit a grid cell), columns settle at uneven heights, and one consistent gap value holds
-between every image both directions. That's plain CSS multi-column layout
-(`column-count` + `break-inside: avoid`) — no masonry JS library. Click any image to
-open it full-screen in a lightbox that flows through every image on the page in order,
-across section boundaries.
+This site was trimmed down from the full `clearview-deck` template it was duplicated
+from, since a single-version drawing-set showcase doesn't need everything that template
+offers:
+- **No Overview section** — the client/location/scope/status stat block and project
+  summary paragraph are gone from the homepage; `renderStats()`/`overviewText` and the
+  `#overview` section were removed from `main.js`/`index.html`.
+- **No Compare tool** — comparing concept directions side-by-side only makes sense with
+  multiple versions. The floating compare bar, compare modal, "Add to Compare" checkbox
+  on each version card, and all supporting JS were removed from `main.js`/`index.html`.
+- **No Reference Images page** — `reference-images.html`, `assets/js/reference-page.js`,
+  the `reference/` folder, and `scripts/generate-reference-data.js` were all deleted;
+  `scripts/scan.sh` and the CI workflow only run the versions scanner now.
 
-It's driven by `reference/` the same way `versions/` drives the version subpages —
-same scan-tool architecture, same rules:
-
-1. Copy `reference/_template/` to `reference/your-id/` (e.g. `reference/materials/`).
-2. Edit `reference/your-id/meta.json` — set `title` (required) and optionally `note`.
-3. Drop image files into `reference/your-id/assets/` — any names, any quantity, any
-   aspect ratio. Captions come from embedded Title metadata or a humanized filename,
-   exactly like a design version's gallery images.
-4. Run `./scripts/scan.sh` (or push — the CI workflow covers `reference/` too).
-
-No real sections exist yet — the page currently renders an empty state. Add one and
-it appears on `reference-images.html` automatically, in natural-sort order by folder
-name, with no other file to touch and no edits to `reference-images.html` itself.
-
-## Reusing this template for a new project
-
-1. Duplicate this whole folder (e.g. `cp -r clearview-deck new-project-slug`).
-2. Delete the `v5*` folders under `versions/`, keep `_template/`, and build new version
-   folders per the steps above. Drop a new PDF into `assets/downloads/`.
-3. Edit `assets/js/project-data.js`:
-   - `studio` — firm name/tagline/email (leave as-is if same firm).
-   - `name`, `subtitle`, `client`, `location`, `scope`, `status`, `summary`.
-   - Hero reel — set **one** of, in priority order (each accepts a full YouTube link
-     pasted straight from the address bar, or a bare ID — same as `videos.json` above):
-     - `heroPlaylistId` — a YouTube playlist link/ID, loops the whole playlist.
-     - `heroVideoIds` — an array of standalone video links/IDs; cycles through them in
-       order, then loops back to the first.
-     - `heroVideoId` — a single video link/ID, loops on itself.
-     - Leave all three empty to fall back to `heroImage` as a static hero background.
-   - `pdfDownloadUrl` — root-relative local path by default (e.g. `assets/downloads/foo.pdf`,
-     no leading `./` — both the homepage and subpages prefix it correctly for their depth);
-     swap for a Google Drive direct-download link once uploaded:
-     `https://drive.google.com/uc?export=download&id=FILE_ID`.
-   - `driveFolderUrl` — link to the full-resolution renderings archive.
-4. Optionally retune the palette in `assets/css/style.css` under `:root` (`--color-*`).
-
-Everything else — nav, hero, overview stats, the version grid + subpages, the compare
-tool, the lightboxes and the download/contact sections — renders itself from that data.
+If this site later grows more design versions and reference imagery, that scanner
+architecture is exactly what `clearview-deck` still uses — copy `generate-reference-data.js`
+and `reference-page.js`/`reference-images.html` back over from that project rather than
+rebuilding them.
 
 ## Notes on this build
 
@@ -217,22 +173,27 @@ tool, the lightboxes and the download/contact sections — renders itself from t
   site/deck plan, two 1/4"-scale building sections (`V5.5.Section.1`, `V5.5.Section.2`),
   and a 3D massing axonometric, all developed from Concept Version 5.5 of the
   `clearview-deck` site. There's only one drawing set so far, so `versions/` holds a
-  single folder, `dv5-5-1`, rather than several concept directions — the homepage
-  version grid, compare tool, and per-version subpage all still work the same way with
-  one card (the compare tool just has nothing to compare against yet).
+  single folder, `dv5-5-1` — the homepage version grid and per-version subpage still work
+  the same way with one card.
 - **Hero video**: `heroPlaylistId` is set to the *same* YouTube playlist as the
-  `clearview-deck` concept-studies site, per the client's request to reuse it here.
-  Swap to `heroVideoIds`/`heroVideoId`, or clear all three to fall back to the static
-  `heroImage`, at any time in `project-data.js`.
-- **Images**: the sheet was rasterized at 300dpi and cropped into five images —
-  the full sheet, the plan, each section, and the axonometric — under
-  `versions/dv5-5-1/assets/`, discovered by the scan tool rather than listed by hand —
-  see "The scan tool" above. No Google Drive archive exists for this drawing set yet,
-  so `driveFolderUrl` is left blank in `project-data.js` (the Drive button hides itself
-  automatically when that field is empty).
-- **Videos**: no walkthrough videos were supplied for this drawing set, so the Video
-  Gallery section on the version subpage stays hidden. Drop a video file into
-  `versions/dv5-5-1/assets/` (or add a YouTube entry to `versions/dv5-5-1/videos.json`)
-  and re-run the scan tool to switch it on.
+  `clearview-deck` concept-studies site, per the client's request to reuse it here — both
+  the site-level hero (`project-data.js`) and the `dv5-5-1` version's own title-header
+  banner (`versions/dv5-5-1/meta.json`). Swap to `heroVideoIds`/`heroVideoId`, or clear
+  all three, at any time.
+- **Images**: `versions/dv5-5-1/assets/` holds two sets. Five are the DV5.5-1 sheet
+  itself, rasterized at 300dpi and cropped — the full sheet, the plan, each section, and
+  the axonometric (`axonometric-massing-view.jpg`, `deck-and-pool-plan.jpg`,
+  `full-drawing-sheet.jpg`, `section-1.jpg`, `section-2.jpg`). The other sixteen
+  (`01-` through `16-`) are the AI-rendered walkthrough of the finished design — aerials,
+  pool/pergola views, the dining terrace, the BBQ kitchen, and outdoor movie nights at
+  the fire pit — carried over from the `clearview-deck` site's `vX` version and
+  re-compressed for the web (~21MB → ~5MB combined). Numbered filenames put the
+  renderings first in the gallery, ahead of the technical drawings, since the scan tool's
+  natural sort is filename-driven. No Google Drive archive exists for this drawing set
+  yet, so `driveFolderUrl` is left blank in `project-data.js` (the Drive button hides
+  itself automatically when that field is empty).
+- **Videos**: `versions/dv5-5-1/videos.json` lists six YouTube walkthroughs — Fire Pit,
+  Sun Study, Projection Screen (×2), and Flythrough (×2) — also carried over from the
+  `clearview-deck` site's `vX` version.
 - **Download PDF**: `assets/downloads/Clearview-Deck-DV5.5-1-Patio-Deck.pdf` is the
   original PDF as supplied (~3.2 MB), so the download button works out of the box.
