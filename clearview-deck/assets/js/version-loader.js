@@ -1,10 +1,12 @@
 /*
- * VERSION LOADER — loads versions/versions-index.js and every registered
- * version's data.js as plain <script> tags (works when the site is opened
- * directly via file://, unlike fetch()/XHR which CORS-block local files).
- * Populates window.VERSION_IDS and window.VERSIONS. Used by main.js (loads
- * every version, for the homepage grid) and version-page.js (loads just its
- * own folder's data.js).
+ * VERSION LOADER — loads an index script (e.g. versions/versions-index.js)
+ * plus every listed item's data.js as plain <script> tags (works when the
+ * site is opened directly via file://, unlike fetch()/XHR which CORS-block
+ * local files). Despite the name, this is generic over any "folder of
+ * folders, each with a data.js, plus one index script listing the folder
+ * names" collection — used for both versions/ (main.js, version-page.js)
+ * and reference/ (reference-page.js), so there's one loader implementation
+ * instead of two near-identical copies.
  */
 window.VersionLoader = (function () {
   "use strict";
@@ -19,11 +21,15 @@ window.VersionLoader = (function () {
     });
   }
 
-  // basePath: relative path to the /versions/ folder from the current page,
-  // e.g. "./versions/" from the homepage.
-  function loadAll(basePath) {
-    return loadScript(basePath + "versions-index.js").then(function () {
-      var ids = window.VERSION_IDS || [];
+  // basePath: relative path to the collection's folder from the current
+  // page, e.g. "./versions/" from the homepage. indexFile/idsGlobalName
+  // default to the versions/ collection's names; reference/ passes its own
+  // ("sections-index.js" / "SECTION_IDS").
+  function loadAll(basePath, indexFile, idsGlobalName) {
+    indexFile = indexFile || "versions-index.js";
+    idsGlobalName = idsGlobalName || "VERSION_IDS";
+    return loadScript(basePath + indexFile).then(function () {
+      var ids = window[idsGlobalName] || [];
       return Promise.all(
         ids.map(function (id) { return loadScript(basePath + id + "/data.js"); })
       ).then(function () { return ids; });

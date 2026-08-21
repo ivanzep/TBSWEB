@@ -925,6 +925,76 @@ section { position: relative; }
   letter-spacing: 0.02em;
 }
 
+/* ---- Reference Images page ---- */
+.page-banner {
+  padding: calc(var(--header-h) + 3rem) 0 3rem;
+}
+
+.page-banner h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0.4rem 0 1rem;
+}
+
+.page-banner-note {
+  max-width: 640px;
+  color: var(--color-ink-soft);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.ref-section { padding: 3rem 0; }
+.ref-section-alt { background: var(--color-bg-alt); }
+.ref-section .section-head p { max-width: 420px; color: var(--color-ink-soft); margin: 0; }
+
+/* True masonry via CSS multi-column: each image keeps its natural aspect
+   ratio (no cropping), columns settle at uneven heights (the "interlocking"
+   look), and column-gap + item margin-bottom give one consistent gap value
+   in both directions — no JS layout library needed. */
+.masonry {
+  column-count: 4;
+  column-gap: 1.4rem;
+}
+
+.masonry-item {
+  display: block;
+  width: 100%;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius);
+  overflow: hidden;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.masonry-item:hover img {
+  transform: scale(1.015);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 980px) {
+  .masonry { column-count: 3; }
+}
+
+@media (max-width: 720px) {
+  .masonry { column-count: 2; column-gap: 0.9rem; }
+  .masonry-item { margin-bottom: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .masonry { column-count: 1; }
+}
+
 /* ---- Video embed (inside lightbox) ---- */
 .video-embed {
   display: block;

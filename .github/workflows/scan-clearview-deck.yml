@@ -1,20 +1,24 @@
 name: Scan Clearview Deck versions
 
-# Runs the version-data scan tool (clearview-deck/scripts/generate-version-data.js)
-# automatically, so it doesn't matter whether images/videos were added locally,
-# through git, or by dragging files into GitHub's web UI — the generated
-# versions-index.js and each version's data.js always get regenerated to match.
+# Runs the scan tools (clearview-deck/scripts/generate-version-data.js and
+# generate-reference-data.js) automatically, so it doesn't matter whether
+# images/videos were added locally, through git, or by dragging files into
+# GitHub's web UI — the generated index/data files always get regenerated
+# to match.
 #
 # The trigger paths deliberately do NOT include the generated files
-# (versions-index.js, versions/*/data.js) themselves, only the hand-authored
-# inputs (assets/, meta.json, videos.json). That means this workflow's own
-# commit never matches its own trigger, so it can't loop.
+# (versions-index.js, versions/*/data.js, reference/sections-index.js,
+# reference/*/data.js) themselves, only the hand-authored inputs (assets/,
+# meta.json, videos.json). That means this workflow's own commit never
+# matches its own trigger, so it can't loop.
 "on":
   push:
     paths:
       - "clearview-deck/versions/**/assets/**"
       - "clearview-deck/versions/*/meta.json"
       - "clearview-deck/versions/*/videos.json"
+      - "clearview-deck/reference/**/assets/**"
+      - "clearview-deck/reference/*/meta.json"
       - "clearview-deck/scripts/**"
   workflow_dispatch: {}
 
@@ -33,16 +37,26 @@ jobs:
 
       - name: Run scan
         working-directory: clearview-deck
-        run: node scripts/generate-version-data.js
+        run: |
+          node scripts/generate-version-data.js
+          node scripts/generate-reference-data.js
 
       - name: Commit regenerated files if changed
+        shell: bash
         run: |
-          if git diff --quiet -- clearview-deck/versions/versions-index.js clearview-deck/versions/*/data.js; then
+          shopt -s nullglob
+          FILES=(
+            clearview-deck/versions/versions-index.js
+            clearview-deck/versions/*/data.js
+            clearview-deck/reference/sections-index.js
+            clearview-deck/reference/*/data.js
+          )
+          if git diff --quiet -- "${FILES[@]}"; then
             echo "No changes to generated files — nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add clearview-deck/versions/versions-index.js clearview-deck/versions/*/data.js
-          git commit -m "Auto-regenerate version data [skip ci]"
+          git add -- "${FILES[@]}"
+          git commit -m "Auto-regenerate version/reference data [skip ci]"
           git push
