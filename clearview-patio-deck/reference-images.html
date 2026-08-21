@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference Images | The Brown Studio</title>
+<meta name="description" content="Inspiration and reference imagery for the Clearview Deck project, organized by theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="./index.html" class="logo">
+      <span class="logo-name" id="logoName"></span>
+      <span class="logo-tag" id="logoTag"></span>
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="./index.html#overview">Overview</a>
+      <a href="./index.html#versions">Design Versions</a>
+      <a href="./reference-images.html" class="is-active">Reference Images</a>
+      <a href="./index.html#compare">Compare</a>
+      <a href="./index.html#download">Download</a>
+      <a href="./index.html#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="page-banner">
+  <div class="container">
+    <a href="./index.html#versions" class="back-link" style="color:var(--color-ink-soft);">← Back to Design Versions</a>
+    <p class="eyebrow">Inspiration</p>
+    <h1>Reference Images</h1>
+    <p class="page-banner-note">
+      Mood-board imagery organized by theme — the visual references that informed the
+      concept directions.
+    </p>
+  </div>
+</section>
+
+<div id="sectionsContainer"></div>
+<p class="empty-note" id="noSectionsNote" hidden style="text-align:center; padding:4rem 1rem;">
+  No reference sections yet.
+</p>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName"></span>
+    <span id="footerMeta">© <span id="footerYear"></span> — Reference Images</span>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="modal-overlay" id="lightbox">
+  <button class="modal-close" id="lightboxClose">Close ✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-stage">
+      <img id="lightboxImg" src="" alt="">
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image">›</button>
+    </div>
+    <div class="lightbox-meta">
+      <div class="label" id="lightboxLabel"></div>
+    </div>
+  </div>
+</div>
+
+<script src="./assets/js/project-data.js"></script>
+<script src="./assets/js/common.js"></script>
+<script src="./assets/js/version-loader.js"></script>
+<script src="./assets/js/reference-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Video Links | Clearview Deck tools</title>
+<style>
+  :root {
+    --color-bg: #f6f4ef;
+    --color-bg-alt: #eeeae1;
+    --color-ink: #16140f;
+    --color-ink-soft: #55503f;
+    --color-line: rgba(22, 20, 15, 0.14);
+    --color-accent: #8a6d4b;
+    --color-accent-soft: #cbb896;
+    --color-card: #ffffff;
+    --color-ok: #3f7d4f;
+    --color-err: #a4402f;
+    --radius: 3px;
+    --font-display: "Oswald", "Arial Narrow", sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  h1 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.7rem;
+    margin: 0 0 0.3rem;
+  }
+  .subtitle { color: var(--color-ink-soft); margin: 0 0 1.6rem; font-size: 0.95rem; }
+  .eyebrow {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--color-accent); margin: 0 0 0.4rem;
+  }
+
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.8rem; border-bottom: 1px solid var(--color-line); }
+  .tab-btn {
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--color-ink-soft); font: inherit; font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; padding: 0.8rem 0.3rem;
+    margin-bottom: -1px; cursor: pointer;
+  }
+  .tab-btn.is-active { color: var(--color-ink); border-bottom-color: var(--color-accent); }
+  .tab-panel { display: none; }
+  .tab-panel.is-active { display: block; }
+
+  section.card {
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    padding: 1.6rem 1.7rem;
+    margin-bottom: 1.6rem;
+  }
+  label { display: block; font-size: 0.78rem; font-weight: 600; margin: 0 0 0.35rem; color: var(--color-ink-soft); }
+  input[type="text"], input[type="url"], textarea, select {
+    width: 100%;
+    font: inherit;
+    font-size: 0.92rem;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--color-ink);
+  }
+  textarea { font-family: var(--font-mono); font-size: 0.82rem; resize: vertical; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 220px; }
+  .field { margin-bottom: 1rem; }
+  .hint { font-size: 0.78rem; color: var(--color-ink-soft); margin-top: 0.35rem; }
+  .status { font-size: 0.82rem; margin-top: 0.4rem; min-height: 1.1em; }
+  .status.ok { color: var(--color-ok); }
+  .status.err { color: var(--color-err); }
+  .preview {
+    display: flex; align-items: center; gap: 0.8rem; margin-top: 0.6rem;
+    padding: 0.6rem; background: var(--color-bg-alt); border-radius: var(--radius);
+    display: none;
+  }
+  .preview.is-visible { display: flex; }
+  .preview img { width: 96px; height: 54px; object-fit: cover; border-radius: 2px; background: #ddd; }
+  .preview .id { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-ink-soft); }
+
+  .mode-toggle { display: flex; gap: 1.6rem; margin-bottom: 1.2rem; }
+  .mode-toggle label {
+    display: flex; align-items: center; gap: 0.4rem; font-weight: 600;
+    font-size: 0.85rem; color: var(--color-ink); cursor: pointer;
+  }
+  .mode-toggle input { width: auto; margin: 0; }
+
+  button {
+    font: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer; border-radius: var(--radius);
+    padding: 0.65rem 1.1rem; border: 1px solid var(--color-ink);
+    background: var(--color-ink); color: #fff; transition: opacity .2s;
+  }
+  button:hover { opacity: 0.85; }
+  button.secondary { background: none; color: var(--color-ink); }
+  button.subtle { background: none; color: var(--color-ink-soft); border-color: var(--color-line); padding: 0.4rem 0.7rem; font-size: 0.72rem; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  ol.entry-list { list-style: none; margin: 0; padding: 0; }
+  ol.entry-list li {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--color-line);
+  }
+  ol.entry-list li:last-child { border-bottom: none; }
+  ol.entry-list img { width: 64px; height: 36px; object-fit: cover; border-radius: 2px; flex: none; background: #ddd; }
+  ol.entry-list .meta { flex: 1; min-width: 0; }
+  ol.entry-list .caption { font-weight: 600; font-size: 0.88rem; }
+  ol.entry-list .idline { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-ink-soft); }
+  ol.entry-list .actions { display: flex; gap: 0.4rem; flex: none; }
+  .empty-note { color: var(--color-ink-soft); font-size: 0.85rem; padding: 0.6rem 0; }
+
+  pre.output {
+    font-family: var(--font-mono); font-size: 0.8rem; white-space: pre-wrap;
+    word-break: break-word; background: var(--color-bg-alt); padding: 1rem;
+    border-radius: var(--radius); max-height: 320px; overflow: auto; margin: 0 0 1rem;
+  }
+  .output-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; align-items: center; }
+
+  details { margin-top: 1rem; }
+  details summary { cursor: pointer; font-size: 0.82rem; color: var(--color-ink-soft); }
+  ol.steps { padding-left: 1.2rem; font-size: 0.88rem; }
+  ol.steps li { margin-bottom: 0.5rem; }
+  code { background: var(--color-bg-alt); padding: 0.1em 0.35em; border-radius: 2px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Clearview Deck — local tool</p>
+  <h1>Add Video Links</h1>
+  <p class="subtitle">
+    Paste any YouTube link — watch, youtu.be, shorts, whatever's in the address bar — no
+    need to dig out the video ID yourself. Runs entirely in your browser; nothing is
+    uploaded anywhere by this page.
+  </p>
+
+  <div class="tabs">
+    <button type="button" class="tab-btn is-active" data-tab="version">Version Gallery</button>
+    <button type="button" class="tab-btn" data-tab="hero">Hero Reel (homepage)</button>
+    <button type="button" class="tab-btn" data-tab="hero-version">Version Title Header</button>
+  </div>
+
+  <!-- ============ VERSION GALLERY TAB ============ -->
+  <div class="tab-panel is-active" id="panel-version">
+    <p class="subtitle" style="margin-top:-0.6rem;">
+      Builds <code>videos.json</code> for one design version's Video Gallery section.
+    </p>
+
+    <section class="card">
+      <div class="eyebrow">1. Choose the version</div>
+      <div class="row">
+        <div class="field" style="flex: 2;">
+          <label for="versionSelect">Design version</label>
+          <select id="versionSelect"></select>
+        </div>
+        <div class="field" style="flex: 1;">
+          <label for="versionCustom">…or type an id</label>
+          <input type="text" id="versionCustom" placeholder="e.g. v5">
+        </div>
+      </div>
+      <p class="hint" id="versionListStatus"></p>
+
+      <details>
+        <summary>Already have a videos.json for this version? Paste it here to add to it.</summary>
+        <div class="field" style="margin-top: 0.8rem;">
+          <textarea id="existingJson" rows="4" placeholder='[{ "type": "youtube", "url": "...", "caption": "..." }]'></textarea>
+          <p class="status" id="existingStatus"></p>
+          <button type="button" class="secondary" id="loadExistingBtn">Load into list below</button>
+        </div>
+      </details>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">2. Add a video</div>
+      <div class="field">
+        <label for="videoUrl">YouTube link</label>
+        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=…">
+        <div class="preview" id="preview">
+          <img id="previewImg" alt="">
+          <div><div class="id" id="previewId"></div></div>
+        </div>
+        <p class="status" id="urlStatus"></p>
+      </div>
+      <div class="field">
+        <label for="videoCaption">Caption</label>
+        <input type="text" id="videoCaption" placeholder="e.g. Walkthrough">
+      </div>
+      <button type="button" id="addBtn">Add to list</button>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">3. Videos for this version</div>
+      <ol class="entry-list" id="entryList"></ol>
+      <p class="empty-note" id="emptyNote">No videos added yet.</p>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">4. Save it</div>
+      <pre class="output" id="output">[]</pre>
+      <div class="output-actions">
+        <button type="button" id="copyBtn">Copy JSON</button>
+        <button type="button" id="downloadBtn" class="secondary">Download videos.json</button>
+        <button type="button" id="saveToRepoBtn" class="secondary" hidden>Save into repo folder…</button>
+        <span class="status" id="saveStatus"></span>
+      </div>
+
+      <details open>
+        <summary>What do I do with this?</summary>
+        <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Save into repo folder…</strong> (Chrome/Edge) and pick this version's
+            <code>versions/&lt;id&gt;/</code> folder — it writes <code>videos.json</code> straight there.
+            Otherwise, click <strong>Download</strong> and move the file into
+            <code>versions/&lt;id&gt;/videos.json</code> yourself.</li>
+          <li>Run <code>./scripts/scan.sh</code> (or push — the CI workflow will regenerate it for you).</li>
+          <li>Commit and push.</li>
+        </ol>
+        <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Copy JSON</strong>.</li>
+          <li>On GitHub, open <code>versions/&lt;id&gt;/</code>, click <strong>Add file → Create new file</strong>,
+            name it <code>videos.json</code>, paste the copied content, and commit.</li>
+          <li>The scan workflow picks it up automatically within about a minute — no local steps needed.</li>
+        </ol>
+      </details>
+    </section>
+  </div>
+
+  <!-- ============ HERO REEL TAB ============ -->
+  <div class="tab-panel" id="panel-hero">
+    <p class="subtitle" style="margin-top:-0.6rem;">
+      Sets the looping video reel behind the homepage hero — lives in
+      <code>assets/js/project-data.js</code>, not a per-version file, so this builds just
+      the three lines that control it rather than a whole file.
+    </p>
+
+    <section class="card">
+      <div class="eyebrow">1. Pick a mode</div>
+      <div class="mode-toggle">
+        <label><input type="radio" name="heroMode" value="videos" checked> One or more videos</label>
+        <label><input type="radio" name="heroMode" value="playlist"> A YouTube playlist</label>
+      </div>
+
+      <div id="heroVideosMode">
+        <div class="field">
+          <label for="heroVideoUrl">YouTube link</label>
+          <input type="url" id="heroVideoUrl" placeholder="https://www.youtube.com/watch?v=…">
+          <div class="preview" id="heroPreview">
+            <img id="heroPreviewImg" alt="">
+            <div><div class="id" id="heroPreviewId"></div></div>
+          </div>
+          <p class="status" id="heroUrlStatus"></p>
+        </div>
+        <button type="button" id="heroAddBtn">Add to list</button>
+
+        <div style="margin-top:1.4rem;">
+          <div class="eyebrow" style="margin-top:0;">Videos (played in this order, then looped)</div>
+          <ol class="entry-list" id="heroEntryList"></ol>
+          <p class="empty-note" id="heroEmptyNote">No videos added yet.</p>
+        </div>
+      </div>
+
+      <div id="heroPlaylistMode" style="display:none;">
+        <div class="field">
+          <label for="heroPlaylistUrl">YouTube playlist link</label>
+          <input type="url" id="heroPlaylistUrl" placeholder="https://www.youtube.com/playlist?list=…">
+          <p class="status" id="heroPlaylistStatus"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">2. Save it</div>
+      <pre class="output" id="heroOutput"></pre>
+      <div class="output-actions">
+        <button type="button" id="heroCopyBtn">Copy snippet</button>
+        <button type="button" id="heroSaveToFileBtn" class="secondary" hidden>Save into project-data.js…</button>
+        <span class="status" id="heroSaveStatus"></span>
+      </div>
+
+      <details open>
+        <summary>What do I do with this?</summary>
+        <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Save into project-data.js…</strong> (Chrome/Edge) and pick that exact file —
+            it updates just these three lines in place and leaves everything else in the file untouched.
+            Otherwise, click <strong>Copy snippet</strong> and paste it over the matching three lines
+            in <code>assets/js/project-data.js</code> yourself.</li>
+          <li>Commit and push. (No scan step needed — this doesn't touch <code>versions/</code>.)</li>
+        </ol>
+        <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Copy snippet</strong>.</li>
+          <li>On GitHub, open <code>assets/js/project-data.js</code>, click the pencil (Edit) icon,
+            find the three lines starting with <code>heroPlaylistId:</code>, <code>heroVideoIds:</code>
+            and <code>heroVideoId:</code>, and replace them with the copied snippet.</li>
+          <li>Commit directly (or via a PR, whichever this repo uses).</li>
+        </ol>
+      </details>
+    </section>
+  </div>
+
+  <!-- ============ VERSION TITLE HEADER TAB ============ -->
+  <div class="tab-panel" id="panel-hero-version">
+    <p class="subtitle" style="margin-top:-0.6rem;">
+      Sets the looping video behind one version's title-header banner (the section at the
+      top of its subpage). Lives in that version's <code>meta.json</code> alongside its
+      label and note, so this builds the whole file — same as the label/note you already have.
+    </p>
+
+    <section class="card">
+      <div class="eyebrow">1. Choose the version</div>
+      <div class="row">
+        <div class="field" style="flex: 2;">
+          <label for="heroVerVersionSelect">Design version</label>
+          <select id="heroVerVersionSelect"></select>
+        </div>
+        <div class="field" style="flex: 1;">
+          <label for="heroVerVersionCustom">…or type an id</label>
+          <input type="text" id="heroVerVersionCustom" placeholder="e.g. v5">
+        </div>
+      </div>
+
+      <details>
+        <summary>Paste this version's existing meta.json so label/note carry over.</summary>
+        <div class="field" style="margin-top: 0.8rem;">
+          <textarea id="heroVerExistingJson" rows="4" placeholder='{ "label": "...", "note": "..." }'></textarea>
+          <p class="status" id="heroVerExistingStatus"></p>
+          <button type="button" class="secondary" id="heroVerLoadExistingBtn">Load</button>
+        </div>
+      </details>
+
+      <div class="row" style="margin-top:1rem;">
+        <div class="field">
+          <label for="heroVerLabel">Label</label>
+          <input type="text" id="heroVerLabel" placeholder="e.g. Version 5">
+        </div>
+      </div>
+      <div class="field">
+        <label for="heroVerNote">Note</label>
+        <textarea id="heroVerNote" rows="2" placeholder="One or two sentences describing this direction."></textarea>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">2. Pick a mode</div>
+      <div class="mode-toggle">
+        <label><input type="radio" name="heroVerMode" value="videos" checked> One or more videos</label>
+        <label><input type="radio" name="heroVerMode" value="playlist"> A YouTube playlist</label>
+      </div>
+
+      <div id="heroVerVideosMode">
+        <div class="field">
+          <label for="heroVerVideoUrl">YouTube link</label>
+          <input type="url" id="heroVerVideoUrl" placeholder="https://www.youtube.com/watch?v=…">
+          <div class="preview" id="heroVerPreview">
+            <img id="heroVerPreviewImg" alt="">
+            <div><div class="id" id="heroVerPreviewId"></div></div>
+          </div>
+          <p class="status" id="heroVerUrlStatus"></p>
+        </div>
+        <button type="button" id="heroVerAddBtn">Add to list</button>
+
+        <div style="margin-top:1.4rem;">
+          <div class="eyebrow" style="margin-top:0;">Videos (played in this order, then looped)</div>
+          <ol class="entry-list" id="heroVerEntryList"></ol>
+          <p class="empty-note" id="heroVerEmptyNote">No videos added yet.</p>
+        </div>
+      </div>
+
+      <div id="heroVerPlaylistMode" style="display:none;">
+        <div class="field">
+          <label for="heroVerPlaylistUrl">YouTube playlist link</label>
+          <input type="url" id="heroVerPlaylistUrl" placeholder="https://www.youtube.com/playlist?list=…">
+          <p class="status" id="heroVerPlaylistStatus"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">3. Save it</div>
+      <pre class="output" id="heroVerOutput"></pre>
+      <div class="output-actions">
+        <button type="button" id="heroVerCopyBtn">Copy JSON</button>
+        <button type="button" id="heroVerDownloadBtn" class="secondary">Download meta.json</button>
+        <button type="button" id="heroVerSaveToRepoBtn" class="secondary" hidden>Save into repo folder…</button>
+        <span class="status" id="heroVerSaveStatus"></span>
+      </div>
+
+      <details open>
+        <summary>What do I do with this?</summary>
+        <p class="hint" style="margin-top:0.6rem;"><strong>If you have this repo cloned locally:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Save into repo folder…</strong> (Chrome/Edge) and pick this version's
+            <code>versions/&lt;id&gt;/</code> folder — it overwrites <code>meta.json</code> there.
+            Otherwise, click <strong>Download</strong> and replace
+            <code>versions/&lt;id&gt;/meta.json</code> yourself.</li>
+          <li>Run <code>./scripts/scan.sh</code> (or push — the CI workflow will regenerate it for you).</li>
+          <li>Commit and push.</li>
+        </ol>
+        <p class="hint"><strong>If you're working through GitHub's website:</strong></p>
+        <ol class="steps">
+          <li>Click <strong>Copy JSON</strong>.</li>
+          <li>On GitHub, open <code>versions/&lt;id&gt;/meta.json</code>, click the pencil (Edit) icon,
+            select all, and paste in the copied content.</li>
+          <li>Commit — the scan workflow regenerates <code>data.js</code> automatically within about a minute.</li>
+        </ol>
+      </details>
+    </section>
+  </div>
+</div>
+
+<script src="../assets/js/youtube-url.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /* ---- reusable add/reorder/remove list of { youtubeId, caption? } ---- */
+
+  function createEntryList(opts) {
+    var entries = [];
+    var listEl = opts.listEl;
+    var emptyEl = opts.emptyEl;
+    var withCaption = !!opts.withCaption;
+    var onChange = opts.onChange || function () {};
+
+    function render() {
+      listEl.innerHTML = "";
+      emptyEl.style.display = entries.length ? "none" : "block";
+      entries.forEach(function (e, i) {
+        var li = document.createElement("li");
+        li.innerHTML =
+          '<img src="https://img.youtube.com/vi/' + e.youtubeId + '/mqdefault.jpg" alt="">' +
+          '<div class="meta">' +
+            (withCaption ? '<div class="caption">' + escapeHtml(e.caption || "(no caption)") + "</div>" : "") +
+            '<div class="idline">' + e.youtubeId + "</div>" +
+          "</div>" +
+          '<div class="actions">' +
+            (i > 0 ? '<button type="button" class="subtle" data-up="' + i + '">↑</button>' : "") +
+            (i < entries.length - 1 ? '<button type="button" class="subtle" data-down="' + i + '">↓</button>' : "") +
+            '<button type="button" class="subtle" data-remove="' + i + '">Remove</button>' +
+          "</div>";
+        listEl.appendChild(li);
+      });
+      onChange(entries);
+    }
+
+    listEl.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t.dataset.remove !== undefined) {
+        entries.splice(Number(t.dataset.remove), 1);
+      } else if (t.dataset.up !== undefined) {
+        var i = Number(t.dataset.up);
+        var tmp = entries[i - 1]; entries[i - 1] = entries[i]; entries[i] = tmp;
+      } else if (t.dataset.down !== undefined) {
+        var j = Number(t.dataset.down);
+        var tmp2 = entries[j + 1]; entries[j + 1] = entries[j]; entries[j] = tmp2;
+      } else {
+        return;
+      }
+      render();
+    });
+
+    return {
+      add: function (entry) { entries.push(entry); render(); },
+      loadMany: function (arr) { entries = entries.concat(arr); render(); },
+      get: function () { return entries; },
+      render: render
+    };
+  }
+
+  /* ---- shared URL-field validator/preview wiring ---- */
+
+  function wireUrlField(input, statusEl, previewEl, previewImgEl, previewIdEl) {
+    function validate() {
+      var raw = input.value.trim();
+      if (!raw) {
+        statusEl.textContent = "";
+        statusEl.className = "status";
+        if (previewEl) previewEl.classList.remove("is-visible");
+        return null;
+      }
+      var id = window.YouTubeUrl.parseVideoId(raw);
+      if (!id) {
+        statusEl.textContent = "Doesn't look like a YouTube video link.";
+        statusEl.className = "status err";
+        if (previewEl) previewEl.classList.remove("is-visible");
+        return null;
+      }
+      statusEl.textContent = "Looks good.";
+      statusEl.className = "status ok";
+      if (previewEl) {
+        previewImgEl.src = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+        previewIdEl.textContent = id;
+        previewEl.classList.add("is-visible");
+      }
+      return id;
+    }
+    input.addEventListener("input", validate);
+    return validate;
+  }
+
+  /* =====================================================================
+     TABS
+     ===================================================================== */
+
+  var tabBtns = document.querySelectorAll(".tab-btn");
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      tabBtns.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      document.querySelectorAll(".tab-panel").forEach(function (p) {
+        p.classList.toggle("is-active", p.id === "panel-" + btn.dataset.tab);
+      });
+    });
+  });
+
+  /* =====================================================================
+     VERSION GALLERY TAB
+     ===================================================================== */
+
+  var versionSelect = document.getElementById("versionSelect");
+  var versionCustom = document.getElementById("versionCustom");
+  var versionListStatus = document.getElementById("versionListStatus");
+  var urlInput = document.getElementById("videoUrl");
+  var captionInput = document.getElementById("videoCaption");
+  var urlStatus = document.getElementById("urlStatus");
+  var preview = document.getElementById("preview");
+  var previewImg = document.getElementById("previewImg");
+  var previewId = document.getElementById("previewId");
+  var addBtn = document.getElementById("addBtn");
+  var output = document.getElementById("output");
+  var copyBtn = document.getElementById("copyBtn");
+  var downloadBtn = document.getElementById("downloadBtn");
+  var saveToRepoBtn = document.getElementById("saveToRepoBtn");
+  var saveStatus = document.getElementById("saveStatus");
+  var existingJson = document.getElementById("existingJson");
+  var existingStatus = document.getElementById("existingStatus");
+  var loadExistingBtn = document.getElementById("loadExistingBtn");
+
+  var versionList = createEntryList({
+    listEl: document.getElementById("entryList"),
+    emptyEl: document.getElementById("emptyNote"),
+    withCaption: true,
+    onChange: function (entries) { output.textContent = buildVersionJson(entries); }
+  });
+
+  var validateVersionUrl = wireUrlField(urlInput, urlStatus, preview, previewImg, previewId);
+
+  var s1 = document.createElement("script");
+  s1.src = "../versions/versions-index.js";
+  s1.onload = function () {
+    var ids = window.VERSION_IDS || [];
+    versionSelect.innerHTML = ids.map(function (id) {
+      return '<option value="' + id + '">' + id + "</option>";
+    }).join("");
+    versionListStatus.textContent = ids.length
+      ? "Loaded " + ids.length + " version(s) from versions-index.js."
+      : "";
+  };
+  s1.onerror = function () {
+    versionListStatus.textContent =
+      "Couldn't load versions-index.js (open this file through a local server, or just type an id on the right).";
+  };
+  document.head.appendChild(s1);
+
+  function currentVersionId() {
+    return (versionCustom.value.trim()) || versionSelect.value || "";
+  }
+
+  addBtn.addEventListener("click", function () {
+    var id = validateVersionUrl();
+    if (!id) { urlInput.focus(); return; }
+    versionList.add({ youtubeId: id, caption: captionInput.value.trim() });
+    urlInput.value = "";
+    captionInput.value = "";
+    urlStatus.textContent = "";
+    preview.classList.remove("is-visible");
+    urlInput.focus();
+  });
+  urlInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addBtn.click(); } });
+  captionInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addBtn.click(); } });
+
+  loadExistingBtn.addEventListener("click", function () {
+    var raw = existingJson.value.trim();
+    if (!raw) { existingStatus.textContent = ""; return; }
+    var parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      existingStatus.textContent = "Not valid JSON: " + err.message;
+      existingStatus.className = "status err";
+      return;
+    }
+    if (!Array.isArray(parsed)) {
+      existingStatus.textContent = "Expected a JSON array.";
+      existingStatus.className = "status err";
+      return;
+    }
+    var toLoad = [], skipped = 0;
+    parsed.forEach(function (v) {
+      if (v.type !== "youtube") { skipped++; return; }
+      var id = window.YouTubeUrl.parseVideoId(v.url || v.youtubeId);
+      if (!id) { skipped++; return; }
+      toLoad.push({ youtubeId: id, caption: v.caption || "" });
+    });
+    versionList.loadMany(toLoad);
+    existingStatus.textContent = "Loaded " + toLoad.length + " entr" + (toLoad.length === 1 ? "y" : "ies") +
+      (skipped ? ", skipped " + skipped + " unrecognized" : "") + ".";
+    existingStatus.className = "status ok";
+  });
+
+  function buildVersionJson(entries) {
+    var arr = entries.map(function (e) {
+      return { type: "youtube", url: "https://www.youtube.com/watch?v=" + e.youtubeId, caption: e.caption || "" };
+    });
+    return JSON.stringify(arr, null, 2) + "\n";
+  }
+
+  copyBtn.addEventListener("click", function () {
+    navigator.clipboard.writeText(output.textContent).then(function () {
+      saveStatus.textContent = "Copied.";
+      saveStatus.className = "status ok";
+      setTimeout(function () { saveStatus.textContent = ""; }, 2500);
+    }, function () {
+      saveStatus.textContent = "Couldn't copy — select the text above and copy manually.";
+      saveStatus.className = "status err";
+    });
+  });
+
+  downloadBtn.addEventListener("click", function () {
+    var blob = new Blob([output.textContent], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "videos.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  });
+
+  if (window.showDirectoryPicker) {
+    saveToRepoBtn.hidden = false;
+    saveToRepoBtn.addEventListener("click", function () {
+      var id = currentVersionId();
+      if (!id) {
+        saveStatus.textContent = "Pick a version first.";
+        saveStatus.className = "status err";
+        return;
+      }
+      window.showDirectoryPicker({ id: "clearview-deck-version-folder", startIn: "documents" })
+        .then(function (dirHandle) {
+          return dirHandle.getFileHandle("videos.json", { create: true }).then(function (fileHandle) {
+            return fileHandle.createWritable().then(function (writable) {
+              return writable.write(output.textContent).then(function () { return writable.close(); });
+            });
+          });
+        })
+        .then(function () {
+          saveStatus.textContent = "Saved videos.json into the selected folder — make sure that was versions/" + id + "/.";
+          saveStatus.className = "status ok";
+        })
+        .catch(function (err) {
+          if (err.name !== "AbortError") {
+            saveStatus.textContent = "Couldn't save: " + err.message;
+            saveStatus.className = "status err";
+          }
+        });
+    });
+  }
+
+  versionList.render();
+
+  /* ---- shared mode-toggle + video-list-or-playlist builder, used by both
+     the homepage hero and a version's title-header hero below ---- */
+
+  function createHeroBuilder(els) {
+    function mode() {
+      var checked = document.querySelector('input[name="' + els.modeName + '"]:checked');
+      return checked ? checked.value : "videos";
+    }
+
+    var list = createEntryList({
+      listEl: els.listEl,
+      emptyEl: els.emptyEl,
+      withCaption: false,
+      onChange: function () { els.onChange(); }
+    });
+
+    var validateUrl = wireUrlField(els.videoUrl, els.urlStatus, els.preview, els.previewImg, els.previewId);
+
+    els.addBtn.addEventListener("click", function () {
+      var id = validateUrl();
+      if (!id) { els.videoUrl.focus(); return; }
+      list.add({ youtubeId: id });
+      els.videoUrl.value = "";
+      els.urlStatus.textContent = "";
+      els.preview.classList.remove("is-visible");
+      els.videoUrl.focus();
+    });
+    els.videoUrl.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); els.addBtn.click(); } });
+
+    var playlistId = null;
+    els.playlistUrl.addEventListener("input", function () {
+      var raw = els.playlistUrl.value.trim();
+      if (!raw) {
+        playlistId = null;
+        els.playlistStatus.textContent = "";
+        els.playlistStatus.className = "status";
+        els.onChange();
+        return;
+      }
+      var id = window.YouTubeUrl.parsePlaylistId(raw);
+      if (!id) {
+        playlistId = null;
+        els.playlistStatus.textContent = "Doesn't look like a YouTube playlist link.";
+        els.playlistStatus.className = "status err";
+      } else {
+        playlistId = id;
+        els.playlistStatus.textContent = "Looks good — resolved to list=" + id;
+        els.playlistStatus.className = "status ok";
+      }
+      els.onChange();
+    });
+
+    document.querySelectorAll('input[name="' + els.modeName + '"]').forEach(function (r) {
+      r.addEventListener("change", function () {
+        els.videosModeEl.style.display = mode() === "videos" ? "block" : "none";
+        els.playlistModeEl.style.display = mode() === "playlist" ? "block" : "none";
+        els.onChange();
+      });
+    });
+
+    return {
+      getFields: function () {
+        return {
+          heroPlaylistId: mode() === "playlist" ? (playlistId || "") : "",
+          heroVideoIds: mode() === "videos" ? list.get().map(function (e) { return e.youtubeId; }) : [],
+          heroVideoId: ""
+        };
+      },
+      render: function () { list.render(); }
+    };
+  }
+
+  /* =====================================================================
+     HERO REEL TAB (homepage — project-data.js)
+     ===================================================================== */
+
+  var heroOutput = document.getElementById("heroOutput");
+  var heroCopyBtn = document.getElementById("heroCopyBtn");
+  var heroSaveToFileBtn = document.getElementById("heroSaveToFileBtn");
+  var heroSaveStatus = document.getElementById("heroSaveStatus");
+
+  var siteHero = createHeroBuilder({
+    modeName: "heroMode",
+    videosModeEl: document.getElementById("heroVideosMode"),
+    playlistModeEl: document.getElementById("heroPlaylistMode"),
+    videoUrl: document.getElementById("heroVideoUrl"),
+    urlStatus: document.getElementById("heroUrlStatus"),
+    preview: document.getElementById("heroPreview"),
+    previewImg: document.getElementById("heroPreviewImg"),
+    previewId: document.getElementById("heroPreviewId"),
+    addBtn: document.getElementById("heroAddBtn"),
+    listEl: document.getElementById("heroEntryList"),
+    emptyEl: document.getElementById("heroEmptyNote"),
+    playlistUrl: document.getElementById("heroPlaylistUrl"),
+    playlistStatus: document.getElementById("heroPlaylistStatus"),
+    onChange: function () { renderSiteHeroOutput(); }
+  });
+
+  function buildHeroSnippet() {
+    var f = siteHero.getFields();
+    var idsLiteral = "[" + f.heroVideoIds.map(function (id) { return JSON.stringify(id); }).join(", ") + "]";
+    return (
+      "heroPlaylistId: " + JSON.stringify(f.heroPlaylistId) + ",\n" +
+      "heroVideoIds: " + idsLiteral + ",\n" +
+      "heroVideoId: \"\","
+    );
+  }
+
+  function renderSiteHeroOutput() {
+    heroOutput.textContent = buildHeroSnippet();
+  }
+  renderSiteHeroOutput();
+
+  heroCopyBtn.addEventListener("click", function () {
+    navigator.clipboard.writeText(heroOutput.textContent).then(function () {
+      heroSaveStatus.textContent = "Copied.";
+      heroSaveStatus.className = "status ok";
+      setTimeout(function () { heroSaveStatus.textContent = ""; }, 2500);
+    }, function () {
+      heroSaveStatus.textContent = "Couldn't copy — select the text above and copy manually.";
+      heroSaveStatus.className = "status err";
+    });
+  });
+
+  /* Direct in-place edit of project-data.js: only the three hero fields are
+     touched via regex replacement, everything else in the file is preserved
+     byte-for-byte. Guards against saving into the wrong file by requiring
+     the picked file to already contain a heroPlaylistId declaration. */
+  if (window.showOpenFilePicker) {
+    heroSaveToFileBtn.hidden = false;
+    heroSaveToFileBtn.addEventListener("click", function () {
+      window.showOpenFilePicker({
+        id: "clearview-deck-project-data",
+        types: [{ description: "project-data.js", accept: { "text/javascript": [".js"] } }],
+        multiple: false
+      })
+        .then(function (handles) {
+          var handle = handles[0];
+          return handle.getFile().then(function (file) {
+            return file.text().then(function (text) { return { handle: handle, text: text }; });
+          });
+        })
+        .then(function (result) {
+          var text = result.text;
+          if (!/heroPlaylistId\s*:/.test(text)) {
+            throw new Error("That file doesn't look like project-data.js (no heroPlaylistId found) — picked the wrong file?");
+          }
+          var f = siteHero.getFields();
+          var idsLiteral = "[" + f.heroVideoIds.map(function (id) { return JSON.stringify(id); }).join(", ") + "]";
+
+          var updated = text
+            .replace(/heroPlaylistId\s*:\s*"[^"]*"/, "heroPlaylistId: " + JSON.stringify(f.heroPlaylistId))
+            .replace(/heroVideoIds\s*:\s*\[[^\]]*\]/, "heroVideoIds: " + idsLiteral)
+            .replace(/heroVideoId\s*:\s*"[^"]*"/, 'heroVideoId: ""');
+
+          return result.handle.createWritable().then(function (writable) {
+            return writable.write(updated).then(function () { return writable.close(); });
+          });
+        })
+        .then(function () {
+          heroSaveStatus.textContent = "Updated project-data.js in place.";
+          heroSaveStatus.className = "status ok";
+        })
+        .catch(function (err) {
+          if (err.name !== "AbortError") {
+            heroSaveStatus.textContent = "Couldn't save: " + err.message;
+            heroSaveStatus.className = "status err";
+          }
+        });
+    });
+  }
+
+  siteHero.render();
+
+  /* =====================================================================
+     VERSION TITLE HEADER TAB — a version's own meta.json
+     ===================================================================== */
+
+  var heroVerVersionSelect = document.getElementById("heroVerVersionSelect");
+  var heroVerVersionCustom = document.getElementById("heroVerVersionCustom");
+  var heroVerLabel = document.getElementById("heroVerLabel");
+  var heroVerNote = document.getElementById("heroVerNote");
+  var heroVerExistingJson = document.getElementById("heroVerExistingJson");
+  var heroVerExistingStatus = document.getElementById("heroVerExistingStatus");
+  var heroVerLoadExistingBtn = document.getElementById("heroVerLoadExistingBtn");
+  var heroVerOutput = document.getElementById("heroVerOutput");
+  var heroVerCopyBtn = document.getElementById("heroVerCopyBtn");
+  var heroVerDownloadBtn = document.getElementById("heroVerDownloadBtn");
+  var heroVerSaveToRepoBtn = document.getElementById("heroVerSaveToRepoBtn");
+  var heroVerSaveStatus = document.getElementById("heroVerSaveStatus");
+
+  // Reuse the version list already loaded for the Version Gallery tab
+  // (versions-index.js was requested once above; just populate this second
+  // <select> from the same window.VERSION_IDS once it resolves).
+  var origVersionsOnload = s1.onload;
+  s1.onload = function () {
+    origVersionsOnload();
+    var ids = window.VERSION_IDS || [];
+    heroVerVersionSelect.innerHTML = ids.map(function (id) {
+      return '<option value="' + id + '">' + id + "</option>";
+    }).join("");
+  };
+
+  function heroVerVersionId() {
+    return (heroVerVersionCustom.value.trim()) || heroVerVersionSelect.value || "";
+  }
+
+  var versionHero = createHeroBuilder({
+    modeName: "heroVerMode",
+    videosModeEl: document.getElementById("heroVerVideosMode"),
+    playlistModeEl: document.getElementById("heroVerPlaylistMode"),
+    videoUrl: document.getElementById("heroVerVideoUrl"),
+    urlStatus: document.getElementById("heroVerUrlStatus"),
+    preview: document.getElementById("heroVerPreview"),
+    previewImg: document.getElementById("heroVerPreviewImg"),
+    previewId: document.getElementById("heroVerPreviewId"),
+    addBtn: document.getElementById("heroVerAddBtn"),
+    listEl: document.getElementById("heroVerEntryList"),
+    emptyEl: document.getElementById("heroVerEmptyNote"),
+    playlistUrl: document.getElementById("heroVerPlaylistUrl"),
+    playlistStatus: document.getElementById("heroVerPlaylistStatus"),
+    onChange: function () { renderVersionHeroOutput(); }
+  });
+
+  heroVerLabel.addEventListener("input", renderVersionHeroOutput);
+  heroVerNote.addEventListener("input", renderVersionHeroOutput);
+
+  heroVerLoadExistingBtn.addEventListener("click", function () {
+    var raw = heroVerExistingJson.value.trim();
+    if (!raw) { heroVerExistingStatus.textContent = ""; return; }
+    var parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      heroVerExistingStatus.textContent = "Not valid JSON: " + err.message;
+      heroVerExistingStatus.className = "status err";
+      return;
+    }
+    heroVerLabel.value = parsed.label || "";
+    heroVerNote.value = parsed.note || "";
+    heroVerExistingStatus.textContent = "Loaded label/note" +
+      (parsed.label ? "" : " (no label found — you'll need to set one, it's required)") + ".";
+    heroVerExistingStatus.className = "status ok";
+    renderVersionHeroOutput();
+  });
+
+  function buildVersionMetaJson() {
+    var f = versionHero.getFields();
+    var obj = {
+      label: heroVerLabel.value.trim(),
+      note: heroVerNote.value.trim(),
+      heroPlaylistId: f.heroPlaylistId,
+      heroVideoIds: f.heroVideoIds,
+      heroVideoId: f.heroVideoId
+    };
+    return JSON.stringify(obj, null, 2) + "\n";
+  }
+
+  function renderVersionHeroOutput() {
+    heroVerOutput.textContent = buildVersionMetaJson();
+  }
+  renderVersionHeroOutput();
+
+  heroVerCopyBtn.addEventListener("click", function () {
+    navigator.clipboard.writeText(heroVerOutput.textContent).then(function () {
+      heroVerSaveStatus.textContent = "Copied.";
+      heroVerSaveStatus.className = "status ok";
+      setTimeout(function () { heroVerSaveStatus.textContent = ""; }, 2500);
+    }, function () {
+      heroVerSaveStatus.textContent = "Couldn't copy — select the text above and copy manually.";
+      heroVerSaveStatus.className = "status err";
+    });
+  });
+
+  heroVerDownloadBtn.addEventListener("click", function () {
+    var blob = new Blob([heroVerOutput.textContent], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "meta.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  });
+
+  if (window.showDirectoryPicker) {
+    heroVerSaveToRepoBtn.hidden = false;
+    heroVerSaveToRepoBtn.addEventListener("click", function () {
+      var id = heroVerVersionId();
+      if (!id) {
+        heroVerSaveStatus.textContent = "Pick a version first.";
+        heroVerSaveStatus.className = "status err";
+        return;
+      }
+      if (!heroVerLabel.value.trim()) {
+        heroVerSaveStatus.textContent = "Label is required (the scan tool skips versions without one).";
+        heroVerSaveStatus.className = "status err";
+        return;
+      }
+      window.showDirectoryPicker({ id: "clearview-deck-version-folder", startIn: "documents" })
+        .then(function (dirHandle) {
+          return dirHandle.getFileHandle("meta.json", { create: true }).then(function (fileHandle) {
+            return fileHandle.createWritable().then(function (writable) {
+              return writable.write(heroVerOutput.textContent).then(function () { return writable.close(); });
+            });
+          });
+        })
+        .then(function () {
+          heroVerSaveStatus.textContent = "Saved meta.json into the selected folder — make sure that was versions/" + id + "/.";
+          heroVerSaveStatus.className = "status ok";
+        })
+        .catch(function (err) {
+          if (err.name !== "AbortError") {
+            heroVerSaveStatus.textContent = "Couldn't save: " + err.message;
+            heroVerSaveStatus.className = "status err";
+          }
+        });
+    });
+  }
+
+  versionHero.render();
+})();
+</script>
+</body>
+</html>
