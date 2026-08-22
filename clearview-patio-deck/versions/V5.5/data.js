@@ -2,9 +2,10 @@
  * Edit versions/V5.5/meta.json for label/note (and optionally this
  * version's own title-header hero video — heroPlaylistId/heroVideoIds/
  * heroVideoId, same shape as project-data.js's site-level hero), add/remove
- * files in versions/V5.5/assets/ for images and local videos, or add
- * entries to versions/V5.5/videos.json for non-file videos (e.g. YouTube) —
- * then re-run: node scripts/generate-version-data.js
+ * files in versions/V5.5/assets/ for images and local videos, drop at most
+ * one PDF in versions/V5.5/assets/ for the drawing-set viewer + download
+ * button, or add entries to versions/V5.5/videos.json for non-file videos
+ * (e.g. YouTube) — then re-run: node scripts/generate-version-data.js
  */
 window.VERSIONS = window.VERSIONS || {};
 window.VERSIONS["V5.5"] = {
@@ -18,6 +19,9 @@ window.VERSIONS["V5.5"] = {
   heroPlaylistId: "PLFgzgcOzYDN0",
   heroVideoIds: [],
   heroVideoId: "",
+  // Drawing-set PDF found in assets/ (null if none) — powers the PDF viewer
+  // + download button on this version's subpage. See version-page.js.
+  pdf: { src: "assets/CLEARVIEW-DECK-DV5.5-1-PATIO-DECK.pdf", label: "Drawing Set (PDF)" },
   images: [
     { src: "assets/01-1.jpg", caption: "01 1" },
     { src: "assets/01-2.jpg", caption: "01 2" },

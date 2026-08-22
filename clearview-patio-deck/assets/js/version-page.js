@@ -56,6 +56,7 @@
     renderHeroMedia();
     renderImages();
     renderVideos();
+    renderPdf();
     renderPager();
   }
 
@@ -201,6 +202,26 @@
     }
     document.getElementById("videoLightboxClose").addEventListener("click", close);
     modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
+  }
+
+  /* ---------------- PDF viewer ---------------- */
+
+  function renderPdf() {
+    var section = document.getElementById("pdfSection");
+    if (!v.pdf) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    var url = assetUrl(v.pdf.src);
+    document.getElementById("pdfFrame").src = url;
+    var downloadBtn = document.getElementById("pdfDownloadBtn");
+    downloadBtn.href = url;
+    downloadBtn.textContent = v.pdf.label || "Download PDF";
+    downloadBtn.setAttribute(
+      "download",
+      (P.name + " " + v.label + " Drawing Set.pdf").replace(/\s+/g, " ")
+    );
   }
 
   /* ---------------- Prev/next pager ---------------- */

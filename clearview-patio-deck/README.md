@@ -40,7 +40,7 @@ clearview-patio-deck/
       meta.json                  Hand-authored: { "label": "...", "note": "..." }
       index.html                 Generic subpage shell (identical for every version, no per-version edits)
       assets/                    Empty — drop that version's images/videos here
-    dv5-5-1/                     The only version so far — DV5.5-1 drawing set + renderings
+    V5.5/, V5.6/                 One folder per drawing set — DV5.5-1, DV5.6-1, + renderings
       meta.json                  Hand-authored label/note/hero
       data.js                    AUTO-GENERATED — do not hand-edit
       index.html                 (copy of _template/index.html)
@@ -77,9 +77,17 @@ subfolder (except `_template`) it:
   Object Name, then EXIF XPTitle/ImageDescription), otherwise a humanized version of the
   filename (`pool-terrace.jpg` → "Pool Terrace"). None of the current images carry title
   metadata, so every caption today is filename-derived — hence the numbered, hyphenated
-  filenames in `versions/dv5-5-1/assets/`, chosen to read well once humanized.
+  filenames in `versions/V5.5/assets/`, chosen to read well once humanized.
 - Picks the thumbnail: a file named `thumb.*`/`cover.*` if present, else the first image
   in sorted order (name files starting with e.g. `01-` if you want a specific one first).
+- Picks up at most one PDF dropped in the same `assets/` folder — becomes that version's
+  `pdf: { src, label }` in `data.js`, which powers the "Drawing Set" section on its
+  subpage: an inline PDF viewer (an `<embed type="application/pdf">`, not `<iframe>` —
+  see note below) plus a "Download PDF" button next to it. `label` is a fixed generic
+  string ("Drawing Set (PDF)") rather than a humanized filename, since PDF source
+  filenames (full sheet titles/dates) don't make good button copy. If more than one PDF
+  is found, the first in natural-sort order wins and the rest are ignored (with a
+  scan-time warning) — drop only one PDF per version's `assets/` folder.
 - Rebuilds `videos[]` from any video files (`.mp4/.webm/.mov/.m4v`) in the same `assets/`
   folder (poster = a same-basename image if one exists, else the version's thumbnail).
   For videos that aren't local files (YouTube), add them in an optional
@@ -104,7 +112,7 @@ the only file you ever type into by hand for an existing version.
 (the section at the top of its subpage) — same three fields, same priority, and same
 link-or-bare-ID handling as the homepage hero below: `heroPlaylistId`, `heroVideoIds`
 (array), `heroVideoId`. Leave all three empty/absent to keep the static thumbnail
-background. `versions/dv5-5-1/meta.json` sets `heroPlaylistId` to the same reel as the
+background. `versions/V5.5/meta.json` sets `heroPlaylistId` to the same reel as the
 site-level hero. Built with `tools/add-videos.html`'s "Version Title Header" tab, same as
 the homepage hero and the gallery videos above.
 
@@ -172,15 +180,21 @@ rebuilding them.
   drawing sheet (Brown Studio Inc., dated 08/18/26, printed 08/20/26) — a dimensioned
   site/deck plan, two 1/4"-scale building sections (`V5.5.Section.1`, `V5.5.Section.2`),
   and a 3D massing axonometric, all developed from Concept Version 5.5 of the
-  `clearview-deck` site. There's only one drawing set so far, so `versions/` holds a
-  single folder, `dv5-5-1` — the homepage version grid and per-version subpage still work
-  the same way with one card.
+  `clearview-deck` site. That drawing sheet's version folder is `versions/V5.5/` (a
+  second drawing set, `versions/V5.6/`, was added later — same pattern).
 - **Hero video**: `heroPlaylistId` is set to the *same* YouTube playlist as the
   `clearview-deck` concept-studies site, per the client's request to reuse it here — both
-  the site-level hero (`project-data.js`) and the `dv5-5-1` version's own title-header
-  banner (`versions/dv5-5-1/meta.json`). Swap to `heroVideoIds`/`heroVideoId`, or clear
-  all three, at any time.
-- **Images**: `versions/dv5-5-1/assets/` holds two sets. Five are the DV5.5-1 sheet
+  the site-level hero (`project-data.js`) and each version's own title-header banner
+  (`versions/<id>/meta.json`). Swap to `heroVideoIds`/`heroVideoId`, or clear all three,
+  at any time.
+- **PDF viewer**: the per-version "Drawing Set" section (see "The scan tool" above) uses
+  `<embed type="application/pdf">`, not `<iframe src="...pdf">`. Both are valid ways to
+  embed a PDF and browsers render either via their native PDF viewer, but in testing an
+  `<iframe>` embed rendered blank/black on this page's markup (reproducible with the real
+  page's CSS, not with a bare-bones page) while `<embed>` rendered correctly — direct
+  navigation to the PDF URL always worked either way. If the viewer ever needs to go back
+  to `<iframe>`, re-test on the real page (not an isolated snippet) before assuming it works.
+- **Images**: `versions/V5.5/assets/` holds two sets. Five are the DV5.5-1 sheet
   itself, rasterized at 300dpi and cropped — the full sheet, the plan, each section, and
   the axonometric (`axonometric-massing-view.jpg`, `deck-and-pool-plan.jpg`,
   `full-drawing-sheet.jpg`, `section-1.jpg`, `section-2.jpg`). The other sixteen
@@ -192,7 +206,7 @@ rebuilding them.
   natural sort is filename-driven. No Google Drive archive exists for this drawing set
   yet, so `driveFolderUrl` is left blank in `project-data.js` (the Drive button hides
   itself automatically when that field is empty).
-- **Videos**: `versions/dv5-5-1/videos.json` lists six YouTube walkthroughs — Fire Pit,
+- **Videos**: `versions/V5.5/videos.json` lists six YouTube walkthroughs — Fire Pit,
   Sun Study, Projection Screen (×2), and Flythrough (×2) — also carried over from the
   `clearview-deck` site's `vX` version.
 - **Download PDF**: `assets/downloads/Clearview-Deck-DV5.5-1-Patio-Deck.pdf` is the
