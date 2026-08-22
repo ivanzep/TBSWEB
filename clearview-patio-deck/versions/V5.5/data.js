@@ -9,8 +9,8 @@
 window.VERSIONS = window.VERSIONS || {};
 window.VERSIONS["V5.5"] = {
   id: "V5.5",
-  label: "DV5.5-1 — Patio Deck",
-  note: "Design-development drawing set for the pool deck: dimensioned plan, two building sections through the pergola bay, and a 3D massing study, developed from Concept Version 5.5 — with the full rendering set and walkthrough videos.",
+  label: "V5.5",
+  note: "BUILT IN BAJA BENCH WITH SITTING AREA,FULLY COVERED FIREPIT AREA WITH PROJECTOR SCREEN, ROOF DECK AREA OVER FIREPIT",
   thumb: "assets/01-aerial-site-overview.jpg",
   // Title-header hero video — checked in this order, first non-empty wins,
   // falls back to the thumb image (above) as a static background if all
