@@ -93,8 +93,7 @@
       card.className = "media-card";
       card.setAttribute("data-reveal", "");
       card.innerHTML =
-        '<img src="' + assetUrl(img.src) + '" alt="' + v.label + ' — ' + img.caption + '" loading="lazy">' +
-        '<span class="media-card-caption">' + img.caption + "</span>";
+        '<img src="' + assetUrl(img.src) + '" alt="' + v.label + ' — ' + img.caption + '" loading="lazy">';
       card.addEventListener("click", function () { openImageLightbox(i); });
       grid.appendChild(card);
     });
@@ -115,7 +114,7 @@
     document.getElementById("lightboxImg").src = assetUrl(current.src);
     document.getElementById("lightboxImg").alt = v.label + " — " + current.caption;
     document.getElementById("lightboxLabel").textContent =
-      current.caption + " (" + (imgLightboxIndex + 1) + "/" + images.length + ")";
+      (imgLightboxIndex + 1) + " / " + images.length;
   }
 
   function bindImageLightbox() {

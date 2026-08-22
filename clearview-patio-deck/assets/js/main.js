@@ -11,7 +11,7 @@
     renderStaticText();
     renderHero();
     C.bindHeaderScroll();
-    C.bindSectionNavHighlight(["home", "versions", "download", "contact"]);
+    C.bindSectionNavHighlight(["home", "versions", "download"]);
     C.bindNavToggle();
     C.bindScrollProgress();
     C.bindReveal();

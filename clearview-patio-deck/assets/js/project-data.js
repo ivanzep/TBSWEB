@@ -18,7 +18,7 @@ window.PROJECT = {
   },
 
   name: "Clearview Deck",
-  subtitle: "Patio Deck — DV5.5-1",
+  subtitle: "Patio Deck",
   client: "Private Residence",
   location: "Placeholder, CA",
   scope: "Pool Deck · Outdoor Kitchen · Dining & Seating",
@@ -40,8 +40,7 @@ window.PROJECT = {
   // 2) heroVideoIds: an array of standalone video links/IDs, cycled then looped.
   // 3) heroVideoId: a single video link/ID, looped on itself.
   // Leave all three empty/blank to fall back to heroImage as a static hero background.
-  // Same hero reel as the clearview-deck concept-studies site, per client branding.
-  heroPlaylistId: "PLFgzgcOzYDN0",
+  heroPlaylistId: "PLL5c6ekNKKMA",
   heroVideoIds: [],
   heroVideoId: "",
   // Homepage-only, so it can stay relative to index.html directly.
