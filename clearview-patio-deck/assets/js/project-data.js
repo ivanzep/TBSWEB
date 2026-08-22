@@ -45,7 +45,7 @@ window.PROJECT = {
   heroVideoIds: [],
   heroVideoId: "",
   // Homepage-only, so it can stay relative to index.html directly.
-  heroImage: "./versions/dv5-5-1/assets/01-aerial-site-overview.jpg",
+  heroImage: "./versions/V5.5/assets/01-aerial-site-overview.jpg",
 
   // Local download by default (works immediately, no setup). Stored root-relative
   // (no leading "./") since SiteCommon.renderChrome() prefixes it per page depth.
