@@ -5,5 +5,6 @@
  * version folder: node scripts/generate-version-data.js
  */
 window.VERSION_IDS = [
-  "dv5-5-1"
+  "V5.5",
+  "V5.6"
 ];
