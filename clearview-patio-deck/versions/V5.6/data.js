@@ -33,7 +33,8 @@ window.VERSIONS["V5.6"] = {
     { src: "assets/2026-08-21 13-39-44 - Custom.jpg", caption: "2026 08 21 13 39 44 Custom" },
     { src: "assets/2026-08-21 13-40-48 - Custom.jpg", caption: "2026 08 21 13 40 48 Custom" },
     { src: "assets/2026-08-21 13-41-23 - Custom.jpg", caption: "2026 08 21 13 41 23 Custom" },
-    { src: "assets/2026-08-21 13-44-06 - Custom.jpg", caption: "2026 08 21 13 44 06 Custom" }
+    { src: "assets/2026-08-21 13-44-06 - Custom.jpg", caption: "2026 08 21 13 44 06 Custom" },
+    { src: "assets/CLEARVIEW DECK-20260819-15-AI.jpeg", caption: "CLEARVIEW DECK 20260819 15 AI" }
   ],
   videos: [
     { type: "youtube", youtubeId: "99A_l5_iOCQ", caption: "2" },
