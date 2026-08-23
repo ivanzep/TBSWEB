@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Version | Loading…</title>
+<meta name="description" content="Design version gallery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="version-page">
+
+<div id="scrollProgress"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-name" id="logoName"></span>
+      <span class="logo-tag" id="logoTag"></span>
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="../../index.html#versions">Design Versions</a>
+      <a href="../../index.html#download">Download</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="version-hero" id="versionHero">
+  <div class="version-hero-media" id="versionHeroMedia"></div>
+  <div class="version-hero-content">
+    <a href="../../index.html#versions" class="back-link">← All Design Versions</a>
+    <p class="eyebrow" id="versionEyebrow">Design Version</p>
+    <h1 id="versionTitle">Loading…</h1>
+    <p class="version-hero-note" id="versionNote"></p>
+  </div>
+</section>
+
+<section class="version-gallery" id="imagesSection">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Renderings</p>
+        <h2>Image Gallery</h2>
+      </div>
+      <p id="imageCount"></p>
+    </div>
+    <div class="media-grid" id="imageGrid"></div>
+  </div>
+</section>
+
+<section class="version-gallery version-gallery-alt" id="videosSection" hidden>
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Walkthroughs</p>
+        <h2>Video Gallery</h2>
+      </div>
+    </div>
+    <div class="media-grid" id="videoGrid"></div>
+  </div>
+</section>
+
+<section class="version-pdf" id="pdfSection" hidden>
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Construction Documents</p>
+        <h2>Drawing Set</h2>
+      </div>
+      <a class="btn btn-primary" id="pdfDownloadBtn" href="#" download>Download PDF</a>
+    </div>
+    <div class="pdf-viewer">
+      <embed id="pdfFrame" src="" type="application/pdf" title="Drawing set PDF">
+    </div>
+  </div>
+</section>
+
+<section class="version-pager" id="versionPager">
+  <div class="container pager-inner">
+    <a class="pager-link prev" id="pagerPrev" href="#"><span class="pager-dir">← Previous</span><span class="pager-label"></span></a>
+    <a class="pager-link next" id="pagerNext" href="#"><span class="pager-dir">Next →</span><span class="pager-label"></span></a>
+  </div>
+</section>
+
+<section class="download" id="download">
+  <div class="container">
+    <p class="eyebrow">Take It With You</p>
+    <h2>Full Drawing Set</h2>
+    <p>The dimensioned plan, both building sections and the massing study in a single downloadable PDF.</p>
+    <div class="download-actions">
+      <a class="btn btn-primary" id="downloadBtn" href="#" download>
+        Download PDF
+      </a>
+      <a class="btn btn-outline" id="driveBtn" href="#" target="_blank" rel="noopener" style="border-color:rgba(255,255,255,.7);color:#fff;">
+        Full-Res Renderings (Drive)
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <p class="eyebrow">Next Step</p>
+    <h2>Let's Land on a Direction</h2>
+    <p>Questions on this version, or ready to combine elements from a few? Reach out and we'll set up a walkthrough.</p>
+    <a class="btn btn-dark-outline" id="contactBtn" href="#">Email The Studio</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName"></span>
+    <span id="footerMeta">© <span id="footerYear"></span> — Patio Deck</span>
+  </div>
+</footer>
+
+<!-- Image lightbox -->
+<div class="modal-overlay" id="lightbox">
+  <button class="modal-close" id="lightboxClose">Close ✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-stage">
+      <img id="lightboxImg" src="" alt="">
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image">›</button>
+    </div>
+    <div class="lightbox-meta">
+      <div class="label" id="lightboxLabel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Video lightbox -->
+<div class="modal-overlay" id="videoLightbox">
+  <button class="modal-close" id="videoLightboxClose">Close ✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-stage" id="videoLightboxStage"></div>
+    <div class="lightbox-meta">
+      <div class="label" id="videoLightboxLabel"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/project-data.js"></script>
+<script src="../../assets/js/youtube-url.js"></script>
+<script src="../../assets/js/common.js"></script>
+<script src="../../assets/js/version-loader.js"></script>
+<script src="../../assets/js/version-page.js"></script>
+</body>
+</html>
