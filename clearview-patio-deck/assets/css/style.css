@@ -862,30 +862,33 @@ section { position: relative; }
   letter-spacing: 0.06em;
 }
 
-.media-card-video .play-icon {
+/* Autoplaying muted/looped preview, inserted once the card scrolls into
+   view (see bindAutoplayPreviews() in version-page.js). Sits over the
+   poster <img> so there's an instant thumbnail while the preview loads.
+   pointer-events: none lets clicks pass through to the card button
+   underneath, which opens the full lightbox (with sound/controls). */
+.media-card-video .video-preview {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 54px; height: 54px;
-  border-radius: 50%;
-  background: rgba(10,9,6,0.55);
-  border: 1.5px solid rgba(255,255,255,0.8);
-  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
 }
 
-.media-card-video .play-icon::after {
-  content: "";
-  position: absolute;
-  top: 50%; left: 54%;
+/* YouTube embeds are always 16:9; the card is a 4:3 box. Oversize the
+   iframe on its width and center it so the video covers the box the same
+   way `.media-card img { object-fit: cover }` does, instead of
+   letterboxing (YouTube's player doesn't crop to fill on its own). */
+.media-card-video iframe.video-preview {
+  inset: 50% auto auto 50%;
+  width: 133.4%;
+  height: 100%;
   transform: translate(-50%, -50%);
-  border-style: solid;
-  border-width: 9px 0 9px 15px;
-  border-color: transparent transparent transparent #fff;
 }
 
-.media-card-video:hover .play-icon {
-  background: var(--color-accent);
-  transform: translate(-50%, -50%) scale(1.08);
+.media-card-video video.video-preview {
+  object-fit: cover;
 }
 
 /* ---- Version subpage: PDF viewer ---- */

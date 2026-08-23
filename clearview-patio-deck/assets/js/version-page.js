@@ -153,6 +153,7 @@
     }
     section.hidden = false;
     var grid = document.getElementById("videoGrid");
+    var cards = [];
     videos.forEach(function (vid, i) {
       var card = document.createElement("button");
       card.type = "button";
@@ -160,11 +161,51 @@
       card.setAttribute("data-reveal", "");
       card.innerHTML =
         '<img src="' + videoThumbUrl(vid) + '" alt="' + v.label + ' — ' + vid.caption + '" loading="lazy">' +
-        '<span class="play-icon" aria-hidden="true"></span>' +
         '<span class="media-card-caption">' + vid.caption + "</span>";
       card.addEventListener("click", function () { openVideoLightbox(i); });
       grid.appendChild(card);
+      cards.push({ card: card, vid: vid });
     });
+    bindAutoplayPreviews(cards);
+  }
+
+  // Thumbnails autoplay a muted, looping preview once scrolled into view
+  // (rather than all at once on page load) -- cheaper, and avoids every
+  // card in a gallery of several videos fighting for bandwidth/CPU at once.
+  // Clicking the card still opens the full lightbox (openVideoLightbox)
+  // with sound and native controls; the preview itself has pointer-events
+  // disabled (see .video-preview in style.css) so clicks pass through to it.
+  function bindAutoplayPreviews(entries) {
+    var obs = new IntersectionObserver(function (observed) {
+      observed.forEach(function (observedEntry) {
+        if (!observedEntry.isIntersecting) return;
+        obs.unobserve(observedEntry.target);
+        var match = entries.filter(function (e) { return e.card === observedEntry.target; })[0];
+        if (match) insertAutoplayPreview(match.card, match.vid);
+      });
+    }, { threshold: 0.25 });
+    entries.forEach(function (e) { obs.observe(e.card); });
+  }
+
+  function insertAutoplayPreview(card, vid) {
+    var el;
+    if (vid.type === "youtube") {
+      var params = "autoplay=1&mute=1&loop=1&controls=0&showinfo=0&modestbranding=1" +
+        "&rel=0&playsinline=1&iv_load_policy=3&disablekb=1&playlist=" + vid.youtubeId;
+      el = document.createElement("iframe");
+      el.src = "https://www.youtube-nocookie.com/embed/" + vid.youtubeId + "?" + params;
+      el.setAttribute("allow", "autoplay; encrypted-media");
+    } else {
+      el = document.createElement("video");
+      el.src = assetUrl(vid.src);
+      el.autoplay = true;
+      el.muted = true;
+      el.loop = true;
+      el.playsInline = true;
+    }
+    el.className = "video-preview";
+    el.setAttribute("tabindex", "-1");
+    card.appendChild(el);
   }
 
   function openVideoLightbox(index) {
