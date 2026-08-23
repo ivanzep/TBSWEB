@@ -106,32 +106,26 @@ h1, h2, h3, h4 {
 
 .logo {
   display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+  align-items: center;
 }
 
-.logo .logo-name {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-ink);
+.logo-img {
+  display: block;
+  height: 40px;
+  width: auto;
+  transition: height 0.4s var(--ease), filter 0.4s var(--ease);
 }
 
-.site-header:not(.is-scrolled) .logo .logo-name {
-  color: #fff;
+/* Logo artwork is black-on-transparent -- invert it to white over the
+   transparent/dark hero background, then back to its natural black once
+   the header picks up its light scrolled background. */
+.site-header:not(.is-scrolled) .logo-img {
+  filter: brightness(0) invert(1);
 }
 
-.logo .logo-tag {
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-accent-soft);
-  margin-top: 2px;
+.site-header.is-scrolled .logo-img {
+  height: 32px;
 }
-
-.site-header.is-scrolled .logo .logo-tag { color: var(--color-accent); }
 
 .nav {
   display: flex;

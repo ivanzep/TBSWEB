@@ -13,8 +13,8 @@ window.SiteCommon = (function () {
   function renderChrome(P, basePath) {
     basePath = basePath || "./";
 
-    document.getElementById("logoName").textContent = P.studio.name;
-    document.getElementById("logoTag").textContent = P.studio.tagline;
+    var logoImg = document.getElementById("logoImg");
+    if (logoImg) logoImg.alt = P.studio.name + " — " + P.studio.tagline;
     document.getElementById("footerName").textContent = P.studio.name + " · " + P.studio.tagline;
     var year = document.getElementById("footerYear");
     if (year) year.textContent = new Date().getFullYear();
