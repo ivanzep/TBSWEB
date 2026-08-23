@@ -11,7 +11,7 @@ window.VERSIONS = window.VERSIONS || {};
 window.VERSIONS["V5.6"] = {
   id: "V5.6",
   label: "V5.6",
-  note: "BUILT IN CHACE LOUNGE AREA, SLIDING TRELLIS ROOF, SLIDING PANELS AND PROJECTOR SCREEN",
+  note: "BUILT IN CHASE LOUNGE AREA, SLIDING TRELLIS ROOF, SLIDING PANELS AND PROJECTOR SCREEN",
   thumb: "assets/2026-08-21 13-23-24 - Custom.jpg",
   // Title-header hero video — checked in this order, first non-empty wins,
   // falls back to the thumb image (above) as a static background if all
