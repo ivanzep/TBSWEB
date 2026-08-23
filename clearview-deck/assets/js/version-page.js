@@ -144,6 +144,28 @@
     return assetUrl(video.poster || v.thumb);
   }
 
+  // Muted/looped/no-controls inline preview player for a video-gallery card —
+  // same autoplay-loop URL shape as the site's hero reels (buildYouTubeHeroSrc),
+  // just for a single fixed video instead of a cycling list.
+  function buildInlinePreviewEl(vid) {
+    if (vid.type === "youtube") {
+      var iframe = document.createElement("iframe");
+      iframe.src = C.buildYouTubeHeroSrc(null, null, vid.youtubeId);
+      iframe.setAttribute("allow", "autoplay; encrypted-media");
+      iframe.setAttribute("tabindex", "-1");
+      iframe.loading = "lazy"; // defers loading (and so autoplay start) until near-viewport
+      return iframe;
+    }
+    var video = document.createElement("video");
+    video.src = assetUrl(vid.src);
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    return video;
+  }
+
   function renderVideos() {
     var videos = v.videos || [];
     var section = document.getElementById("videosSection");
@@ -158,10 +180,21 @@
       card.type = "button";
       card.className = "media-card media-card-video";
       card.setAttribute("data-reveal", "");
-      card.innerHTML =
-        '<img src="' + videoThumbUrl(vid) + '" alt="' + v.label + ' — ' + vid.caption + '" loading="lazy">' +
-        '<span class="play-icon" aria-hidden="true"></span>' +
-        '<span class="media-card-caption">' + vid.caption + "</span>";
+      // Poster shows immediately as the card's own background — behind the
+      // player, visible instantly and as a fallback while it loads.
+      card.style.backgroundImage = "url('" + videoThumbUrl(vid) + "')";
+      card.setAttribute("aria-label", vid.caption);
+
+      var mediaWrap = document.createElement("span");
+      mediaWrap.className = "media-card-video-media";
+      mediaWrap.appendChild(buildInlinePreviewEl(vid));
+      card.appendChild(mediaWrap);
+
+      var caption = document.createElement("span");
+      caption.className = "media-card-caption";
+      caption.textContent = vid.caption;
+      card.appendChild(caption);
+
       card.addEventListener("click", function () { openVideoLightbox(i); });
       grid.appendChild(card);
     });
