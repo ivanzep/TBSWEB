@@ -64,6 +64,12 @@ design-review/
       package-page.js    Review-set page renderer
       all-files.js       All Files page renderer — flattens every set, sorts/filters
       review-log.js      Review log renderer + export/import
+
+.github/
+  workflows/sync-drive-sheet.yml   Regenerates the 3 manifest files above from
+                                    a published sheet — see "Keeping it in
+                                    sync automatically" below
+  scripts/generate_manifest.py     What that workflow actually runs
 ```
 
 ## Setting it up
@@ -208,6 +214,81 @@ PDF does (Drive's file preview plays video natively there). Order within a
 project's array is the order shown on the site. This manifest only applies to
 a project with no `driveFolderId` of its own — a live-discovered project's
 review sets come from its Drive subfolders instead, with no manifest involved.
+
+## Keeping it in sync automatically
+
+Hand-editing `packages.js`/`folder-tree.js`/`projects.js` every time a folder
+or file is added works, but doesn't scale to updating them by hand forever.
+A GitHub Action (`.github/workflows/sync-drive-sheet.yml`) can do it instead:
+on a schedule (every 6 hours by default) and on demand (Actions tab → **Sync
+Drive Sheet** → **Run workflow**), it reads a published Google Sheet listing
+every folder and file, regenerates all three manifest files from it, and
+commits the result if anything changed.
+
+**Why a sheet instead of the Drive API directly:** listing an entire nested
+folder tree via the Drive API needs a request per folder (one to list a
+folder's children, again for each subfolder, and so on) — a script doing
+that from GitHub Actions would need Drive credentials with broad read access
+and pay that request cost on every run. A sheet someone (or a Drive-side
+Apps Script trigger) keeps updated with every file's folder path, name, ID
+and MIME type turns that into one flat table — one HTTP request, no
+credentials at all once it's published read-only.
+
+### 1. Set up the sheet
+
+Its rows need these exact column headers — same shape you'd paste directly
+into a chat with Claude to update this manifest by hand:
+
+| Folder Path | File Name | File ID | MIME Type | URL |
+|---|---|---|---|---|
+| `PROJECT REVIEWS/Clearview Deck/20260821/V5.6` | `...-01.jpg` | `1AbC...` | `image/jpeg` | (unused by the generator) |
+
+`Folder Path` must start with `PROJECT REVIEWS/` followed by the project
+name, then any number of subfolder levels, ending in the folder that
+actually holds the file — that last folder becomes a review set, and
+everything above it (down to the project) becomes the folder-tree.js
+nesting the sidebar and the project page's review-sets grid both read. A
+folder that holds files directly *and* has a subfolder of its own (like
+Bungalow A's `20260416-…-AI`, which also has an `ARCHIVE` subfolder) works
+correctly — it becomes one review set and one folder-tree node with both.
+A row whose path doesn't start with `PROJECT REVIEWS/`, or has nothing
+between the project name and the file (a file sitting in the project's own
+root, with no set folder to belong to), is skipped rather than guessed at.
+
+Publish it: **File → Share → Publish to web**, choose the sheet/tab, format
+**Comma-separated values (.csv)**, **Publish**. Copy the URL it gives you.
+
+### 2. Point the workflow at it
+
+Repo → **Settings → Secrets and variables → Actions → Variables** tab →
+**New repository variable** → name it `DRIVE_SHEET_CSV_URL`, paste the
+published CSV URL as the value. It's a plain variable, not a secret,
+because a "Publish to web" CSV is world-readable by design — anyone with
+the link can already read it.
+
+Until this variable is set, the workflow runs and exits without changing
+anything (same "never come up empty" fallback as `config.js`'s Drive
+settings) — it's safe to add the workflow before the sheet is ready.
+
+### 3. What comes out — and what doesn't
+
+The generator owns all three files completely once it's wired up — each
+starts with a `GENERATED FILE — do not hand-edit` header, and a hand edit
+is overwritten on the next run. What it can't do:
+
+- **Titles are the raw folder/file name**, not hand-polished text — a
+  folder named `20260416-BUNGALOW A-AI` on Drive shows on the site exactly
+  that way, not reformatted to "20260416 — Bungalow A (AI)". Rename the
+  Drive folder to change how it reads on the site.
+- **Project metadata beyond title is empty** — `client`/`location`/`scope`/
+  `phase`/`summary`/`thumbnail` in `projects.js` all come out blank, since
+  none of that lives in the sheet. (Currently unused anyway — the project
+  page's Overview section that displayed them was removed.) A future
+  version could read them from extra sheet columns if that's ever needed.
+- **Slugs are derived, not chosen** — a set's slug is its full path under
+  the project, slugified (e.g. `bungalow-a-20260416-bungalow-a-ai`), so
+  URLs are uglier than the short hand-picked ones a manual edit could use,
+  but guaranteed unique and stable across regenerations.
 
 ## The Drive-folder sidebar
 

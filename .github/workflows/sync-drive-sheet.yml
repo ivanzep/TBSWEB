@@ -1,0 +1,45 @@
+name: Sync Drive Sheet
+
+# Regenerates design-review's packages.js, folder-tree.js and projects.js
+# from the published Drive-tracking Google Sheet — see
+# design-review/README.md → "Keeping it in sync automatically" for how to
+# publish the sheet and set the DRIVE_SHEET_CSV_URL repository variable this
+# workflow reads. Runs on a schedule, or on demand from the Actions tab.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate manifests from the Drive sheet
+        env:
+          DRIVE_SHEET_CSV_URL: ${{ vars.DRIVE_SHEET_CSV_URL }}
+        run: python3 .github/scripts/generate_manifest.py design-review
+
+      - name: Commit and push if the sheet produced any changes
+        run: |
+          git config user.name "drive-sheet-sync[bot]"
+          git config user.email "actions@github.com"
+          git add design-review/assets/js/packages.js \
+                  design-review/assets/js/folder-tree.js \
+                  design-review/assets/js/projects.js
+          if git diff --cached --quiet; then
+            echo "No changes — the sheet already matches what's committed."
+          else
+            git commit -m "Sync project/folder structure from Drive sheet"
+            git push
+          fi
