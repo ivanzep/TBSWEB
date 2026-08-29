@@ -1,0 +1,231 @@
+/*
+ * ALL FILES — every item from every review set, flattened into one grid with
+ * sorting and filtering, and the same viewer used everywhere else.
+ *
+ * Reuses the item-card markup/CSS from a single review set's page (package-page.js)
+ * almost verbatim; the one addition is a set label on each card, since items here
+ * come from more than one package. Opening a card hands the viewer whatever the
+ * current filter/sort produced, so arrowing through the carousel crosses set
+ * boundaries instead of stopping at the one the card came from.
+ */
+(function () {
+  "use strict";
+
+  var C = window.SiteCommon;
+  var packages = [];
+  var allItems = [];
+
+  var typeFilter = "all";
+  var commentsOnly = false;
+  var setFilter = "";
+  var sortKey = "set";
+  var searchText = "";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    C.initPage();
+    window.Viewer.init(function () { render(); });
+
+    window.Drive.loadPackages().then(function (result) {
+      packages = result.packages;
+      C.renderSetupNotice(result);
+      allItems = flatten(packages);
+      fillSetFilter();
+      bindControls();
+      render();
+    });
+
+    // Marks made in the viewer change comment counts/badges on screen, and can
+    // move an item in or out of the "With Comments" filter or a comment sort.
+    window.Store.subscribe(render);
+  });
+
+  // Carries pkgTitle alongside the fields Drive.normalizeItem already put on
+  // the item, so a card can show which set it's from without a second lookup.
+  function flatten(packages) {
+    var out = [];
+    packages.forEach(function (pkg) {
+      pkg.items.forEach(function (item) {
+        out.push({
+          uid: item.uid,
+          id: item.id,
+          src: item.src,
+          name: item.name,
+          type: item.type,
+          sheet: item.sheet,
+          note: item.note,
+          modified: item.modified,
+          pkgSlug: item.pkgSlug,
+          pkgTitle: pkg.title
+        });
+      });
+    });
+    return out;
+  }
+
+  function fillSetFilter() {
+    var sel = document.getElementById("filterSet");
+    packages.forEach(function (p) {
+      var opt = document.createElement("option");
+      opt.value = p.slug;
+      opt.textContent = p.title;
+      sel.appendChild(opt);
+    });
+  }
+
+  /* ── Filter + sort ─────────────────────────────────────────────────────── */
+
+  function visibleItems() {
+    var list = allItems.filter(function (it) {
+      if (typeFilter !== "all" && it.type !== typeFilter) return false;
+      if (setFilter && it.pkgSlug !== setFilter) return false;
+      if (commentsOnly && !window.Store.getNotes(it.uid).length) return false;
+      if (searchText) {
+        var hay = (it.name + " " + (it.sheet || "") + " " + it.pkgTitle).toLowerCase();
+        if (hay.indexOf(searchText) === -1) return false;
+      }
+      return true;
+    });
+    return sortItems(list);
+  }
+
+  // Natural/numeric compare so "R-2" sorts before "R-10" instead of after it.
+  function naturalCompare(a, b) {
+    return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+  }
+
+  function sortItems(list) {
+    var copy = list.slice();
+    if (sortKey === "name") {
+      copy.sort(function (a, b) { return naturalCompare(a.name, b.name); });
+    } else if (sortKey === "sheet") {
+      // Items with no sheet number sort after every item that has one.
+      copy.sort(function (a, b) {
+        if (!a.sheet && !b.sheet) return naturalCompare(a.name, b.name);
+        if (!a.sheet) return 1;
+        if (!b.sheet) return -1;
+        return naturalCompare(a.sheet, b.sheet);
+      });
+    } else if (sortKey === "type") {
+      copy.sort(function (a, b) {
+        if (a.type !== b.type) return a.type === "image" ? -1 : 1;
+        return naturalCompare(a.name, b.name);
+      });
+    } else if (sortKey === "comments") {
+      copy.sort(function (a, b) {
+        return window.Store.getNotes(b.uid).length - window.Store.getNotes(a.uid).length;
+      });
+    } else if (sortKey === "modified") {
+      // ISO timestamps compare correctly as strings; items without one (the
+      // common case in manifest mode, where Drive never reports a mtime) sort
+      // to the end rather than bunching at whichever end string compare picks.
+      copy.sort(function (a, b) {
+        if (!a.modified && !b.modified) return 0;
+        if (!a.modified) return 1;
+        if (!b.modified) return -1;
+        return String(b.modified).localeCompare(String(a.modified));
+      });
+    }
+    // "set" (default): the flattened order already follows package order,
+    // then each package's own item order — nothing to do.
+    return copy;
+  }
+
+  /* ── Render ────────────────────────────────────────────────────────────── */
+
+  function render() {
+    var host = document.getElementById("itemGrid");
+    var empty = document.getElementById("emptyState");
+    var items = visibleItems();
+
+    var countEl = document.getElementById("resultsCount");
+    if (countEl) countEl.textContent = items.length + " file" + (items.length === 1 ? "" : "s");
+
+    if (!items.length) {
+      host.innerHTML = "";
+      empty.hidden = false;
+      empty.textContent = allItems.length
+        ? "Nothing matches those filters."
+        : "No files found yet.";
+      return;
+    }
+    empty.hidden = true;
+
+    host.innerHTML = items.map(function (item, i) {
+      var notes = window.Store.getNotes(item.uid);
+      var open = notes.filter(function (n) { return !n.resolved; }).length;
+      var thumb = window.Drive.thumbUrl(item, 800);
+
+      var html = '<button type="button" class="item-card' +
+        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal>';
+      html += '<span class="shot">';
+      html += thumb
+        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
+        : '<span class="shot-empty">' +
+            (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
+      html += '<span class="type-tag">' + (item.type === "pdf" ? "PDF" : "Image") + "</span>";
+      if (notes.length) {
+        html += '<span class="note-count">' + notes.length +
+          (open ? " · " + open + " open" : "") + "</span>";
+      }
+      html += "</span>";
+
+      html += '<span class="body">';
+      if (item.sheet) html += '<span class="sheet">' + C.escapeHtml(item.sheet) + "</span>";
+      html += '<span class="name">' + C.escapeHtml(item.name) + "</span>";
+      html += '<span class="pkg-label">' + C.escapeHtml(item.pkgTitle) + "</span>";
+      html += "</span></button>";
+      return html;
+    }).join("");
+
+    host.querySelectorAll(".item-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        // The viewer pages through exactly what's on screen, so arrowing never
+        // lands on an item the active filters are hiding.
+        window.Viewer.open(visibleItems(), Number(card.getAttribute("data-i")));
+      });
+    });
+
+    C.revealWithin(host);
+  }
+
+  /* ── Controls ──────────────────────────────────────────────────────────── */
+
+  function bindControls() {
+    document.querySelectorAll("[data-filter]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        typeFilter = btn.getAttribute("data-filter");
+        document.querySelectorAll("[data-filter]").forEach(function (b) {
+          b.classList.toggle("is-active", b === btn);
+        });
+        render();
+      });
+    });
+
+    var commentsBtn = document.getElementById("filterComments");
+    commentsBtn.addEventListener("click", function () {
+      commentsOnly = !commentsOnly;
+      commentsBtn.classList.toggle("is-active", commentsOnly);
+      render();
+    });
+
+    document.getElementById("filterSet").addEventListener("change", function (e) {
+      setFilter = e.target.value;
+      render();
+    });
+
+    document.getElementById("sortBy").addEventListener("change", function (e) {
+      sortKey = e.target.value;
+      render();
+    });
+
+    document.getElementById("filterText").addEventListener("input", function (e) {
+      searchText = e.target.value.trim().toLowerCase();
+      render();
+    });
+
+    document.getElementById("openFirst").addEventListener("click", function () {
+      var items = visibleItems();
+      if (items.length) window.Viewer.open(items, 0);
+    });
+  }
+})();

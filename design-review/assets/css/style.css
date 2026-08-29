@@ -523,6 +523,34 @@ section { position: relative; }
   color: #fff;
 }
 
+/* Two-row toolbar (All Files): quick-filter buttons on top, the finer-grained
+   set/sort/search controls below. One outer border pair rather than each row
+   carrying its own, so stacking rows doesn't double up the divider lines. */
+.toolbar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 2.4rem;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-row .spacer { flex: 1; }
+
+.results-count {
+  font-size: 0.74rem;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
 /* ---- Item grid ---- */
 .item-grid {
   display: grid;
@@ -644,6 +672,15 @@ section { position: relative; }
   font-size: 0.82rem;
   color: var(--color-ink-soft);
   margin: 0.4rem 0 0;
+}
+
+/* All Files: which review set a card belongs to, since the grid mixes sets. */
+.item-card .pkg-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--color-ink-soft);
+  letter-spacing: 0.03em;
+  margin: 0.35rem 0 0;
 }
 
 .empty-state {

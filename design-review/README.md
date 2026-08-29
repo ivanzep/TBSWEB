@@ -15,6 +15,7 @@ sites read as one family.
 design-review/
   index.html            Homepage — hero, overview, review sets
   package.html          One review set (?p=<slug>) — item grid + the viewer overlay
+  all-files.html        Every item from every set in one grid, sortable + filterable
   review-log.html       Every comment in one list, with export/import
   assets/
     css/style.css        Theme tokens at :root, then components
@@ -28,6 +29,7 @@ design-review/
       viewer.js          The carousel, the PDF viewer and the markup pins
       home.js            Homepage renderer
       package-page.js    Review-set page renderer
+      all-files.js       All Files page renderer — flattens every set, sorts/filters
       review-log.js      Review log renderer + export/import
 ```
 
@@ -76,9 +78,16 @@ falls back to `packages.js`, so it never comes up empty.
 
 ## Reviewing
 
+- **All Files** — every item from every review set in one grid. Filter by type
+  (image/PDF), by set, or to items with comments; sort by name, sheet number,
+  type, comment count, or (in live folder mode) recently modified; search by
+  name/sheet/set. Opens the same carousel/PDF viewer as a single set, except
+  arrowing through it crosses set boundaries instead of stopping at one set's
+  edge — whatever's on screen after filtering is what the viewer pages through.
 - **Carousel** — click any item, or **Open Carousel**. Arrow keys or the
-  filmstrip move through the set; the filmstrip dot shows each item's status.
-  Scroll to zoom, drag to pan, swipe on touch.
+  filmstrip move through the set; the filmstrip dot shows whether the item has
+  open comments, all-resolved comments, or none. Scroll to zoom, drag to pan,
+  swipe on touch.
 - **PDF sheets** — open in Drive's embedded viewer with its own page navigation.
   Comments on a sheet can carry a page number.
 - **Markups** — on an image, **Add Markup** (or `M`), then click the spot. A
