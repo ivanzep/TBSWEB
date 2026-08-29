@@ -3,8 +3,7 @@
  *
  * This is the hand-authored manifest used when SITE.liveFolderMode is false
  * (the default). Each package is one review set — a drawing issue, a rendering
- * batch, a reference pack — and mirrors one subfolder of the project's Drive
- * folder. Order here is the order shown on the site.
+ * batch, a reference pack. Order here is the order shown on the site.
  *
  * ── An item ────────────────────────────────────────────────────────────────
  *   {
@@ -16,128 +15,109 @@
  *     note:  "Revised stair"         optional one-line description
  *   }
  *
- * ── Getting a Drive file ID ────────────────────────────────────────────────
- * Right-click the file in Drive → Share → Copy link. You get
- *   https://drive.google.com/file/d/1AbC...XyZ/view?usp=drivesdk
- * The ID is the part between /d/ and /view → "1AbC...XyZ".
- * The file must be shared "Anyone with the link → Viewer" to embed.
+ * ══ TWO THINGS TO FIX WHEN YOU GET A MINUTE ═══════════════════════════════
  *
- * ── Note ───────────────────────────────────────────────────────────────────
- * The packages below are seeded with the repo's existing local renderings so
- * the site is viewable before any Drive wiring exists. Replace `src` with `id`
- * as the real files land in Drive — or skip this file entirely and turn on
- * SITE.liveFolderMode to have the Drive folder generate all of this itself.
+ * 1. THE NAMES. Every file below is called "Image 42"–"Image 45", which is
+ *    what the exporter named them, not what they are. A client paging through
+ *    "Image 43" learns nothing. Renaming is a one-string edit per line — the
+ *    `name` is display text only, nothing keys off it:
+ *
+ *        { id: "1T2ocz3…", name: "Image 42" }
+ *      →  { id: "1T2ocz3…", name: "Pool Terrace — Dusk", sheet: "R-01" }
+ *
+ *    Comments already made stay attached through a rename: they're filed under
+ *    the Drive ID, not the name.
+ *
+ * 2. THE GROUPING. The 15 IDs supplied were numbered 42,43,44,45 / 42,43 /
+ *    42 / 42,43,44,45 / 42,43,44,45 — the counter restarts five times, which
+ *    almost certainly means five source folders or documents. That's the split
+ *    used below, but it is an INFERENCE from the numbering, not something read
+ *    off Drive. If the real grouping differs, move the lines between the
+ *    `items` arrays — nothing else needs to change.
+ *
+ * Set titles are placeholders too. Rename `title` freely; `slug` is what
+ * appears in the URL (package.html?p=set-1), so changing a slug breaks any
+ * link already shared for that set.
+ * ══════════════════════════════════════════════════════════════════════════
+ *
+ * No PDFs are listed yet — all 15 files supplied were images. Drawing sets
+ * drop in exactly the same way, with `type: "pdf"`:
+ *
+ *     { id: "1XyZ…", name: "A1.0 — Site Plan", type: "pdf", sheet: "A1.0" }
+ *
+ * ── Getting a Drive file ID ────────────────────────────────────────────────
+ * Right-click the file in Drive → Share → Copy link:
+ *   https://drive.google.com/file/d/1AbC...XyZ/view?usp=drivesdk
+ * The ID is the part between /d/ and /view.
+ *
+ * ── Sharing ────────────────────────────────────────────────────────────────
+ * Every file below must be shared "Anyone with the link → Viewer" or it can't
+ * be embedded. Files that aren't show a "couldn't load — check sharing"
+ * placeholder in the viewer rather than failing silently.
  */
 window.PACKAGES = [
   {
-    slug: "dd-set",
-    title: "Design Development Set",
-    issued: "2026-08-14",
-    note: "Current issue for client review. Sheets are the controlling documents; " +
-      "renderings are illustrative.",
-    driveFolderId: "",
-    items: [
-      {
-        src: "../clearview-deck/assets/downloads/Clearview-Deck-Concept-Studies.pdf",
-        name: "Full Drawing Set",
-        type: "pdf",
-        sheet: "DD-00",
-        note: "All sheets, current issue."
-      },
-      {
-        src: "../clearview-patio-deck/versions/V5.6/assets/CLEARVIEW-DECK-DV5.6-1-PATIO-DECK.pdf",
-        name: "Patio Deck — Plan + Elevations",
-        type: "pdf",
-        sheet: "DD-01"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/aerial-overview.jpg",
-        name: "Aerial Overview",
-        sheet: "R-01"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/poolside-terrace.jpg",
-        name: "Poolside Terrace",
-        sheet: "R-02"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/dining-terrace.jpg",
-        name: "Dining Terrace",
-        sheet: "R-03"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/fireplace-detail.jpg",
-        name: "Fireplace Detail",
-        sheet: "R-04"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/courtyard-view.jpg",
-        name: "Courtyard View",
-        sheet: "R-05"
-      },
-      {
-        src: "../clearview-deck/versions/v5-4/assets/interior-transition.jpg",
-        name: "Interior Transition",
-        sheet: "R-06"
-      }
-    ]
-  },
-
-  {
-    slug: "sd-set",
-    title: "Schematic Design Set",
-    issued: "2026-05-22",
-    note: "Superseded by the DD set — kept for reference and to track which " +
-      "comments carried forward.",
-    driveFolderId: "",
-    items: [
-      {
-        src: "../clearview-patio-deck/versions/V5.5/assets/CLEARVIEW-DECK-DV5.5-1-PATIO-DECK.pdf",
-        name: "Patio Deck — Schematic",
-        type: "pdf",
-        sheet: "SD-01"
-      },
-      {
-        src: "../clearview-deck/versions/v5-5/assets/aerial-overview.jpg",
-        name: "Aerial Overview",
-        sheet: "R-01"
-      },
-      {
-        src: "../clearview-deck/versions/v5-5/assets/poolside-terrace.jpg",
-        name: "Poolside Terrace",
-        sheet: "R-02"
-      },
-      {
-        src: "../clearview-deck/versions/v5-5/assets/dining-terrace.jpg",
-        name: "Dining Terrace",
-        sheet: "R-03"
-      }
-    ]
-  },
-
-  {
-    slug: "reference",
-    title: "Reference + Materials",
+    slug: "set-1",
+    title: "Review Set 1",
     issued: "",
-    note: "Precedent imagery and material direction. Not for construction.",
+    note: "",
     driveFolderId: "",
     items: [
-      {
-        src: "../clearview-deck/reference/TRELLIS/assets/2.jpg",
-        name: "Trellis Precedent 01"
-      },
-      {
-        src: "../clearview-deck/reference/TRELLIS/assets/3.jpg",
-        name: "Trellis Precedent 02"
-      },
-      {
-        src: "../clearview-deck/reference/TRELLIS/assets/4.jpg",
-        name: "Trellis Precedent 03"
-      },
-      {
-        src: "../clearview-deck/reference/TRELLIS/assets/16.jpg",
-        name: "Trellis Precedent 04"
-      }
+      { id: "1T2ocz3NUDHV64dBGm-X7C7AQ7aa3Nqu7", name: "Image 42", type: "image" },
+      { id: "1LVjE89T7YGkTlokoYOIV6ARyGst4a73Q", name: "Image 43", type: "image" },
+      { id: "1b13AtwsYNWU0PmIE5uPM-P5d61qHgcJC", name: "Image 44", type: "image" },
+      { id: "1KBQ0Ptz5eRNH52jK8rrQ1pWj-wZ4yRs_", name: "Image 45", type: "image" }
+    ]
+  },
+
+  {
+    slug: "set-2",
+    title: "Review Set 2",
+    issued: "",
+    note: "",
+    driveFolderId: "",
+    items: [
+      { id: "1_M5l8174bDU5HDsCsNExfPosTCeIUz7o", name: "Image 42", type: "image" },
+      { id: "1PexKIBM96T1oTW4H0tzAvVBmoFlS1Y-w", name: "Image 43", type: "image" }
+    ]
+  },
+
+  {
+    slug: "set-3",
+    title: "Review Set 3",
+    issued: "",
+    note: "",
+    driveFolderId: "",
+    items: [
+      { id: "1hN8ZWABhJVw4O1b89FUyiDFhMuALttGg", name: "Image 42", type: "image" }
+    ]
+  },
+
+  {
+    slug: "set-4",
+    title: "Review Set 4",
+    issued: "",
+    note: "",
+    driveFolderId: "",
+    items: [
+      { id: "1FszemPbhqBegTYyUk1i9S8B64EXMVvF1", name: "Image 42", type: "image" },
+      { id: "18wHaWWnWRIa3912DS-a1Y1OEWNGB8n5K", name: "Image 43", type: "image" },
+      { id: "1iXRWBupSvdQXZdj1JR9gWd2MAHdFWbEH", name: "Image 44", type: "image" },
+      { id: "1nd4D2rtX3r9roqcp1E4EuVpLqKngqBOk", name: "Image 45", type: "image" }
+    ]
+  },
+
+  {
+    slug: "set-5",
+    title: "Review Set 5",
+    issued: "",
+    note: "",
+    driveFolderId: "",
+    items: [
+      { id: "11Uxqmv6hEIvZydLekHh3OqRj2ysUaLzs", name: "Image 42", type: "image" },
+      { id: "1ZWKzSzYR2bp5rqKVs8tKd6TRDQ4uCEI5", name: "Image 43", type: "image" },
+      { id: "1qdz0pH1KoYUMOb6Xvvdndd7fV8kMV_Ib", name: "Image 44", type: "image" },
+      { id: "10IQElsYiBFUeeLNMugyxftWzLcPQanaK", name: "Image 45", type: "image" }
     ]
   }
 ];
