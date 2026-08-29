@@ -18,20 +18,26 @@ window.Drive = (function () {
 
   var IMAGE_EXT = /\.(jpe?g|png|webp|gif|avif|bmp|tiff?)$/i;
   var PDF_EXT = /\.pdf$/i;
+  var VIDEO_EXT = /\.(mp4|mov|webm|m4v)$/i;
 
   /* ── Type ──────────────────────────────────────────────────────────────── */
 
   // Explicit `type` wins; otherwise infer from the Drive MIME type, then from
   // the file extension on src/name. Anything unrecognized is treated as a file
-  // (linked, not embedded) rather than guessed at.
+  // (linked, not embedded) rather than guessed at. A "video" item rides the
+  // same embed path a PDF does — viewer.js treats anything that isn't
+  // "image" as embeddable, and Drive's /preview iframe plays video natively —
+  // so no separate viewer code was needed to add this type.
   function inferType(item) {
     if (item.type) return item.type;
     var mime = item.mimeType || "";
     if (mime.indexOf("image/") === 0) return "image";
     if (mime === "application/pdf") return "pdf";
+    if (mime.indexOf("video/") === 0) return "video";
     var probe = item.src || item.name || "";
     if (IMAGE_EXT.test(probe)) return "image";
     if (PDF_EXT.test(probe)) return "pdf";
+    if (VIDEO_EXT.test(probe)) return "video";
     return "file";
   }
 
@@ -251,12 +257,14 @@ window.Drive = (function () {
 
   // One project's review sets. `rootFolderId` is that project's OWN Drive
   // folder (from projects.js or from a live-discovered project) — falsy means
-  // "no Drive folder for this project," which resolves straight to the local
-  // packages.js manifest (the demo project's content) rather than attempting
-  // a call that could never succeed. Any live failure falls back the same way,
-  // so a project page never comes up empty over a bad key or a network blip.
-  function loadPackages(rootFolderId) {
-    var manifest = (window.PACKAGES || []).map(normalizePackage);
+  // "no Drive folder for this project," which resolves straight to that
+  // project's own entry in the packages.js manifest (keyed by `projectSlug`,
+  // since more than one project can be manifest-only at once — see that
+  // file's header) rather than attempting a call that could never succeed.
+  // Any live failure falls back the same way, so a project page never comes
+  // up empty over a bad key or a network blip.
+  function loadPackages(rootFolderId, projectSlug) {
+    var manifest = ((window.PACKAGES || {})[projectSlug] || []).map(normalizePackage);
     var canGoLive = !!rootFolderId && !!window.SITE.driveApiKey;
 
     if (!canGoLive) {

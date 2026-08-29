@@ -44,7 +44,7 @@
       bindDriveLink();
       document.title = "All Files — " + project.title + " | " + window.SITE.studio.name;
 
-      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+      window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         packages = result.packages;
         C.renderSetupNotice(result);
         allItems = flatten(packages);
@@ -210,7 +210,7 @@
         ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
         : '<span class="shot-empty">' +
             (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
-      html += '<span class="type-tag">' + (item.type === "pdf" ? "PDF" : "Image") + "</span>";
+      html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
       if (notes.length) {
         html += '<span class="note-count">' + notes.length +
           (open ? " · " + open + " open" : "") + "</span>";

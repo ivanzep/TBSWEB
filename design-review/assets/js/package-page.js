@@ -32,7 +32,7 @@
       fixupNavLinks();
       bindBackLink();
 
-      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+      window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         C.renderSetupNotice(result);
         pkg = pick(result.packages, param("p"));
 
@@ -155,7 +155,7 @@
         ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
         : '<span class="shot-empty">' +
             (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
-      html += '<span class="type-tag">' + (item.type === "pdf" ? "PDF" : "Image") + "</span>";
+      html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
       if (state.notes.length) {
         html += '<span class="note-count">' + state.notes.length +
           (open ? " · " + open + " open" : "") + "</span>";

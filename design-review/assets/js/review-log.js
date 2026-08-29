@@ -29,7 +29,7 @@
       document.title = "Review Log — " + project.title + " | " + window.SITE.studio.name;
       bindControls();
 
-      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+      window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         packages = result.packages;
         C.renderSetupNotice(result);
         fillPackageFilter();

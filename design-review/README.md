@@ -52,7 +52,7 @@ design-review/
     js/
       config.js          ← START HERE. Studio branding + the master Drive folder
       projects.js        ← The project list, when not auto-discovering from Drive
-      packages.js        ← The demo project's review sets (see "The demo project")
+      packages.js        ← Review sets for any project without a live Drive folder
       drive.js           Drive URL builders + the two levels of live listing
       store.js           Comments and markups (localStorage), namespaced per project
       common.js          Shared header/nav/scroll/reveal/modal + helpers
@@ -174,28 +174,38 @@ backend (or Drive's own commenting) — the **Open original** link in the viewer
 goes straight to the file in Drive, where Drive's native comments work
 normally.
 
-## Adding a review set by hand (the demo project only)
+## Adding a review set by hand
 
-Add an entry to `window.PACKAGES` in `assets/js/packages.js`:
+`window.PACKAGES` in `assets/js/packages.js` is keyed by project slug, since
+more than one project can be manifest-only at once. Add a set under the
+matching key (create the key if the project doesn't have one yet):
 
 ```js
-{
-  slug: "cd-set",                      // used in the URL: package.html?p=cd-set
-  title: "Construction Documents",
-  issued: "2026-10-02",                // optional
-  note: "Permit set.",                 // optional
-  driveFolderId: "1AbC...",            // optional — "Open in Drive" for this set
-  items: [
-    { id: "1XyZ...", name: "A1.0 — Site Plan", type: "pdf", sheet: "A1.0" },
-    { id: "1QrS...", name: "Pool Terrace — Dusk" }
+window.PACKAGES = {
+  "clearview-deck": [ /* ... */ ],
+
+  "some-other-project": [
+    {
+      slug: "cd-set",                      // used in the URL: package.html?p=cd-set
+      title: "Construction Documents",
+      issued: "2026-10-02",                // optional
+      note: "Permit set.",                 // optional
+      driveFolderId: "1AbC...",            // optional — "Open in Drive" for this set
+      items: [
+        { id: "1XyZ...", name: "A1.0 — Site Plan", type: "pdf", sheet: "A1.0" },
+        { id: "1QrS...", name: "Pool Terrace — Dusk" }
+      ]
+    }
   ]
-}
+};
 ```
 
-`type` is inferred from the MIME type or extension when omitted. Order in the
-array is the order on the site. This manifest only applies to a project with
-no `driveFolderId` of its own — a live-discovered project's review sets come
-from its Drive subfolders instead, with no manifest involved.
+`type` is `"pdf"`, `"image"`, or `"video"` — inferred from the MIME type or
+extension when omitted. A `"video"` item opens in the same embedded viewer a
+PDF does (Drive's file preview plays video natively there). Order within a
+project's array is the order shown on the site. This manifest only applies to
+a project with no `driveFolderId` of its own — a live-discovered project's
+review sets come from its Drive subfolders instead, with no manifest involved.
 
 ## Notes
 

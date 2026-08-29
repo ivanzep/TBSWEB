@@ -188,6 +188,11 @@ window.SiteCommon = (function () {
     });
   }
 
+  var TYPE_LABELS = { pdf: "PDF", video: "Video", image: "Image" };
+  // The item-card type-tag label — anything not in the map (an unrecognized
+  // "file" type) reads as "Image" rather than showing nothing.
+  function typeLabel(type) { return TYPE_LABELS[type] || "Image"; }
+
   var toastTimer = null;
   function toast(message) {
     var el = document.getElementById("toast");
@@ -249,6 +254,7 @@ window.SiteCommon = (function () {
     escapeHtml: escapeHtml,
     formatDate: formatDate,
     formatDateTime: formatDateTime,
+    typeLabel: typeLabel,
     toast: toast,
     copyText: copyText,
     downloadFile: downloadFile

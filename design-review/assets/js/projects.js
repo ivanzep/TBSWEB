@@ -47,5 +47,23 @@ window.PROJECTS = [
     // Wired to the project's own Drive folder — its review sets list live
     // from here even though the project LIST above is the local fallback.
     driveFolderId: "1LMkGxtyunIvuBy_hg2xfdiCzfOkmdtFF"
+  },
+
+  // Added from a flat file-ID list (name/ID/MIME/URL only) — no folder was
+  // ever given for this one, only individual files, so it has no
+  // driveFolderId and runs entirely off its packages.js entry (same key,
+  // "la-costa"). Client/location/scope/phase/summary below are unknown and
+  // left blank on purpose rather than invented — project.html's overview
+  // just skips whichever of these rows has nothing in it.
+  {
+    slug: "la-costa",
+    title: "La Costa",
+    client: "",
+    location: "",
+    scope: "",
+    phase: "",
+    year: "2026",
+    summary: "",
+    driveFolderId: ""
   }
 ];

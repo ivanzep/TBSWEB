@@ -35,7 +35,7 @@
       renderOverview();
       bindDriveLink();
 
-      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+      window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         packages = result.packages;
         C.renderSetupNotice(result);
         renderPackages();
@@ -97,7 +97,7 @@
   // load live, since renderPackages() doesn't touch the hero again.
   function firstImage() {
     if (project.driveFolderId) return "";
-    var manifest = (window.PACKAGES || []).map(window.Drive.normalizePackage);
+    var manifest = ((window.PACKAGES || {})[project.slug] || []).map(window.Drive.normalizePackage);
     for (var i = 0; i < manifest.length; i++) {
       var hit = manifest[i].items.filter(function (it) { return it.type === "image"; })[0];
       if (hit) return window.Drive.fullUrl(hit);
