@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Review + Tracking | The Brown Studio</title>
+<meta name="description" content="Design review and tracking portal by The Brown Studio — drawing sets and renderings from the project Google Drive folder, with a carousel viewer, embedded PDF sheets, markups and review status.">
+<link rel="icon" href="./assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="./index.html" class="logo">
+      <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="#overview">Overview</a>
+      <a href="#tracking">Tracking</a>
+      <a href="#packages">Review Sets</a>
+      <a href="./review-log.html">Review Log</a>
+      <a href="#drive">Drive</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-media" id="heroMedia"></div>
+  <div class="hero-content">
+    <p class="eyebrow" id="heroEyebrow">The Brown Studio — Design + Build</p>
+    <h1 id="heroTitle">Project</h1>
+    <p class="hero-sub" id="heroSubtitle">Design Review + Tracking</p>
+    <div class="hero-actions">
+      <a href="#packages" class="btn btn-outline">Start Reviewing</a>
+      <a href="./review-log.html" class="btn btn-outline">Review Log</a>
+    </div>
+  </div>
+</section>
+
+<div class="setup-notice" id="setupNotice" hidden></div>
+
+<section class="overview" id="overview">
+  <div class="container">
+    <div class="grid">
+      <div data-reveal>
+        <p class="eyebrow">Project Overview</p>
+        <p class="lede" id="overviewText"></p>
+      </div>
+      <div data-reveal>
+        <ul class="stat-list" id="statList"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tracking" id="tracking">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Where Things Stand</p>
+        <h2>Review Tracking</h2>
+      </div>
+      <p>Status across every drawing and rendering in the project folder, rolled up from the marks made on each one.</p>
+    </div>
+    <div class="tracker" id="tracker" data-reveal></div>
+  </div>
+</section>
+
+<section class="packages" id="packages">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Drive Folder</p>
+        <h2>Review Sets</h2>
+      </div>
+      <p>Each set mirrors one folder in Drive. Open a set to page through its renderings in the carousel, read its PDF sheets in place, and leave markups.</p>
+    </div>
+    <div class="packages-grid" id="packagesGrid"></div>
+  </div>
+</section>
+
+<section class="download" id="drive">
+  <div class="container">
+    <p class="eyebrow">Source of Truth</p>
+    <h2>The Project Drive Folder</h2>
+    <p>Everything this site shows is read from one Google Drive folder. Open it directly to
+       upload new sheets, check version history, or grab full-resolution files.</p>
+    <div class="download-actions">
+      <a class="btn btn-outline" data-drive-folder href="#" target="_blank" rel="noopener">
+        Open Drive Folder
+      </a>
+      <a class="btn btn-outline" href="./review-log.html">Export Comments</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <p class="eyebrow">Next Step</p>
+    <h2>Questions on a Set?</h2>
+    <p id="contactText">Leave your comments on the drawings themselves, then send them over — or reach out and we'll walk the set together.</p>
+    <a class="btn btn-dark-outline" id="contactBtn" href="#">Email The Studio</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName">The Brown Studio · Design + Build</span>
+    <span id="footerMeta"></span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/packages.js"></script>
+<script src="./assets/js/drive.js"></script>
+<script src="./assets/js/store.js"></script>
+<script src="./assets/js/common.js"></script>
+<script src="./assets/js/home.js"></script>
+</body>
+</html>

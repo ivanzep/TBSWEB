@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Set | The Brown Studio</title>
+<meta name="description" content="Review set — renderings in a carousel, PDF sheets in an embedded viewer, with markups and review status.">
+<link rel="icon" href="./assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+
+<header class="site-header is-solid" id="siteHeader">
+  <div class="header-inner">
+    <a href="./index.html" class="logo">
+      <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="./index.html#overview">Overview</a>
+      <a href="./index.html#tracking">Tracking</a>
+      <a href="./index.html#packages">Review Sets</a>
+      <a href="./review-log.html">Review Log</a>
+      <a href="./index.html#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="setup-notice" id="setupNotice" hidden></div>
+
+<section class="page-banner">
+  <div class="container">
+    <a class="back-link" href="./index.html#packages">← All Review Sets</a>
+    <p class="eyebrow" id="pkgEyebrow">Review Set</p>
+    <h1 id="pkgTitle">Loading…</h1>
+    <p class="page-banner-note" id="pkgNote"></p>
+
+    <div class="toolbar" id="toolbar">
+      <button class="filter-btn is-active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="image">Images</button>
+      <button class="filter-btn" data-filter="pdf">Drawings</button>
+      <span class="spacer"></span>
+      <button class="filter-btn" id="openFirst">Open Carousel</button>
+      <a class="filter-btn" id="pkgDrive" href="#" target="_blank" rel="noopener">Open in Drive</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="item-grid" id="itemGrid"></div>
+    <div class="empty-state" id="emptyState" hidden></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName">The Brown Studio · Design + Build</span>
+    <span id="footerMeta"></span>
+  </div>
+</footer>
+
+<!-- ── Viewer overlay ─────────────────────────────────────────────────────
+     One overlay serves both media types: the image stage and the PDF iframe
+     share the same grid cell, and only one is visible at a time. -->
+<div class="modal-overlay viewer" id="viewer">
+
+  <div class="viewer-bar">
+    <span class="v-title" id="viewerTitle"></span>
+    <span class="v-counter" id="viewerCounter"></span>
+    <span class="spacer"></span>
+
+    <span class="viewer-zoom" id="viewerZoom">
+      <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
+      <span id="zoomLevel">100%</span>
+      <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+      <button type="button" id="zoomReset" aria-label="Reset zoom">⤢</button>
+    </span>
+
+    <button type="button" class="v-btn" id="viewerMarkup">Add Markup</button>
+    <button type="button" class="v-btn" id="viewerPanelToggle">Panel</button>
+    <button type="button" class="v-btn" id="viewerClose">Close ✕</button>
+  </div>
+
+  <div class="viewer-stage" id="viewerStage">
+    <div class="viewer-wrap" id="viewerWrap">
+      <img id="viewerImg" alt="">
+      <div class="viewer-pins" id="viewerPins"></div>
+    </div>
+    <div class="viewer-fallback" id="viewerFallback" hidden></div>
+  </div>
+
+  <div class="viewer-embed" id="viewerEmbed" hidden>
+    <iframe id="viewerFrame" title="Document viewer" allow="autoplay"></iframe>
+  </div>
+
+  <button type="button" class="viewer-nav prev" id="viewerPrev" aria-label="Previous">‹</button>
+  <button type="button" class="viewer-nav next" id="viewerNext" aria-label="Next">›</button>
+
+  <div class="viewer-filmstrip" id="viewerFilmstrip"></div>
+  <aside class="viewer-panel" id="viewerPanel"></aside>
+</div>
+
+<div id="toast"></div>
+
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/packages.js"></script>
+<script src="./assets/js/drive.js"></script>
+<script src="./assets/js/store.js"></script>
+<script src="./assets/js/common.js"></script>
+<script src="./assets/js/viewer.js"></script>
+<script src="./assets/js/package-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Log | The Brown Studio</title>
+<meta name="description" content="Every review comment and markup across the project, with export for sending back to the studio.">
+<link rel="icon" href="./assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+
+<header class="site-header is-solid" id="siteHeader">
+  <div class="header-inner">
+    <a href="./index.html" class="logo">
+      <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
+    </a>
+    <nav class="nav" id="siteNav">
+      <a href="./index.html#overview">Overview</a>
+      <a href="./index.html#tracking">Tracking</a>
+      <a href="./index.html#packages">Review Sets</a>
+      <a href="./review-log.html" class="is-active">Review Log</a>
+      <a href="./index.html#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="setup-notice" id="setupNotice" hidden></div>
+
+<section class="page-banner">
+  <div class="container">
+    <a class="back-link" href="./index.html">← Back to Project</a>
+    <p class="eyebrow">All Comments</p>
+    <h1>Review Log</h1>
+    <p class="page-banner-note">
+      Every comment and markup made in this browser, newest first. Comments are
+      stored locally on this device — nothing is sent anywhere until you export
+      them below and send them over.
+    </p>
+
+    <div class="log-controls">
+      <label class="field">Your name
+        <input type="text" id="reviewerName" placeholder="e.g. Ivan Z." autocomplete="name">
+      </label>
+      <label class="field">Set
+        <select id="filterPkg"><option value="">All sets</option></select>
+      </label>
+      <label class="field">Show
+        <select id="filterState">
+          <option value="open">Open only</option>
+          <option value="all">All comments</option>
+          <option value="resolved">Resolved only</option>
+        </select>
+      </label>
+      <label class="field">Find
+        <input type="search" id="filterText" placeholder="Search comments…">
+      </label>
+    </div>
+
+    <div class="log-controls">
+      <button class="btn btn-dark-outline btn-sm" id="copyMd">Copy for Email</button>
+      <button class="btn btn-dark-outline btn-sm" id="downloadJson">Download JSON</button>
+      <button class="btn btn-dark-outline btn-sm" id="importJson">Import Comments</button>
+      <button class="btn btn-dark-outline btn-sm" id="clearAll">Clear All</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </div>
+</section>
+
+<section class="log-section">
+  <div class="container">
+    <div class="log-table" id="logTable"></div>
+    <div class="empty-state" id="logEmpty" hidden></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span id="footerName">The Brown Studio · Design + Build</span>
+    <span id="footerMeta"></span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/packages.js"></script>
+<script src="./assets/js/drive.js"></script>
+<script src="./assets/js/store.js"></script>
+<script src="./assets/js/common.js"></script>
+<script src="./assets/js/review-log.js"></script>
+</body>
+</html>
