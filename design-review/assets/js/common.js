@@ -27,13 +27,6 @@ window.SiteCommon = (function () {
       footerMeta.innerHTML = "© " + new Date().getFullYear() + " — " + escapeHtml(label);
     }
 
-    var contactBtn = document.getElementById("contactBtn");
-    if (contactBtn) {
-      var subject = projectMeta ? projectMeta.title + " — design review" : "Design review";
-      contactBtn.href = "mailto:" + S.studio.email + "?subject=" + encodeURIComponent(subject);
-      contactBtn.textContent = "Email " + S.studio.name;
-    }
-
     // The master folder link (landing page only — a project-scoped page binds
     // its OWN folder link separately, since data-drive-folder always means
     // "the master folder" here).

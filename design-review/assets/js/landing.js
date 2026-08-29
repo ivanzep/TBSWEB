@@ -34,9 +34,9 @@
   /* ── Project cards ─────────────────────────────────────────────────────── */
 
   // Reuses the review-set card's own markup/classes (.pkg-card) rather than a
-  // parallel component — a project card and a review-set card are the same
-  // shape (thumbnail, title, a couple of meta lines, a note, a link deeper),
-  // so there's nothing a new class would do that this doesn't already do.
+  // parallel component — same shape (thumbnail, a link deeper), just with the
+  // meta/note lines a review-set card can have left out: this is an internal
+  // team tool, so a project card is a thumbnail and a name, nothing else.
   function renderProjects(projects) {
     var host = document.getElementById("projectsGrid");
     if (!host) return;
@@ -52,25 +52,16 @@
       var href = "./project.html?p=" + encodeURIComponent(p.slug);
       var cover = p.thumbnail || "";
 
-      var meta = [p.client, p.location].filter(Boolean).join(" · ");
-
       var html = '<article class="pkg-card" data-reveal>';
       html += '<a class="thumb" href="' + href + '">' + (cover
         ? '<img loading="lazy" src="' + C.escapeHtml(cover) + '" alt="">'
         : '<span class="thumb-empty">No preview</span>') + "</a>";
       html += '<div class="body">';
       html += '<a class="label" href="' + href + '">' + C.escapeHtml(p.title) + "</a>";
-      if (meta) html += '<div class="meta">' + C.escapeHtml(meta) + "</div>";
-      if (p.summary) html += '<p class="note">' + C.escapeHtml(truncate(p.summary, 160)) + "</p>";
       html += "</div></article>";
       return html;
     }).join("");
 
     C.revealWithin(host);
-  }
-
-  function truncate(text, max) {
-    if (text.length <= max) return text;
-    return text.slice(0, max).replace(/\s+\S*$/, "") + "…";
   }
 })();

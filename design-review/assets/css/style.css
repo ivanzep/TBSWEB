@@ -1326,10 +1326,6 @@ section { position: relative; }
   flex-wrap: wrap;
 }
 
-.contact { padding: 5.5rem 0; text-align: center; }
-.contact h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); margin-bottom: 1.2rem; }
-.contact p { color: var(--color-ink-soft); max-width: 520px; margin: 0 auto 2rem; }
-
 .site-footer {
   border-top: 1px solid var(--color-line);
   padding: 2.2rem 0;
