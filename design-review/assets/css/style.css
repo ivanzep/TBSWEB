@@ -610,7 +610,8 @@ section { position: relative; }
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 .pkg-group + .pkg-group,
-.packages-grid + .pkg-group { margin-top: 2.4rem; }
+.packages-grid + .pkg-group,
+.pkg-group + .packages-grid { margin-top: 2.4rem; }
 
 /* Landing page — with the hero and Drive-folder section gone, the project
    grid is the whole page, so give each card more room than a review-set

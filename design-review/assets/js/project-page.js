@@ -135,15 +135,28 @@
     C.revealWithin(host);
   }
 
+  // Walks `nodes` in their real Drive order — NOT leaves-first-then-folders,
+  // which would silently reorder the tree (e.g. a folder sitting between two
+  // leaf sets would render after both instead of between them). A run of
+  // consecutive leaves batches into one grid (so plain sets still lay out in
+  // columns); hitting a folder flushes that run and starts its own labeled
+  // subsection, and any leaves right after it start a fresh run/grid.
   function renderGroup(nodes, depth) {
-    var leaves = nodes.filter(function (n) { return n.pkg && !n.children.length; });
-    var folders = nodes.filter(function (n) { return n.children.length; });
-
     var html = "";
-    if (leaves.length) {
-      html += '<div class="packages-grid">' + leaves.map(function (n) { return cardHtml(n.pkg); }).join("") + "</div>";
+    var runLeaves = [];
+
+    function flushLeaves() {
+      if (!runLeaves.length) return;
+      html += '<div class="packages-grid">' + runLeaves.map(cardHtml).join("") + "</div>";
+      runLeaves = [];
     }
-    folders.forEach(function (n) {
+
+    nodes.forEach(function (n) {
+      if (!n.children.length) {
+        if (n.pkg) runLeaves.push(n.pkg);
+        return;
+      }
+      flushLeaves();
       var folderHref = withProj("./all-files.html?folder=" + encodeURIComponent(n.slug));
       html += '<div class="pkg-group" style="--pkg-group-depth:' + depth + '">';
       html += '<h3 class="pkg-group-title"><a href="' + C.escapeHtml(folderHref) + '">' +
@@ -152,6 +165,8 @@
       html += renderGroup(innerNodes, depth + 1);
       html += "</div>";
     });
+
+    flushLeaves();
     return html;
   }
 
