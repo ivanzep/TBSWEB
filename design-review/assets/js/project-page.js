@@ -1,5 +1,5 @@
 /*
- * PROJECT PAGE — one project's overview and its review sets grid. This is the
+ * PROJECT PAGE — one project's hero and its review sets grid. This is the
  * page every project gets (via ?p=<projectSlug>) — the same layout every
  * single-project version of this site used to have at the root, now scoped
  * to whichever project the URL names.
@@ -25,15 +25,15 @@
         return;
       }
 
-      // Store must be namespaced to THIS project before anything reads or
-      // writes a comment, or the "with comments" counts below would either
-      // throw (Store guards against exactly that) or, worse, read another
-      // project's data if the guard were ever loosened.
+      // Store must be namespaced to THIS project before anything on the page
+      // (or the viewer, once someone opens an item) reads or writes a
+      // comment, or it would either throw (Store guards against exactly
+      // that) or, worse, read another project's data if the guard were ever
+      // loosened.
       window.Store.init(project.slug, project.title);
       C.initPage(project);
 
       renderHero();
-      renderOverview();
       bindDriveLink();
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
@@ -43,8 +43,6 @@
         renderPackages();
         window.SiteSidebar.render(project, tree, null);
       });
-
-      window.Store.subscribe(renderPackages);
     });
   });
 
@@ -59,11 +57,10 @@
   function renderMissing() {
     C.initPage();
     document.getElementById("heroTitle").textContent = "Project Not Found";
-    document.getElementById("heroSubtitle").textContent = "";
+    document.getElementById("heroSubtitle").textContent =
+      "That project doesn't exist. Pick one from the homepage.";
     document.getElementById("heroEyebrow").textContent = S.studio.name;
     document.title = "Project Not Found | " + S.studio.name;
-    document.getElementById("overviewText").textContent =
-      "That project doesn't exist. Pick one from the homepage.";
     document.getElementById("packages").hidden = true;
     document.getElementById("drive").hidden = true;
   }
@@ -106,25 +103,6 @@
       if (hit) return window.Drive.fullUrl(hit);
     }
     return "";
-  }
-
-  /* ── Overview ──────────────────────────────────────────────────────────── */
-
-  function renderOverview() {
-    document.getElementById("overviewText").textContent = project.summary;
-
-    var rows = [
-      ["Client", project.client],
-      ["Location", project.location],
-      ["Scope", project.scope],
-      ["Phase", project.phase],
-      ["Year", project.year]
-    ].filter(function (r) { return r[1]; });
-
-    document.getElementById("statList").innerHTML = rows.map(function (r) {
-      return '<li><span class="k">' + C.escapeHtml(r[0]) + '</span>' +
-        '<span class="v">' + C.escapeHtml(r[1]) + "</span></li>";
-    }).join("");
   }
 
   function bindDriveLink() {
@@ -178,15 +156,8 @@
   }
 
   function cardHtml(pkg) {
-    var c = window.Store.counts(pkg.items);
     var cover = coverFor(pkg);
     var href = withProj("./package.html?p=" + encodeURIComponent(pkg.slug));
-
-    var pdfs = pkg.items.filter(function (i) { return i.type === "pdf"; }).length;
-    var imgs = pkg.items.filter(function (i) { return i.type === "image"; }).length;
-    var mix = [];
-    if (imgs) mix.push(imgs + (imgs === 1 ? " image" : " images"));
-    if (pdfs) mix.push(pdfs + (pdfs === 1 ? " PDF" : " PDFs"));
 
     var html = '<article class="pkg-card" data-reveal>';
     html += '<a class="thumb" href="' + href + '">' + (cover
@@ -194,13 +165,6 @@
       : '<span class="thumb-empty">No preview</span>') + "</a>";
     html += '<div class="body">';
     html += '<a class="label" href="' + href + '">' + C.escapeHtml(pkg.title) + "</a>";
-    html += '<div class="meta">' +
-      (pkg.issued ? "Issued " + C.escapeHtml(C.formatDate(pkg.issued)) + " · " : "") +
-      C.escapeHtml(mix.join(" · ") || "Empty") + "</div>";
-    if (pkg.note) html += '<p class="note">' + C.escapeHtml(pkg.note) + "</p>";
-    html += '<div class="counts"><span>' + c.total + " item" + (c.total === 1 ? "" : "s") +
-      "</span><span>" + c.openNotes + " open comment" +
-      (c.openNotes === 1 ? "" : "s") + "</span></div>";
     html += "</div></article>";
     return html;
   }

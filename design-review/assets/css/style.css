@@ -66,8 +66,6 @@ h1, h2, h3, h4 {
 }
 
 .container {
-  max-width: 1280px;
-  margin: 0 auto;
   padding: 0 6vw;
 }
 
@@ -514,46 +512,6 @@ section { position: relative; }
 
 .setup-notice p { margin: 0; }
 
-/* ---- Overview ---- */
-.overview { padding: 6rem 0 4rem; }
-
-.overview .grid {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 4rem;
-}
-
-.overview p.lede {
-  font-size: 1.24rem;
-  line-height: 1.55;
-  margin: 0;
-}
-
-.stat-list {
-  list-style: none;
-  margin: 0; padding: 0;
-  border-top: 1px solid var(--color-line);
-}
-
-.stat-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--color-line);
-  font-size: 0.92rem;
-}
-
-.stat-list .k {
-  color: var(--color-ink-soft);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  padding-top: 3px;
-}
-
-.stat-list .v { font-weight: 600; text-align: right; }
-
 /* ---- Package grid ---- */
 .packages { padding: 4rem 0 6rem; background: var(--color-bg-alt); }
 
@@ -605,40 +563,18 @@ section { position: relative; }
   flex: 1;
 }
 
+/* Just the thumbnail + title now — no meta/note/comment-count caption below
+   it, on this card or the landing page's project card that shares this
+   class (see #projectsGrid's own rules further down for that one's tweaks). */
 .pkg-card .label {
   font-family: var(--font-display);
   font-size: 1.1rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: 0.45rem;
   transition: color 0.25s var(--ease);
 }
 
 .pkg-card:hover .label { color: var(--color-accent); }
-
-.pkg-card .meta {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-ink-soft);
-  margin-bottom: 0.8rem;
-}
-
-.pkg-card .note {
-  font-size: 0.87rem;
-  color: var(--color-ink-soft);
-  line-height: 1.5;
-  margin: 0 0 1.2rem;
-  flex: 1;
-}
-
-.pkg-card .counts {
-  font-size: 0.74rem;
-  color: var(--color-ink-soft);
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
 
 /* A project page's review-sets grid, grouped to match the real Drive folder
    structure (folder-tree.js) instead of one flat list — see
@@ -1601,7 +1537,6 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
 }
 
 @media (max-width: 980px) {
-  .overview .grid { grid-template-columns: 1fr; gap: 2.4rem; }
   .packages-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* Below this width the side-by-side stage + panel stops working: stack the

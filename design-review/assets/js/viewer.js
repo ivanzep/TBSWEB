@@ -58,10 +58,9 @@ window.Viewer = (function () {
     document.getElementById("viewerPrev").addEventListener("click", function () { step(-1); });
     document.getElementById("viewerNext").addEventListener("click", function () { step(1); });
     els.markupBtn.addEventListener("click", toggleMarkup);
-    document.getElementById("viewerPanelToggle").addEventListener("click", function () {
-      els.overlay.classList.toggle("panel-collapsed");
-      // The stage changed width, so the contain-fit box has to be recomputed.
-      fitImage();
+    els.panelBtn = document.getElementById("viewerPanelToggle");
+    els.panelBtn.addEventListener("click", function () {
+      setPanelCollapsed(!els.overlay.classList.contains("panel-collapsed"));
     });
 
     document.getElementById("zoomIn").addEventListener("click", function () { setZoom(zoom * 1.4); });
@@ -92,6 +91,10 @@ window.Viewer = (function () {
     if (!items.length) return;
     index = Math.max(0, Math.min(startIndex || 0, items.length - 1));
     markupMode = false;
+    // Every open starts with the review panel out of the way — the drawing
+    // itself is what someone's here for; the panel is one click away
+    // (Show Panel) once they're ready to comment.
+    setPanelCollapsed(true);
     C.openModal(els.overlay);
     renderFilmstrip();
     render();
@@ -320,6 +323,18 @@ window.Viewer = (function () {
       else if (e.key === "-" || e.key === "_") setZoom(zoom / 1.4);
       else if (e.key === "0") resetZoom();
     });
+  }
+
+  /* ── Review panel ──────────────────────────────────────────────────────── */
+
+  function setPanelCollapsed(collapsed) {
+    els.overlay.classList.toggle("panel-collapsed", collapsed);
+    els.panelBtn.classList.toggle("is-active", !collapsed);
+    els.panelBtn.textContent = collapsed ? "Show Panel" : "Hide Panel";
+    // The stage's available width changed, so the contain-fit box has to be
+    // recomputed — harmless before the first render() too, since fitImage()
+    // itself no-ops until an image has actually loaded.
+    fitImage();
   }
 
   /* ── Markup pins ───────────────────────────────────────────────────────── */

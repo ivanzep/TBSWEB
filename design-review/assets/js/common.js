@@ -175,32 +175,19 @@ window.SiteCommon = (function () {
 
   /* ── Setup notice ──────────────────────────────────────────────────────── */
 
-  // Shown whenever a Drive listing came back as manifest/demo content rather
-  // than live, so a freshly cloned site (or one project within it) explains
-  // what it needs instead of just looking sparse. Reads loadResult itself —
-  // not a single global "is Drive configured" flag — because in a multi-
-  // project site that's genuinely different per page: the master folder can
-  // be unconfigured while a specific project still has its own real Drive
-  // folder wired up and lists live, or vice versa.
+  // Only ever surfaces a real problem now — a live Drive listing that failed
+  // (bad key, sharing, network) — not the "this is demo/manifest content"
+  // disclaimer that used to show here too; that was useful while wiring the
+  // site up, but reads as noise on a site people actually review work in.
   //
-  // `kind` distinguishes what was being listed, since the fix is different:
-  // "projects" (landing page, listing the master folder) vs the default,
-  // "packages" (a project's own review sets).
+  // `kind` is unused now that the demo-content message is gone, but callers
+  // (landing.js, project-page.js, etc.) still pass it — kept in the
+  // signature rather than touching every call site for no behavioral gain.
   function renderSetupNotice(loadResult, kind) {
     var host = document.getElementById("setupNotice");
     if (!host) return;
 
     var msgs = [];
-    if (loadResult && loadResult.source === "manifest") {
-      msgs.push(kind === "projects"
-        ? "<strong>Demo project.</strong> Set <code>driveFolderId</code> and " +
-          "<code>driveApiKey</code> in <code>assets/js/config.js</code> to list real " +
-          "projects from Drive instead of the one in <code>assets/js/projects.js</code>."
-        : "<strong>Demo content.</strong> This project isn't listing live from Drive " +
-          "(no <code>driveFolderId</code> on it, or no <code>driveApiKey</code> in " +
-          "<code>assets/js/config.js</code>) — showing the manifest in " +
-          "<code>assets/js/packages.js</code> instead.");
-    }
     if (loadResult && loadResult.error) {
       msgs.push("<strong>Drive listing unavailable</strong> (" + escapeHtml(loadResult.error) + ").");
     }

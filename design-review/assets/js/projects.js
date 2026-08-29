@@ -53,8 +53,7 @@ window.PROJECTS = [
   // ever given for this one, only individual files, so it has no
   // driveFolderId and runs entirely off its packages.js entry (same key,
   // "la-costa"). Client/location/scope/phase/summary below are unknown and
-  // left blank on purpose rather than invented — project.html's overview
-  // just skips whichever of these rows has nothing in it.
+  // left blank on purpose rather than invented.
   {
     slug: "la-costa",
     title: "La Costa",
