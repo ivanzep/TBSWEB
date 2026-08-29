@@ -345,20 +345,63 @@ window.Drive = (function () {
   // whose sets aren't nested) falls back to one flat level, same order as
   // `packages` itself, so callers never need to branch on whether a tree was
   // hand-authored.
+  //
+  // Every node gets a `slug` too, so a folder — not just a leaf review set —
+  // is itself addressable (all-files.html?folder=<slug>, via findFolderNode()
+  // + packagesUnder() below). A leaf's slug is just its package's own slug,
+  // unchanged; a folder's slug is its title slugified and prefixed with its
+  // parent folder's slug, so two same-named folders at different depths
+  // (unlikely, but the tree doesn't forbid it) still resolve to two different
+  // pages rather than colliding.
   function buildTree(projectSlug, packages) {
     var bySlug = {};
     packages.forEach(function (p) { bySlug[p.slug] = p; });
 
-    function resolve(node) {
+    function resolve(node, parentSlug) {
       var pkg = node.set ? bySlug[node.set] : null;
-      var children = (node.children || []).map(resolve).filter(Boolean);
+      var titleSlug = slugify(node.title || (pkg ? pkg.title : ""));
+      var branchSlug = parentSlug ? parentSlug + "-" + titleSlug : titleSlug;
+      var children = (node.children || [])
+        .map(function (c) { return resolve(c, branchSlug); })
+        .filter(Boolean);
       if (!pkg && !children.length) return null; // dangling reference — nothing to show
-      return { title: node.title || (pkg ? pkg.title : ""), pkg: pkg, children: children };
+      var isBranch = children.length > 0;
+      return {
+        title: node.title || (pkg ? pkg.title : ""),
+        pkg: pkg,
+        children: children,
+        slug: isBranch ? branchSlug : (pkg ? pkg.slug : titleSlug)
+      };
     }
 
     var manifestTree = (window.FOLDER_TREE || {})[projectSlug];
-    if (manifestTree) return manifestTree.map(resolve).filter(Boolean);
-    return packages.map(function (p) { return { title: p.title, pkg: p, children: [] }; });
+    if (manifestTree) return manifestTree.map(function (n) { return resolve(n, ""); }).filter(Boolean);
+    return packages.map(function (p) { return { title: p.title, pkg: p, children: [], slug: p.slug }; });
+  }
+
+  // Every package a folder node contains, recursively — its own (if the
+  // folder holds files directly, e.g. Bungalow A/20260416-…-AI) plus
+  // everything under every nested subfolder. This is what a folder's own
+  // "view everything in here" page (all-files.html?folder=…) shows.
+  function packagesUnder(node) {
+    var out = node.pkg ? [node.pkg] : [];
+    (node.children || []).forEach(function (c) { out = out.concat(packagesUnder(c)); });
+    return out;
+  }
+
+  // Depth-first search for the folder node with this slug — only ever
+  // matches a branch (a leaf's "slug" is just its package's, addressed via
+  // package.html instead, not this).
+  function findFolderNode(nodes, slug) {
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      if (n.children.length && n.slug === slug) return n;
+      if (n.children.length) {
+        var found = findFolderNode(n.children, slug);
+        if (found) return found;
+      }
+    }
+    return null;
   }
 
   return {
@@ -376,6 +419,8 @@ window.Drive = (function () {
     listProjects: listProjects,
     resolveProject: resolveProject,
     buildTree: buildTree,
+    packagesUnder: packagesUnder,
+    findFolderNode: findFolderNode,
     slugify: slugify
   };
 })();

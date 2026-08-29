@@ -224,6 +224,16 @@ so most projects need no tree entry at all. The project page's own
 **Review Sets** grid reads the same tree, grouping cards under a folder
 heading instead of always showing one flat grid.
 
+Every level of the tree is clickable, not just a leaf review set — a folder
+row (in the sidebar, or the project page's own group heading) opens
+`all-files.html?folder=<slug>`, the same sortable/filterable grid a whole
+project gets, pre-scoped to everything under that folder: its own files (if
+it has any directly) plus every nested subfolder, flattened together. A
+folder that's also directly a review set — `Bungalow A/20260416-…-AI`, which
+has both its own images and a nested `ARCHIVE` subfolder — shows one row for
+both; there's no separate leaf row for its own files, since the folder link
+already includes them.
+
 Add an entry to `window.FOLDER_TREE` only when a project's Drive folder
 nests review sets under an intermediate subfolder:
 

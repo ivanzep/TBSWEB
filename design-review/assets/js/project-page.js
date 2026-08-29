@@ -166,8 +166,10 @@
       html += '<div class="packages-grid">' + leaves.map(function (n) { return cardHtml(n.pkg); }).join("") + "</div>";
     }
     folders.forEach(function (n) {
+      var folderHref = withProj("./all-files.html?folder=" + encodeURIComponent(n.slug));
       html += '<div class="pkg-group" style="--pkg-group-depth:' + depth + '">';
-      html += '<h3 class="pkg-group-title">' + C.escapeHtml(n.title) + "</h3>";
+      html += '<h3 class="pkg-group-title"><a href="' + C.escapeHtml(folderHref) + '">' +
+        C.escapeHtml(n.title) + "</a></h3>";
       var innerNodes = n.pkg ? [{ pkg: n.pkg, children: [] }].concat(n.children) : n.children;
       html += renderGroup(innerNodes, depth + 1);
       html += "</div>";

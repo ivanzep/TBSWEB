@@ -11,22 +11,29 @@ window.SiteSidebar = (function () {
 
   var C = window.SiteCommon;
 
-  function hrefFor(project, pkg) {
+  // A leaf (no children) opens its one review set; a folder opens the
+  // aggregate "everything under here" view instead — every item from its own
+  // files (if it has any directly) and every nested subfolder, flattened
+  // into the same All Files grid a whole project gets, just pre-scoped.
+  function hrefFor(project, node) {
+    if (node.children && node.children.length) {
+      return "./all-files.html?proj=" + encodeURIComponent(project.slug) +
+        "&folder=" + encodeURIComponent(node.slug);
+    }
     return "./package.html?proj=" + encodeURIComponent(project.slug) +
-      "&p=" + encodeURIComponent(pkg.slug);
+      "&p=" + encodeURIComponent(node.pkg.slug);
   }
 
   // Recursive: a node is a folder row (caret + label) when it has children,
-  // a plain link when it's only ever a leaf set, or both at once (a folder
-  // that's also directly a review set — the caret and the link sit side by
-  // side rather than nested, since a <button> can't contain an <a>).
+  // a plain link when it's only ever a leaf set. Both are always clickable —
+  // the caret only toggles the nested list, it never gates the label link
+  // (a <button> can't contain an <a>, so they sit side by side, not nested).
   function renderNode(project, node, activeSlug) {
     var hasChildren = node.children && node.children.length > 0;
-    var isActive = !!(node.pkg && node.pkg.slug === activeSlug);
-    var label = node.pkg
-      ? '<a class="tree-label' + (isActive ? " is-active" : "") + '" href="' +
-        C.escapeHtml(hrefFor(project, node.pkg)) + '">' + C.escapeHtml(node.title) + "</a>"
-      : '<span class="tree-label">' + C.escapeHtml(node.title) + "</span>";
+    var isActive = hasChildren ? node.slug === activeSlug : !!(node.pkg && node.pkg.slug === activeSlug);
+    var label = '<a class="tree-label' +
+      (hasChildren ? " is-folder-link" : "") + (isActive ? " is-active" : "") + '" href="' +
+      C.escapeHtml(hrefFor(project, node)) + '">' + C.escapeHtml(node.title) + "</a>";
 
     if (!hasChildren) {
       return '<li class="tree-node"><div class="tree-row tree-row-leaf">' +

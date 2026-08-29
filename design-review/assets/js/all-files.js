@@ -42,16 +42,24 @@
       C.initPage(project);
       fixupNavLinks();
       bindDriveLink();
-      document.title = "All Files — " + project.title + " | " + window.SITE.studio.name;
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
-        packages = result.packages;
+        var tree = window.Drive.buildTree(project.slug, result.packages);
+        var folderSlug = param("folder");
+        var folderNode = folderSlug ? window.Drive.findFolderNode(tree, folderSlug) : null;
+
+        // A folder link scopes the grid to just that subtree; a bad/stale
+        // ?folder= (or none at all) falls back to the whole project, same
+        // "never come up empty" contract every other loader here follows.
+        packages = folderNode ? window.Drive.packagesUnder(folderNode) : result.packages;
+        applyScopeBanner(folderNode);
+
         C.renderSetupNotice(result);
         allItems = flatten(packages);
         fillSetFilter();
         bindControls();
         render();
-        window.SiteSidebar.render(project, window.Drive.buildTree(project.slug, packages), null);
+        window.SiteSidebar.render(project, tree, folderNode ? folderNode.slug : null);
       });
 
       // Marks made in the viewer change comment counts/badges on screen, and
@@ -62,6 +70,24 @@
 
   function param(name) {
     return new URLSearchParams(location.search).get(name) || "";
+  }
+
+  // Swaps the generic "All Files" banner for the scoped folder's own name
+  // when this page was opened from a folder row in the sidebar, rather than
+  // the top nav's unscoped "All Files" link.
+  function applyScopeBanner(folderNode) {
+    var title = folderNode ? folderNode.title : "All Files";
+    document.title = title + " — " + project.title + " | " + window.SITE.studio.name;
+    var eyebrowEl = document.getElementById("pageEyebrow");
+    var titleEl = document.getElementById("pageTitle");
+    var noteEl = document.getElementById("pageNote");
+    if (eyebrowEl) eyebrowEl.textContent = folderNode ? "Drive Folder" : "Every Set, One View";
+    if (titleEl) titleEl.textContent = title;
+    if (noteEl) noteEl.textContent = folderNode
+      ? "Everything under this folder — its own files and every nested subfolder, together."
+      : "Every image and drawing across every review set, together. Sort and filter to " +
+        "find what you need, then open it straight into the carousel or PDF viewer — " +
+        "arrowing through moves across sets, not just within one.";
   }
 
   // Fragment-safe — see package-page.js's withProj for why the naive version

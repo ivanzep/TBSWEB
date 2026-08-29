@@ -336,6 +336,13 @@ code {
 }
 a.tree-label { transition: color 0.2s var(--ease), background 0.2s var(--ease); }
 a.tree-label:hover { color: var(--color-ink); background: var(--color-bg-alt); }
+/* A folder row's own label opens the aggregate "everything under here" view
+   (all-files.html?folder=…) — same weight as the old plain (unclickable)
+   folder label had, so making it a link doesn't change how the tree reads. */
+a.tree-label.is-folder-link { color: var(--color-ink); font-weight: 600; }
+a.tree-label.is-folder-link:hover { color: var(--color-accent); background: var(--color-bg-alt); }
+/* Must come after .is-folder-link (equal specificity) so an active folder
+   still reads as active rather than falling back to the folder's own color. */
 a.tree-label.is-active { color: var(--color-accent); font-weight: 600; background: var(--color-bg-alt); }
 span.tree-label { color: var(--color-ink); font-weight: 600; }
 
@@ -621,10 +628,18 @@ section { position: relative; }
 .pkg-group-title {
   font-size: 1.1rem;
   letter-spacing: 0.03em;
-  color: var(--color-ink-soft);
   margin: 0 0 1.4rem;
   padding-left: 0.2rem;
 }
+
+/* The heading is a link to this folder's aggregate view (everything under
+   it, nested subfolders included) — same all-files.html grid a whole
+   project gets, just pre-scoped. */
+.pkg-group-title a {
+  color: var(--color-ink-soft);
+  transition: color 0.25s var(--ease);
+}
+.pkg-group-title a:hover { color: var(--color-accent); }
 
 /* A nested group's indent shrinks its available width, so a fixed 3-column
    grid there squeezes cards too narrow — let column count adapt instead. */
