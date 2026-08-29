@@ -1,18 +1,48 @@
 /*
- * SITE CONFIG — the one file to edit when standing this site up for a project.
+ * SITE CONFIG — studio branding and the one Drive folder the whole site hangs
+ * off of.
  *
- * Everything the site needs to point at a Google Drive folder lives here. The
- * review packages themselves (the folder structure) live in packages.js.
+ * This is a multi-project portal: one Google Drive folder holds one subfolder
+ * per project, and the site discovers projects by listing that folder live —
+ * add a subfolder in Drive, it shows up on the landing page with no code
+ * change. Each project's own subfolder works exactly the same way one level
+ * down: subfolders of IT become that project's review sets, and files inside
+ * those become the reviewable items. So the whole hierarchy is:
  *
- * ── Getting the Drive folder ready ────────────────────────────────────────
- * 1. In Google Drive, open the project folder → Share → General access →
- *    "Anyone with the link" → Viewer.
- *    Files that aren't link-shared cannot be embedded; the site will show a
- *    "can't load" placeholder for them rather than failing silently.
- * 2. Copy the folder ID out of the address bar. For
+ *   Master folder (driveFolderId below)
+ *     Project A/              → a project
+ *       Design Development/   → a review set
+ *         A1.0 Site Plan.pdf  → an item
+ *       Schematic Design/
+ *         ...
+ *     Project B/
+ *       ...
+ *
+ * ── Getting the master folder ready ───────────────────────────────────────
+ * 1. Create (or pick) a Drive folder to hold every project. Inside it, one
+ *    subfolder per project; inside each of those, one subfolder per review
+ *    set, same as any single project folder already looks like.
+ * 2. Share the WHOLE tree "Anyone with the link → Viewer" — right-click the
+ *    master folder → Share sets it for everything inside unless a subfolder
+ *    overrides it. Anything not link-shared can't be listed or embedded; the
+ *    site shows a "can't load — check sharing" placeholder rather than
+ *    failing silently, but it still won't be visible to a client.
+ * 3. Copy the master folder's ID out of its address bar. For
  *      https://drive.google.com/drive/folders/1AbC...XyZ
- *    the ID is everything after /folders/ → "1AbC...XyZ".
- * 3. Paste it into driveFolderId below.
+ *    the ID is everything after /folders/ → "1AbC...XyZ". Paste it below.
+ * 4. Get a Drive API key (auto-discovery needs one — there's no manifest
+ *    fallback for "what projects exist" the way there is within a project):
+ *      console.cloud.google.com → enable the "Google Drive API" →
+ *      Credentials → Create credentials → API key.
+ *    Restrict it — Application restrictions → Websites → this site's domain;
+ *    API restrictions → Google Drive API only. The key is visible in
+ *    client-side source, as any browser key is; that's what the restriction
+ *    is for. A restricted key can only ever read files already shared
+ *    "anyone with link".
+ *
+ * Until both are set, the landing page shows the single demo project in
+ * projects.js (which in turn reads its packages from packages.js) with an
+ * on-screen setup notice — so the site is never blank while this is unwired.
  */
 window.SITE = {
   studio: {
@@ -22,64 +52,30 @@ window.SITE = {
     email: "hello@thebrownstudio.com"
   },
 
-  project: {
-    name: "Clearview Deck",
-    subtitle: "Design Review",
-    client: "Private Residence",
-    location: "Placeholder, CA",
-    scope: "Outdoor Pergola · Pool Deck · Fireplace",
-    phase: "Design Development",
-    year: "2026",
-    summary:
-      "Every drawing set, rendering and revision for the project lives in one Google " +
-      "Drive folder. This site reads that folder directly — renderings open in a " +
-      "full-screen carousel, PDF sheets open in an embedded viewer, and any of them " +
-      "can be marked up and commented on so nothing gets lost between sets."
-  },
-
   /* ── Google Drive ───────────────────────────────────────────────────────
-   * driveFolderId  The top-level project folder. Powers the "Open in Drive"
-   *                links, and — in live mode — the folder listing itself.
-   *                Leave as the PLACEHOLDER string and the site runs in demo
-   *                mode with an on-screen setup notice.
+   * driveFolderId  The MASTER folder — one subfolder per project. Powers the
+   *                landing page's project list and the "Open in Drive" link
+   *                there. Leave as the PLACEHOLDER string and the site runs
+   *                on the demo project in projects.js instead.
+   * driveApiKey    Required to discover projects live. Without it the site
+   *                can't list Drive at all and always shows the demo project,
+   *                even if driveFolderId is set.
    */
-  driveFolderId: "1LMkGxtyunIvuBy_hg2xfdiCzfOkmdtFF",
-
-  /* ── Live folder mode (optional) ────────────────────────────────────────
-   * Off by default. With it off, the site renders the hand-authored manifest
-   * in packages.js — dependable, no keys, nothing to expire.
-   *
-   * Turn it on and the site lists the Drive folder live at page load: every
-   * subfolder becomes a review package, every file inside becomes an item, and
-   * dropping a new PDF into Drive makes it appear on the site with no code
-   * change. That is the mode to use if the folder changes often.
-   *
-   * To enable:
-   *   1. console.cloud.google.com → create/pick a project → enable the
-   *      "Google Drive API" → Credentials → Create credentials → API key.
-   *   2. Restrict the key: Application restrictions → Websites → add the site's
-   *      domain; API restrictions → Google Drive API only.
-   *   3. Set driveApiKey below and flip liveFolderMode to true.
-   *
-   * The key is visible in client-side source — that is expected for a browser
-   * key, which is why the referrer + API restrictions in step 2 matter. A
-   * restricted key can only ever read files already shared "anyone with link".
-   * If the listing call fails for any reason the site falls back to packages.js
-   * automatically, so the page never comes up empty.
-   */
-  liveFolderMode: false,
+  driveFolderId: "PASTE_MASTER_DRIVE_FOLDER_ID_HERE",
   driveApiKey: "",
 
-  /* Files/folders the live listing should ignore, matched case-insensitively
-   * against the name. Handy for working folders you don't want clients seeing. */
+  /* Files/folders the live listing should ignore at every level (projects,
+   * review sets, and items alike), matched case-insensitively against the
+   * name. Handy for working folders no client should see. */
   liveIgnore: ["_wip", "_archive", "working", ".DS_Store"],
 
-  /* Shown in the hero when no package cover image is available yet. */
+  /* Shown in a project's hero when it has no cover image of its own yet. */
   fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg"
 };
 
 /* True while config still carries the shipped placeholder — the pages use this
- * to show the setup notice instead of pretending the folder is wired up. */
+ * to show the setup notice and fall back to the demo project instead of
+ * pretending Drive is wired up. */
 window.SITE.isUnconfigured = function () {
   return !window.SITE.driveFolderId ||
     window.SITE.driveFolderId.indexOf("PASTE_") === 0;

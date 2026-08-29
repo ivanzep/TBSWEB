@@ -487,6 +487,17 @@ section { position: relative; }
 }
 .back-link:hover { color: var(--color-accent); }
 
+/* Over the hero photo (project.html's "All Projects" link) rather than the
+   light page-banner ground every other back-link sits on — needs its own
+   light-on-dark coloring since the photo's brightness is unknown. */
+.hero-content .back-link {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.6rem;
+  text-shadow: 0 1px 12px rgba(10, 9, 6, 0.75);
+}
+.hero-content .back-link:hover { color: #fff; }
+
 .toolbar {
   display: flex;
   align-items: center;

@@ -2,39 +2,81 @@
  * PACKAGE PAGE — one review set: its item grid, the type filter, and the hand-off
  * into the viewer.
  *
- * Reads ?p=<slug> for the set and, optionally, ?item=<uid> to open straight into
- * a specific drawing — that's the link the Review Log hands back, so a comment
- * can be followed to the thing it's about in one click.
+ * Reads ?proj=<projectSlug>&p=<setSlug>, and optionally &item=<uid> to open
+ * straight into a specific drawing — that's the link the Review Log hands
+ * back, so a comment can be followed to the thing it's about in one click.
  */
 (function () {
   "use strict";
 
   var C = window.SiteCommon;
+  var project = null;
   var pkg = null;
   var filter = "all";
 
   document.addEventListener("DOMContentLoaded", function () {
-    C.initPage();
     window.Viewer.init(function () { renderGrid(); });
 
-    window.Drive.loadPackages().then(function (result) {
-      C.renderSetupNotice(result);
-      pkg = pick(result.packages, param("p"));
+    window.Drive.resolveProject(param("proj")).then(function (resolved) {
+      project = resolved.project;
 
-      if (!pkg) {
-        renderMissing(result.packages);
+      if (!project) {
+        C.initPage();
+        renderMissing(null);
         return;
       }
 
-      renderHeader();
-      renderGrid();
-      bindToolbar();
-      openDeepLink();
+      // Must happen before anything touches Store — see store.js's header.
+      window.Store.init(project.slug, project.title);
+      C.initPage(project);
+      fixupNavLinks();
+      bindBackLink();
+
+      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+        C.renderSetupNotice(result);
+        pkg = pick(result.packages, param("p"));
+
+        if (!pkg) {
+          renderMissing(result.packages);
+          return;
+        }
+
+        renderHeader();
+        renderGrid();
+        bindToolbar();
+        openDeepLink();
+      });
     });
   });
 
   function param(name) {
     return new URLSearchParams(location.search).get(name) || "";
+  }
+
+  // Fragment-safe: a nav link back to project.html carries a #section, and
+  // the query has to land before that fragment, not after it — appending
+  // blindly would produce "project.html#overview?proj=x", which drops the
+  // param (a fragment is everything after # as far as the browser's concerned).
+  function withProj(url) {
+    var hashIdx = url.indexOf("#");
+    var base = hashIdx === -1 ? url : url.slice(0, hashIdx);
+    var hash = hashIdx === -1 ? "" : url.slice(hashIdx);
+    base += (base.indexOf("?") === -1 ? "?" : "&") + "proj=" + encodeURIComponent(project.slug);
+    return base + hash;
+  }
+
+  // The nav's project.html/all-files.html/review-log.html links are bare
+  // sibling-page hrefs in the shared markup — stamp this project's slug onto
+  // them once, same pattern project-page.js uses for its own copies.
+  function fixupNavLinks() {
+    document.querySelectorAll(
+      'a[href^="./project.html"], a[href^="./all-files.html"], a[href^="./review-log.html"]'
+    ).forEach(function (a) { a.setAttribute("href", withProj(a.getAttribute("href"))); });
+  }
+
+  function bindBackLink() {
+    var back = document.getElementById("backLink");
+    if (back) back.href = withProj("./project.html#packages");
   }
 
   // Falls back to the first set so a bare /package.html still shows something
@@ -48,7 +90,7 @@
 
   function renderHeader() {
     document.getElementById("pkgTitle").textContent = pkg.title;
-    document.title = pkg.title + " — " + window.SITE.project.name + " | " + window.SITE.studio.name;
+    document.title = pkg.title + " — " + project.title + " | " + window.SITE.studio.name;
 
     document.getElementById("pkgEyebrow").textContent =
       pkg.issued ? "Issued " + C.formatDate(pkg.issued) : "Review Set";
@@ -58,17 +100,23 @@
     else note.hidden = true;
 
     var drive = document.getElementById("pkgDrive");
-    var url = window.Drive.folderUrl(pkg.driveFolderId || window.SITE.driveFolderId);
+    var url = window.Drive.folderUrl(pkg.driveFolderId || project.driveFolderId);
     if (url) drive.href = url;
     else drive.hidden = true;
   }
 
+  // `packages` is null when the project itself couldn't be resolved at all
+  // (bad ?proj=) — distinct from a real project with zero review sets, which
+  // still has an empty array and a normal "no sets yet" message.
   function renderMissing(packages) {
-    document.getElementById("pkgTitle").textContent = "Set Not Found";
+    document.getElementById("pkgTitle").textContent =
+      packages === null ? "Project Not Found" : "Set Not Found";
     document.getElementById("pkgNote").textContent =
-      packages.length
-        ? "That review set doesn't exist. Pick one from the homepage."
-        : "No review sets are configured yet.";
+      packages === null
+        ? "That project doesn't exist. Pick one from the homepage."
+        : packages.length
+          ? "That review set doesn't exist. Pick one from the project page."
+          : "No review sets are configured yet.";
     document.getElementById("toolbar").hidden = true;
   }
 

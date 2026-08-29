@@ -1,9 +1,12 @@
 /*
  * REVIEW PACKAGES — the folder structure the site presents.
  *
- * This is the hand-authored manifest used when SITE.liveFolderMode is false
- * (the default). Each package is one review set — a drawing issue, a rendering
- * batch, a reference pack. Order here is the order shown on the site.
+ * This is the hand-authored manifest used whenever a project has no live
+ * Drive folder — see Drive.loadPackages() in drive.js. In the multi-project
+ * site, that in practice means: the demo project in projects.js, and any
+ * other project entry someone adds there without a driveFolderId of its own.
+ * Each package is one review set — a drawing issue, a rendering batch, a
+ * reference pack. Order here is the order shown on the site.
  *
  * ── An item ────────────────────────────────────────────────────────────────
  *   {

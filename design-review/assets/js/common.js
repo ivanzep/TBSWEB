@@ -8,7 +8,11 @@ window.SiteCommon = (function () {
 
   /* ── Chrome ────────────────────────────────────────────────────────────── */
 
-  function renderChrome() {
+  // projectMeta is optional — pages scoped to one project (project.html,
+  // package.html, all-files.html, review-log.html) pass the resolved project
+  // ({title, driveFolderId, ...}) once they know it; the landing page, which
+  // isn't about any single project, omits it and gets studio-only chrome.
+  function renderChrome(projectMeta) {
     var S = window.SITE;
 
     var logoImg = document.getElementById("logoImg");
@@ -19,17 +23,20 @@ window.SiteCommon = (function () {
 
     var footerMeta = document.getElementById("footerMeta");
     if (footerMeta) {
-      footerMeta.innerHTML = "© " + new Date().getFullYear() + " — " +
-        escapeHtml(S.project.name) + " " + escapeHtml(S.project.subtitle);
+      var label = projectMeta ? projectMeta.title + " Design Review" : "Design Review Projects";
+      footerMeta.innerHTML = "© " + new Date().getFullYear() + " — " + escapeHtml(label);
     }
 
     var contactBtn = document.getElementById("contactBtn");
     if (contactBtn) {
-      contactBtn.href = "mailto:" + S.studio.email +
-        "?subject=" + encodeURIComponent(S.project.name + " — design review");
+      var subject = projectMeta ? projectMeta.title + " — design review" : "Design review";
+      contactBtn.href = "mailto:" + S.studio.email + "?subject=" + encodeURIComponent(subject);
       contactBtn.textContent = "Email " + S.studio.name;
     }
 
+    // The master folder link (landing page only — a project-scoped page binds
+    // its OWN folder link separately, since data-drive-folder always means
+    // "the master folder" here).
     document.querySelectorAll("[data-drive-folder]").forEach(function (el) {
       var url = window.Drive.folderUrl(S.driveFolderId);
       if (url) el.href = url;
@@ -127,20 +134,34 @@ window.SiteCommon = (function () {
 
   /* ── Setup notice ──────────────────────────────────────────────────────── */
 
-  // Shown until config.js carries a real Drive folder ID, so a freshly cloned
-  // site explains what it needs instead of looking broken.
-  function renderSetupNotice(loadResult) {
+  // Shown whenever a Drive listing came back as manifest/demo content rather
+  // than live, so a freshly cloned site (or one project within it) explains
+  // what it needs instead of just looking sparse. Reads loadResult itself —
+  // not a single global "is Drive configured" flag — because in a multi-
+  // project site that's genuinely different per page: the master folder can
+  // be unconfigured while a specific project still has its own real Drive
+  // folder wired up and lists live, or vice versa.
+  //
+  // `kind` distinguishes what was being listed, since the fix is different:
+  // "projects" (landing page, listing the master folder) vs the default,
+  // "packages" (a project's own review sets).
+  function renderSetupNotice(loadResult, kind) {
     var host = document.getElementById("setupNotice");
     if (!host) return;
 
     var msgs = [];
-    if (window.SITE.isUnconfigured()) {
-      msgs.push("<strong>Demo content.</strong> Set <code>driveFolderId</code> in " +
-        "<code>assets/js/config.js</code> to point this site at the project's Google Drive folder.");
+    if (loadResult && loadResult.source === "manifest") {
+      msgs.push(kind === "projects"
+        ? "<strong>Demo project.</strong> Set <code>driveFolderId</code> and " +
+          "<code>driveApiKey</code> in <code>assets/js/config.js</code> to list real " +
+          "projects from Drive instead of the one in <code>assets/js/projects.js</code>."
+        : "<strong>Demo content.</strong> This project isn't listing live from Drive " +
+          "(no <code>driveFolderId</code> on it, or no <code>driveApiKey</code> in " +
+          "<code>assets/js/config.js</code>) — showing the manifest in " +
+          "<code>assets/js/packages.js</code> instead.");
     }
     if (loadResult && loadResult.error) {
-      msgs.push("<strong>Drive listing unavailable</strong> (" + escapeHtml(loadResult.error) +
-        "). Showing the manifest in <code>assets/js/packages.js</code> instead.");
+      msgs.push("<strong>Drive listing unavailable</strong> (" + escapeHtml(loadResult.error) + ").");
     }
     if (!msgs.length) { host.hidden = true; return; }
 
@@ -215,8 +236,8 @@ window.SiteCommon = (function () {
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  function initPage() {
-    renderChrome();
+  function initPage(projectMeta) {
+    renderChrome(projectMeta);
     bindHeaderScroll();
     bindNavToggle();
     bindScrollProgress();

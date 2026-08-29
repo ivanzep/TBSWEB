@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Projects | The Brown Studio</title>
-<meta name="description" content="Design review portal by The Brown Studio — every project's drawing sets and renderings, each with its own carousel viewer, embedded PDF sheets, markups and comment log.">
+<title>Project | The Brown Studio</title>
+<meta name="description" content="Design review for this project — drawing sets and renderings from its Google Drive folder, with a carousel viewer, embedded PDF sheets and markups.">
 <link rel="icon" href="./assets/img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,10 @@
       <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
     </a>
     <nav class="nav" id="siteNav">
-      <a href="#projects">Projects</a>
+      <a href="#overview">Overview</a>
+      <a href="#packages">Review Sets</a>
+      <a href="./all-files.html">All Files</a>
+      <a href="./review-log.html">Review Log</a>
       <a href="#drive">Drive</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -34,39 +37,56 @@
 <section class="hero" id="home">
   <div class="hero-media" id="heroMedia"></div>
   <div class="hero-content">
+    <a class="back-link" href="./index.html">← All Projects</a>
     <p class="eyebrow" id="heroEyebrow">The Brown Studio — Design + Build</p>
-    <h1 id="heroTitle">Projects</h1>
+    <h1 id="heroTitle">Project</h1>
     <p class="hero-sub" id="heroSubtitle">Design Review</p>
     <div class="hero-actions">
-      <a href="#projects" class="btn btn-outline">Browse Projects</a>
+      <a href="#packages" class="btn btn-outline">Start Reviewing</a>
+      <a href="./review-log.html" class="btn btn-outline">Review Log</a>
     </div>
   </div>
 </section>
 
 <div class="setup-notice" id="setupNotice" hidden></div>
 
-<section class="packages" id="projects">
+<section class="overview" id="overview">
+  <div class="container">
+    <div class="grid">
+      <div data-reveal>
+        <p class="eyebrow">Project Overview</p>
+        <p class="lede" id="overviewText"></p>
+      </div>
+      <div data-reveal>
+        <ul class="stat-list" id="statList"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="packages" id="packages">
   <div class="container">
     <div class="section-head" data-reveal>
       <div>
-        <p class="eyebrow">Every Project, One Place</p>
-        <h2>Projects</h2>
+        <p class="eyebrow">Drive Folder</p>
+        <h2>Review Sets</h2>
       </div>
     </div>
-    <div class="packages-grid" id="projectsGrid"></div>
+    <div class="packages-grid" id="packagesGrid"></div>
   </div>
 </section>
 
 <section class="download" id="drive">
   <div class="container">
     <p class="eyebrow">Source of Truth</p>
-    <h2>The Master Drive Folder</h2>
-    <p>Every project on this site is a subfolder of one Google Drive folder. Open it
-       directly to add a new project, or to browse anything not surfaced here.</p>
+    <h2>This Project's Drive Folder</h2>
+    <p>Everything on this page is read from one Google Drive folder. Open it directly to
+       upload new sheets, check version history, or grab full-resolution files.</p>
     <div class="download-actions">
-      <a class="btn btn-outline" data-drive-folder href="#" target="_blank" rel="noopener">
+      <a class="btn btn-outline" data-project-drive-folder href="#" target="_blank" rel="noopener">
         Open Drive Folder
       </a>
+      <a class="btn btn-outline" href="./review-log.html">Export Comments</a>
     </div>
   </div>
 </section>
@@ -74,9 +94,8 @@
 <section class="contact" id="contact">
   <div class="container">
     <p class="eyebrow">Next Step</p>
-    <h2>Questions on a Project?</h2>
-    <p id="contactText">Open the project, leave your comments on the drawings themselves, then send
-      them over from its Review Log — or reach out and we'll walk it together.</p>
+    <h2>Questions on a Set?</h2>
+    <p id="contactText">Leave your comments on the drawings themselves, then send them over — or reach out and we'll walk the set together.</p>
     <a class="btn btn-dark-outline" id="contactBtn" href="#">Email The Studio</a>
   </div>
 </section>
@@ -92,8 +111,10 @@
 
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/projects.js"></script>
+<script src="./assets/js/packages.js"></script>
 <script src="./assets/js/drive.js"></script>
+<script src="./assets/js/store.js"></script>
 <script src="./assets/js/common.js"></script>
-<script src="./assets/js/landing.js"></script>
+<script src="./assets/js/project-page.js"></script>
 </body>
 </html>

@@ -21,11 +21,11 @@
       <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
     </a>
     <nav class="nav" id="siteNav">
-      <a href="./index.html#overview">Overview</a>
-      <a href="./index.html#packages">Review Sets</a>
+      <a href="./project.html#overview">Overview</a>
+      <a href="./project.html#packages">Review Sets</a>
       <a href="./all-files.html">All Files</a>
       <a href="./review-log.html" class="is-active">Review Log</a>
-      <a href="./index.html#contact">Contact</a>
+      <a href="./project.html#contact">Contact</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -37,7 +37,7 @@
 
 <section class="page-banner">
   <div class="container">
-    <a class="back-link" href="./index.html">← Back to Project</a>
+    <a class="back-link" href="./project.html" id="backLink">← Back to Project</a>
     <p class="eyebrow">All Comments</p>
     <h1>Review Log</h1>
     <p class="page-banner-note">
@@ -46,31 +46,33 @@
       them below and send them over.
     </p>
 
-    <div class="log-controls">
-      <label class="field">Your name
-        <input type="text" id="reviewerName" placeholder="e.g. Ivan Z." autocomplete="name">
-      </label>
-      <label class="field">Set
-        <select id="filterPkg"><option value="">All sets</option></select>
-      </label>
-      <label class="field">Show
-        <select id="filterState">
-          <option value="open">Open only</option>
-          <option value="all">All comments</option>
-          <option value="resolved">Resolved only</option>
-        </select>
-      </label>
-      <label class="field">Find
-        <input type="search" id="filterText" placeholder="Search comments…">
-      </label>
-    </div>
+    <div id="logControls">
+      <div class="log-controls">
+        <label class="field">Your name
+          <input type="text" id="reviewerName" placeholder="e.g. Ivan Z." autocomplete="name">
+        </label>
+        <label class="field">Set
+          <select id="filterPkg"><option value="">All sets</option></select>
+        </label>
+        <label class="field">Show
+          <select id="filterState">
+            <option value="open">Open only</option>
+            <option value="all">All comments</option>
+            <option value="resolved">Resolved only</option>
+          </select>
+        </label>
+        <label class="field">Find
+          <input type="search" id="filterText" placeholder="Search comments…">
+        </label>
+      </div>
 
-    <div class="log-controls">
-      <button class="btn btn-dark-outline btn-sm" id="copyMd">Copy for Email</button>
-      <button class="btn btn-dark-outline btn-sm" id="downloadJson">Download JSON</button>
-      <button class="btn btn-dark-outline btn-sm" id="importJson">Import Comments</button>
-      <button class="btn btn-dark-outline btn-sm" id="clearAll">Clear All</button>
-      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <div class="log-controls">
+        <button class="btn btn-dark-outline btn-sm" id="copyMd">Copy for Email</button>
+        <button class="btn btn-dark-outline btn-sm" id="downloadJson">Download JSON</button>
+        <button class="btn btn-dark-outline btn-sm" id="importJson">Import Comments</button>
+        <button class="btn btn-dark-outline btn-sm" id="clearAll">Clear All</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </div>
     </div>
   </div>
 </section>
@@ -92,6 +94,7 @@
 <div id="toast"></div>
 
 <script src="./assets/js/config.js"></script>
+<script src="./assets/js/projects.js"></script>
 <script src="./assets/js/packages.js"></script>
 <script src="./assets/js/drive.js"></script>
 <script src="./assets/js/store.js"></script>

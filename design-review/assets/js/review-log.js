@@ -6,21 +6,57 @@
   "use strict";
 
   var C = window.SiteCommon;
+  var project = null;
   var packages = [];
 
   document.addEventListener("DOMContentLoaded", function () {
-    C.initPage();
+    window.Drive.resolveProject(param("proj")).then(function (resolved) {
+      project = resolved.project;
 
-    window.Drive.loadPackages().then(function (result) {
-      packages = result.packages;
-      C.renderSetupNotice(result);
-      fillPackageFilter();
-      render();
+      if (!project) {
+        C.initPage();
+        document.getElementById("logControls").hidden = true;
+        var empty = document.getElementById("logEmpty");
+        empty.hidden = false;
+        empty.textContent = "That project doesn't exist. Pick one from the homepage.";
+        return;
+      }
+
+      // Must happen before anything touches Store — see store.js's header.
+      window.Store.init(project.slug, project.title);
+      C.initPage(project);
+      fixupNavLinks();
+      document.title = "Review Log — " + project.title + " | " + window.SITE.studio.name;
+      bindControls();
+
+      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+        packages = result.packages;
+        C.renderSetupNotice(result);
+        fillPackageFilter();
+        render();
+      });
+
+      window.Store.subscribe(render);
     });
-
-    bindControls();
-    window.Store.subscribe(render);
   });
+
+  function param(name) {
+    return new URLSearchParams(location.search).get(name) || "";
+  }
+
+  // Fragment-safe — see package-page.js's withProj for why.
+  function withProj(url) {
+    var hashIdx = url.indexOf("#");
+    var base = hashIdx === -1 ? url : url.slice(0, hashIdx);
+    var hash = hashIdx === -1 ? "" : url.slice(hashIdx);
+    base += (base.indexOf("?") === -1 ? "?" : "&") + "proj=" + encodeURIComponent(project.slug);
+    return base + hash;
+  }
+
+  function fixupNavLinks() {
+    document.querySelectorAll('a[href^="./project.html"], a[href^="./all-files.html"]')
+      .forEach(function (a) { a.setAttribute("href", withProj(a.getAttribute("href"))); });
+  }
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
 
@@ -90,9 +126,8 @@
   }
 
   function fileName(ext) {
-    var slug = window.Drive.slugify(window.SITE.project.name);
     var day = new Date().toISOString().slice(0, 10);
-    return slug + "-review-" + day + "." + ext;
+    return project.slug + "-review-" + day + "." + ext;
   }
 
   function fillPackageFilter() {
@@ -133,7 +168,8 @@
       empty.innerHTML = window.Store.allNotes(packages).length
         ? "<p>No comments match those filters.</p>"
         : "<p>No comments yet. Open a review set, click any drawing, and add one.</p>" +
-          '<p><a class="btn btn-dark-outline" href="./index.html#packages">Go to Review Sets</a></p>';
+          '<p><a class="btn btn-dark-outline" href="' + withProj("./project.html#packages") +
+          '">Go to Review Sets</a></p>';
       return;
     }
     empty.hidden = true;
@@ -141,8 +177,8 @@
     host.innerHTML = rows.map(function (row) {
       var item = row.item;
       var note = row.note;
-      var href = "./package.html?p=" + encodeURIComponent(row.pkg.slug) +
-        "&item=" + encodeURIComponent(item.uid);
+      var href = withProj("./package.html?p=" + encodeURIComponent(row.pkg.slug) +
+        "&item=" + encodeURIComponent(item.uid));
 
       var where = C.escapeHtml(row.pkg.title) + " › " +
         '<a href="' + href + '">' +

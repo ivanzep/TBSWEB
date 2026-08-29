@@ -1,10 +1,17 @@
 /*
- * GOOGLE DRIVE LAYER — URL builders, plus the optional live folder listing.
+ * GOOGLE DRIVE LAYER — URL builders, plus the two levels of live folder listing.
  *
  * Every other script talks to Drive through here, so there is exactly one place
  * that knows Drive's URL shapes. An "item" is either a Drive file (has `id`) or
  * a plain local/remote file (has `src`); both flow through the same builders,
  * which is what lets a package mix Drive files and local assets freely.
+ *
+ * Two listing levels mirror the folder hierarchy:
+ *   listProjects()          master folder  → one project per subfolder
+ *   listLive(rootFolderId)  a project's folder → one review set per subfolder
+ * Both take an explicit root rather than reading a single global, since a
+ * multi-project site has one master root (config.js) but a different root per
+ * project (each project's own driveFolderId) — see loadPackages().
  */
 window.Drive = (function () {
   "use strict";
@@ -83,9 +90,12 @@ window.Drive = (function () {
   /* ── Normalizing ───────────────────────────────────────────────────────── */
 
   // Gives every item a stable uid, a resolved type and a display name. The uid
-  // is what notes and statuses are filed under, so it must stay stable across
-  // reloads: it keys off the Drive ID (or src path) scoped to the package, so
-  // the same drawing reviewed in two different sets keeps two separate threads.
+  // is what notes are filed under, so it must stay stable across reloads: it
+  // keys off the Drive ID (or src path) scoped to the package, so the same
+  // drawing reviewed in two different sets keeps two separate threads. It is
+  // NOT scoped to a project — that isolation is Store's job (see store.js
+  // init()), keyed by project slug — so a uid only needs to be unique within
+  // one project's own packages, which package-scoping already guarantees.
   function normalizeItem(item, pkgSlug, index) {
     var type = inferType(item);
     var key = item.id || item.src || ("idx-" + index);
@@ -116,6 +126,24 @@ window.Drive = (function () {
     };
   }
 
+  // Same shape whether a project came from projects.js or from a live-listed
+  // Drive subfolder — see listProjects().
+  function normalizeProject(p, i) {
+    var slug = p.slug || ("project-" + (i + 1));
+    return {
+      slug: slug,
+      title: p.title || slug,
+      client: p.client || "",
+      location: p.location || "",
+      scope: p.scope || "",
+      phase: p.phase || "",
+      year: p.year || "",
+      summary: p.summary || "",
+      thumbnail: p.thumbnail || "",
+      driveFolderId: p.driveFolderId || ""
+    };
+  }
+
   function prettyName(src) {
     if (!src) return "";
     var base = src.split("/").pop().replace(/\.[^.]+$/, "");
@@ -123,7 +151,7 @@ window.Drive = (function () {
       .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
 
-  /* ── Live folder listing (optional) ────────────────────────────────────── */
+  /* ── Live folder listing ──────────────────────────────────────────────── */
 
   function apiList(folderId) {
     var url = "https://www.googleapis.com/drive/v3/files" +
@@ -148,11 +176,10 @@ window.Drive = (function () {
 
   var FOLDER_MIME = "application/vnd.google-apps.folder";
 
-  // Top folder → one package per subfolder, plus a package for any loose files
-  // sitting at the top level so nothing in the folder is invisible on the site.
-  function listLive() {
-    var root = window.SITE.driveFolderId;
-    return apiList(root).then(function (files) {
+  // One project's folder → one package per subfolder, plus a package for any
+  // loose files sitting at the top level so nothing in the folder is invisible.
+  function listLive(rootFolderId) {
+    return apiList(rootFolderId).then(function (files) {
       var kept = files.filter(function (f) { return !ignored(f.name); });
       var folders = kept.filter(function (f) { return f.mimeType === FOLDER_MIME; });
       var loose = kept.filter(function (f) { return f.mimeType !== FOLDER_MIME; });
@@ -176,13 +203,22 @@ window.Drive = (function () {
           packages.unshift({
             slug: "project-files",
             title: "Project Files",
-            driveFolderId: root,
+            driveFolderId: rootFolderId,
             note: "Files sitting at the top level of the project folder.",
             items: loose.map(toItem)
           });
         }
         return packages.filter(function (p) { return p.items.length; });
       });
+    });
+  }
+
+  // The master folder → one project per subfolder. Loose files at the master
+  // level are ignored (a project must be a folder — there's nowhere for a
+  // stray file to go, since it has no review sets of its own underneath it).
+  function listProjectFolders(masterFolderId) {
+    return apiList(masterFolderId).then(function (files) {
+      return files.filter(function (f) { return f.mimeType === FOLDER_MIME && !ignored(f.name); });
     });
   }
 
@@ -208,25 +244,26 @@ window.Drive = (function () {
   function slugify(s) {
     return String(s || "").toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "package";
+      .replace(/^-+|-+$/g, "") || "item";
   }
 
-  /* ── Public loader ─────────────────────────────────────────────────────── */
+  /* ── Public loaders ───────────────────────────────────────────────────── */
 
-  // Resolves to { packages, source, error }. Live mode is attempted only when
-  // it's switched on AND has both a folder and a key; any failure falls back to
-  // the manifest so the site never comes up empty because of a bad key.
-  function loadPackages() {
+  // One project's review sets. `rootFolderId` is that project's OWN Drive
+  // folder (from projects.js or from a live-discovered project) — falsy means
+  // "no Drive folder for this project," which resolves straight to the local
+  // packages.js manifest (the demo project's content) rather than attempting
+  // a call that could never succeed. Any live failure falls back the same way,
+  // so a project page never comes up empty over a bad key or a network blip.
+  function loadPackages(rootFolderId) {
     var manifest = (window.PACKAGES || []).map(normalizePackage);
-    var canGoLive = window.SITE.liveFolderMode &&
-      window.SITE.driveApiKey &&
-      !window.SITE.isUnconfigured();
+    var canGoLive = !!rootFolderId && !!window.SITE.driveApiKey;
 
     if (!canGoLive) {
       return Promise.resolve({ packages: manifest, source: "manifest", error: null });
     }
 
-    return listLive().then(function (live) {
+    return listLive(rootFolderId).then(function (live) {
       var packages = live.map(normalizePackage);
       if (!packages.length) {
         return { packages: manifest, source: "manifest", error: "Drive folder is empty." };
@@ -234,6 +271,61 @@ window.Drive = (function () {
       return { packages: packages, source: "live", error: null };
     }).catch(function (err) {
       return { packages: manifest, source: "manifest", error: err.message || String(err) };
+    });
+  }
+
+  // The site's project list. Live-lists the master folder's subfolders when
+  // config.js has both a folder and a key; a projects.js entry whose `slug`
+  // matches a live-discovered folder's slugified name applies as a metadata
+  // override (title/client/location/etc.) on top of it — same pattern a
+  // review-set's own meta uses. Falls back to projects.js entirely on any
+  // failure, same "never come up empty" contract as loadPackages().
+  function listProjects() {
+    var manifest = (window.PROJECTS || []).map(normalizeProject);
+    var canGoLive = !window.SITE.isUnconfigured() && !!window.SITE.driveApiKey;
+
+    if (!canGoLive) {
+      return Promise.resolve({ projects: manifest, source: "manifest", error: null });
+    }
+
+    return listProjectFolders(window.SITE.driveFolderId).then(function (folders) {
+      var overrides = {};
+      manifest.forEach(function (p) { overrides[p.slug] = p; });
+
+      var projects = folders.map(function (f) {
+        var slug = slugify(f.name);
+        var o = overrides[slug] || {};
+        return normalizeProject({
+          slug: slug,
+          title: o.title || f.name,
+          client: o.client,
+          location: o.location,
+          scope: o.scope,
+          phase: o.phase,
+          year: o.year,
+          summary: o.summary,
+          thumbnail: o.thumbnail,
+          driveFolderId: f.id
+        });
+      });
+
+      if (!projects.length) {
+        return { projects: manifest, source: "manifest", error: "Drive folder has no project subfolders." };
+      }
+      return { projects: projects, source: "live", error: null };
+    }).catch(function (err) {
+      return { projects: manifest, source: "manifest", error: err.message || String(err) };
+    });
+  }
+
+  // Finds one project by slug within the current list (live or manifest),
+  // falling back to the first project so a bare/garbled `?p=` still lands
+  // somewhere real instead of an error the reader can't act on.
+  function resolveProject(slug) {
+    return listProjects().then(function (result) {
+      var found = result.projects.filter(function (p) { return p.slug === slug; })[0] ||
+        result.projects[0] || null;
+      return { project: found, listResult: result };
     });
   }
 
@@ -247,7 +339,10 @@ window.Drive = (function () {
     openUrl: openUrl,
     folderUrl: folderUrl,
     normalizePackage: normalizePackage,
+    normalizeProject: normalizeProject,
     loadPackages: loadPackages,
+    listProjects: listProjects,
+    resolveProject: resolveProject,
     slugify: slugify
   };
 })();

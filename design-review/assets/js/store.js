@@ -10,15 +10,42 @@
  * Everything is filed under an item's uid (see Drive.normalizeItem), so notes
  * survive reordering a package, renaming a file, or switching between the
  * manifest and live folder mode — as long as the Drive ID stays the same.
+ *
+ * Multi-project isolation: package.html/all-files.html/review-log.html are
+ * shared page templates for every project — a URL query param picks which
+ * project, not a distinct file per project — so the OLD scheme (namespace the
+ * localStorage key off the URL path) would have every project sharing one
+ * key and every comment landing in one pool. Instead the current project's
+ * slug must be handed in explicitly via init(), which every page calls right
+ * after it resolves which project it's on and before touching anything else
+ * here. Calling any other method first throws, on purpose — a silent generic
+ * namespace would look like it worked while quietly mixing every project's
+ * comments together, which is exactly the bug this exists to prevent.
  */
 window.Store = (function () {
   "use strict";
 
   var VERSION = 1;
-  var KEY = "tbs-design-review:" + (location.pathname.split("/")[1] || "project");
+  var KEY = null;
+  var projectTitle = "";
 
   var listeners = [];
-  var state = load();
+  var state = null;
+
+  /* ── Namespace ─────────────────────────────────────────────────────────── */
+
+  function init(projectSlug, title) {
+    KEY = "tbs-design-review:" + (projectSlug || "project");
+    projectTitle = title || projectSlug || "Project";
+    state = load();
+    listeners.forEach(function (fn) { fn(state); });
+  }
+
+  function requireInit() {
+    if (state === null) {
+      throw new Error("Store.init(projectSlug, title) must be called before use.");
+    }
+  }
 
   /* ── Persistence ───────────────────────────────────────────────────────── */
 
@@ -49,17 +76,21 @@ window.Store = (function () {
     listeners.forEach(function (fn) { fn(state); });
   }
 
+  // Subscribers survive a later init() (a re-render callback registered once
+  // at page load), so this doesn't require init() to have run yet.
   function subscribe(fn) { listeners.push(fn); }
 
   /* ── Items ─────────────────────────────────────────────────────────────── */
 
   function entry(uid) {
+    requireInit();
     if (!state.items[uid]) state.items[uid] = { notes: [] };
     if (!state.items[uid].notes) state.items[uid].notes = [];
     return state.items[uid];
   }
 
   function getItem(uid) {
+    requireInit();
     var e = state.items[uid];
     return { notes: (e && e.notes) || [] };
   }
@@ -73,6 +104,7 @@ window.Store = (function () {
   // any screen size or zoom level. A note without a pin is a general comment;
   // on a PDF it can carry a `page` instead.
   function addNote(uid, fields) {
+    requireInit();
     var note = {
       id: "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       text: String(fields.text || "").trim(),
@@ -120,9 +152,10 @@ window.Store = (function () {
 
   /* ── Reviewer ──────────────────────────────────────────────────────────── */
 
-  function getReviewer() { return state.reviewer; }
+  function getReviewer() { requireInit(); return state.reviewer; }
 
   function setReviewer(name) {
+    requireInit();
     state.reviewer = String(name || "").trim();
     save();
   }
@@ -160,9 +193,10 @@ window.Store = (function () {
   /* ── Export / import ───────────────────────────────────────────────────── */
 
   function exportJSON() {
+    requireInit();
     return JSON.stringify({
       version: VERSION,
-      project: window.SITE.project.name,
+      project: projectTitle,
       reviewer: state.reviewer,
       exported: new Date().toISOString(),
       items: state.items
@@ -195,9 +229,9 @@ window.Store = (function () {
   // Plain-text roll-up for pasting into an email or a meeting agenda — the
   // format most likely to actually get read by everyone on the project.
   function exportMarkdown(packages) {
+    requireInit();
     var lines = [];
-    var P = window.SITE.project;
-    lines.push("# " + P.name + " — Design Review Comments");
+    lines.push("# " + projectTitle + " — Design Review Comments");
     lines.push("");
     lines.push("Reviewer: " + (state.reviewer || "—"));
     lines.push("Exported: " + new Date().toLocaleString());
@@ -229,11 +263,13 @@ window.Store = (function () {
   }
 
   function clearAll() {
+    requireInit();
     state = blank();
     save();
   }
 
   return {
+    init: init,
     subscribe: subscribe,
     getItem: getItem,
     getNotes: getNotes,

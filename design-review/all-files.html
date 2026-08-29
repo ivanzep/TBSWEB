@@ -21,11 +21,11 @@
       <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
     </a>
     <nav class="nav" id="siteNav">
-      <a href="./index.html#overview">Overview</a>
-      <a href="./index.html#packages">Review Sets</a>
+      <a href="./project.html#overview">Overview</a>
+      <a href="./project.html#packages">Review Sets</a>
       <a href="./all-files.html" class="is-active">All Files</a>
       <a href="./review-log.html">Review Log</a>
-      <a href="./index.html#contact">Contact</a>
+      <a href="./project.html#contact">Contact</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -37,7 +37,7 @@
 
 <section class="page-banner">
   <div class="container">
-    <a class="back-link" href="./index.html#packages">← Review Sets</a>
+    <a class="back-link" href="./project.html#packages" id="backLink">← Review Sets</a>
     <p class="eyebrow">Every Set, One View</p>
     <h1>All Files</h1>
     <p class="page-banner-note">
@@ -46,7 +46,7 @@
       arrowing through moves across sets, not just within one.
     </p>
 
-    <div class="toolbar-stack">
+    <div class="toolbar-stack" id="toolbarStack">
       <div class="toolbar-row">
         <button class="filter-btn is-active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="image">Images</button>
@@ -55,7 +55,7 @@
         <span class="spacer"></span>
         <span class="results-count" id="resultsCount"></span>
         <button class="filter-btn" id="openFirst">Open Carousel</button>
-        <a class="filter-btn" data-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
+        <a class="filter-btn" data-project-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
       </div>
       <div class="toolbar-row">
         <label class="field">Set
@@ -137,6 +137,7 @@
 <div id="toast"></div>
 
 <script src="./assets/js/config.js"></script>
+<script src="./assets/js/projects.js"></script>
 <script src="./assets/js/packages.js"></script>
 <script src="./assets/js/drive.js"></script>
 <script src="./assets/js/store.js"></script>

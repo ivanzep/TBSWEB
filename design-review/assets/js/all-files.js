@@ -12,6 +12,7 @@
   "use strict";
 
   var C = window.SiteCommon;
+  var project = null;
   var packages = [];
   var allItems = [];
 
@@ -22,22 +23,69 @@
   var searchText = "";
 
   document.addEventListener("DOMContentLoaded", function () {
-    C.initPage();
     window.Viewer.init(function () { render(); });
 
-    window.Drive.loadPackages().then(function (result) {
-      packages = result.packages;
-      C.renderSetupNotice(result);
-      allItems = flatten(packages);
-      fillSetFilter();
-      bindControls();
-      render();
-    });
+    window.Drive.resolveProject(param("proj")).then(function (resolved) {
+      project = resolved.project;
 
-    // Marks made in the viewer change comment counts/badges on screen, and can
-    // move an item in or out of the "With Comments" filter or a comment sort.
-    window.Store.subscribe(render);
+      if (!project) {
+        C.initPage();
+        var empty = document.getElementById("emptyState");
+        empty.hidden = false;
+        empty.textContent = "That project doesn't exist. Pick one from the homepage.";
+        document.getElementById("toolbarStack").hidden = true;
+        return;
+      }
+
+      // Must happen before anything touches Store — see store.js's header.
+      window.Store.init(project.slug, project.title);
+      C.initPage(project);
+      fixupNavLinks();
+      bindDriveLink();
+      document.title = "All Files — " + project.title + " | " + window.SITE.studio.name;
+
+      window.Drive.loadPackages(project.driveFolderId).then(function (result) {
+        packages = result.packages;
+        C.renderSetupNotice(result);
+        allItems = flatten(packages);
+        fillSetFilter();
+        bindControls();
+        render();
+      });
+
+      // Marks made in the viewer change comment counts/badges on screen, and
+      // can move an item in or out of the "With Comments" filter or sort.
+      window.Store.subscribe(render);
+    });
   });
+
+  function param(name) {
+    return new URLSearchParams(location.search).get(name) || "";
+  }
+
+  // Fragment-safe — see package-page.js's withProj for why the naive version
+  // (appending after the URL as-is) breaks on a link that already carries a
+  // #section, which project.html links here do.
+  function withProj(url) {
+    var hashIdx = url.indexOf("#");
+    var base = hashIdx === -1 ? url : url.slice(0, hashIdx);
+    var hash = hashIdx === -1 ? "" : url.slice(hashIdx);
+    base += (base.indexOf("?") === -1 ? "?" : "&") + "proj=" + encodeURIComponent(project.slug);
+    return base + hash;
+  }
+
+  function fixupNavLinks() {
+    document.querySelectorAll('a[href^="./project.html"], a[href^="./review-log.html"]')
+      .forEach(function (a) { a.setAttribute("href", withProj(a.getAttribute("href"))); });
+  }
+
+  function bindDriveLink() {
+    var el = document.querySelector("[data-project-drive-folder]");
+    if (!el) return;
+    var url = window.Drive.folderUrl(project.driveFolderId);
+    if (url) el.href = url;
+    else el.classList.add("is-disabled");
+  }
 
   // Carries pkgTitle alongside the fields Drive.normalizeItem already put on
   // the item, so a card can show which set it's from without a second lookup.
