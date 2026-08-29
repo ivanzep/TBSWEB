@@ -255,16 +255,23 @@ A row whose path doesn't start with `PROJECT REVIEWS/`, or has nothing
 between the project name and the file (a file sitting in the project's own
 root, with no set folder to belong to), is skipped rather than guessed at.
 
-Publish it: **File → Share → Publish to web**, choose the sheet/tab, format
-**Comma-separated values (.csv)**, **Publish**. Copy the URL it gives you.
+Share it "Anyone with the link" (same as every Drive folder this site
+already needs shared that way) and copy its normal **Share → Copy link**
+URL — the generator turns a plain share link into the CSV it actually needs
+on its own. (A **File → Share → Publish to web → CSV** link works too, if
+you'd rather use that; paste whichever URL you have.)
 
 ### 2. Point the workflow at it
 
 Repo → **Settings → Secrets and variables → Actions → Variables** tab →
 **New repository variable** → name it `DRIVE_SHEET_CSV_URL`, paste the
-published CSV URL as the value. It's a plain variable, not a secret,
-because a "Publish to web" CSV is world-readable by design — anyone with
-the link can already read it.
+sheet's share (or published-CSV) URL as the value. It's a plain variable,
+not a secret — anyone with the link can already read the sheet, same as
+any "Anyone with the link" Drive file.
+
+If the workflow run's log says it got an HTML page back instead of CSV,
+link-sharing isn't actually turned on for the sheet (or got turned back
+off) — double check **Share → General access → Anyone with the link**.
 
 Until this variable is set, the workflow runs and exits without changing
 anything (same "never come up empty" fallback as `config.js`'s Drive

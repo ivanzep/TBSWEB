@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 """
 Generates design-review's assets/js/packages.js, folder-tree.js and
-projects.js from a published Google Sheet CSV — the same "Folder Path /
-File Name / File ID / MIME Type / URL" table the studio has been pasting
-into this project by hand. Run by .github/workflows/sync-drive-sheet.yml;
-see design-review/README.md's "Keeping it in sync automatically" section
-for how to point it at your sheet.
+projects.js from a Google Sheet — the same "Folder Path / File Name /
+File ID / MIME Type / URL" table the studio has been pasting into this
+project by hand. Run by .github/workflows/sync-drive-sheet.yml; see
+design-review/README.md's "Keeping it in sync automatically" section for
+how to point it at your sheet.
+
+DRIVE_SHEET_CSV_URL can be a plain Sheets share link (Share button → Copy
+link) as long as the sheet is shared "Anyone with the link", a
+File → Share → Publish to web → CSV link, or an already-built
+/export?format=csv URL — normalize_sheet_url() below turns any of the
+first two into the third.
 
 Stdlib only — no pip install step needed in the workflow.
 
@@ -70,9 +76,51 @@ def infer_type(file_name, mime):
     return "file"
 
 
+SHEET_ID_RE = re.compile(r"/spreadsheets/d/([a-zA-Z0-9_-]+)")
+GID_RE = re.compile(r"[?#&]gid=(\d+)")
+
+
+# Accepts either an already-published/CSV-export URL or a plain Sheets
+# share/edit link (what you get from the Share button, not "Publish to
+# web") and returns a CSV export URL either way. A plain share link only
+# works here if the sheet is shared "Anyone with the link" — same sharing
+# level the Drive files in this project already need — since this fetch is
+# anonymous, same as everything else Drive.js reads client-side.
+def normalize_sheet_url(url):
+    # A "Publish to web" link uses a different ID shape entirely
+    # (/spreadsheets/d/e/<published-id>/pub...) — SHEET_ID_RE would match
+    # just the literal "e" out of that and build a broken URL. Any link
+    # already carrying that /d/e/ marker, or an explicit csv output param,
+    # is already fetchable as-is — leave it alone.
+    if "/spreadsheets/d/e/" in url or "output=csv" in url or "format=csv" in url:
+        return url
+    m = SHEET_ID_RE.search(url)
+    if not m:
+        return url  # not a recognizable Sheets URL — let it fail on fetch, with whatever that error says
+    sheet_id = m.group(1)
+    csv_url = "https://docs.google.com/spreadsheets/d/%s/export?format=csv" % sheet_id
+    gid = GID_RE.search(url)
+    if gid:
+        csv_url += "&gid=%s" % gid.group(1)
+    return csv_url
+
+
 def fetch_rows(url):
-    with urlopen(url) as resp:
+    with urlopen(normalize_sheet_url(url)) as resp:
         text = resp.read().decode("utf-8-sig")
+    # A share link Google can't serve anonymously (not shared "Anyone with
+    # the link", or 2FA/login-walled) comes back as the sign-in page's HTML,
+    # not CSV — csv.DictReader would happily "parse" that into garbage rows
+    # that all get silently skipped downstream, which is exactly what
+    # produced a confusing "workflow succeeded, nothing changed" the first
+    # time this ran. Fail loudly instead.
+    if text.lstrip()[:15].lower().startswith(("<!doctype html", "<html")):
+        raise RuntimeError(
+            "Got an HTML page back instead of CSV — the sheet likely isn't "
+            "shared \"Anyone with the link\" (or link‑sharing was turned off). "
+            "Share it that way, or use File → Share → Publish to web → CSV instead, "
+            "then update DRIVE_SHEET_CSV_URL if the URL changed."
+        )
     return list(csv.DictReader(io.StringIO(text)))
 
 
