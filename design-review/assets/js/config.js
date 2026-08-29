@@ -24,7 +24,7 @@ window.SITE = {
 
   project: {
     name: "Clearview Deck",
-    subtitle: "Design Review + Tracking",
+    subtitle: "Design Review",
     client: "Private Residence",
     location: "Placeholder, CA",
     scope: "Outdoor Pergola · Pool Deck · Fireplace",
@@ -34,7 +34,7 @@ window.SITE = {
       "Every drawing set, rendering and revision for the project lives in one Google " +
       "Drive folder. This site reads that folder directly — renderings open in a " +
       "full-screen carousel, PDF sheets open in an embedded viewer, and any of them " +
-      "can be marked up and given a review status so nothing gets lost between sets."
+      "can be marked up and commented on so nothing gets lost between sets."
   },
 
   /* ── Google Drive ───────────────────────────────────────────────────────
@@ -73,17 +73,6 @@ window.SITE = {
   /* Files/folders the live listing should ignore, matched case-insensitively
    * against the name. Handy for working folders you don't want clients seeing. */
   liveIgnore: ["_wip", "_archive", "working", ".DS_Store"],
-
-  /* ── Review workflow ────────────────────────────────────────────────────
-   * The statuses an item can carry. `key` is what gets stored — renaming a key
-   * orphans existing marks, so add/remove rather than rename once in use.
-   */
-  statuses: [
-    { key: "open",     label: "Not Reviewed", color: "#9a9384" },
-    { key: "review",   label: "In Review",    color: "#c08a2e" },
-    { key: "revise",   label: "Revise",       color: "#b4503a" },
-    { key: "approved", label: "Approved",     color: "#5f7d4f" }
-  ],
 
   /* Shown in the hero when no package cover image is available yet. */
   fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg"

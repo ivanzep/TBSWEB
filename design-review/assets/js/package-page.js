@@ -108,7 +108,6 @@
         : '<span class="shot-empty">' +
             (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
       html += '<span class="type-tag">' + (item.type === "pdf" ? "PDF" : "Image") + "</span>";
-      html += '<span class="status-tag">' + C.statusPill(state.status) + "</span>";
       if (state.notes.length) {
         html += '<span class="note-count">' + state.notes.length +
           (open ? " · " + open + " open" : "") + "</span>";

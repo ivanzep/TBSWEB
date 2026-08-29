@@ -79,7 +79,7 @@
       // Destructive and unrecoverable — localStorage has no undo — so name the
       // cost and point at the export before wiping.
       var ok = confirm(
-        "Delete all " + total + " comment(s) and reset every status on this device?\n\n" +
+        "Delete all " + total + " comment(s) on this device?\n\n" +
         "This can't be undone. Download the JSON first if you want a copy."
       );
       if (!ok) return;
@@ -141,7 +141,6 @@
     host.innerHTML = rows.map(function (row) {
       var item = row.item;
       var note = row.note;
-      var status = window.Store.getStatus(item.uid);
       var href = "./package.html?p=" + encodeURIComponent(row.pkg.slug) +
         "&item=" + encodeURIComponent(item.uid);
 
@@ -151,8 +150,17 @@
 
       var marker = note.pin ? "Markup" : note.page ? "Page " + note.page : "Comment";
 
+      // Drive's thumbnail endpoint covers both images and Drive-hosted PDFs
+      // (page one); a local PDF has no such endpoint and falls back to a label.
+      var thumb = window.Drive.thumbUrl(item, 160);
+      var thumbHtml = thumb
+        ? '<img class="log-thumb" loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
+        : '<span class="log-thumb log-thumb-empty">' +
+            (item.type === "pdf" ? "PDF" : "IMG") + "</span>";
+
       var html = '<article class="log-row' + (note.resolved ? " is-resolved" : "") +
         '" data-reveal>';
+      html += '<a class="log-thumb-link" href="' + href + '">' + thumbHtml + "</a>";
       html += "<div>";
       html += '<div class="log-where">' + where + "</div>";
       html += '<p class="log-text">' + C.escapeHtml(note.text) + "</p>";
@@ -161,7 +169,6 @@
       html += "</div>";
       html += '<div class="log-side">';
       html += '<span class="marker">' + C.escapeHtml(marker) + "</span>";
-      html += C.statusPill(status);
       html += '<button type="button" class="filter-btn" data-toggle="' +
         C.escapeHtml(item.uid) + "|" + C.escapeHtml(note.id) + '">' +
         (note.resolved ? "Reopen" : "Resolve") + "</button>";

@@ -1,5 +1,5 @@
 /*
- * HOMEPAGE — project overview, the tracking roll-up, and one card per review set.
+ * HOMEPAGE — project overview and one card per review set.
  */
 (function () {
   "use strict";
@@ -16,14 +16,12 @@
     window.Drive.loadPackages().then(function (result) {
       packages = result.packages;
       C.renderSetupNotice(result);
-      renderTracker();
       renderPackages();
     });
 
-    // Marks made in the viewer on a package page change these roll-ups, so
-    // recompute whenever the store reports a write.
+    // Marks made in the viewer on a package page change the comment counts on
+    // each card, so recompute whenever the store reports a write.
     window.Store.subscribe(function () {
-      renderTracker();
       renderPackages();
     });
   });
@@ -72,56 +70,6 @@
     }).join("");
   }
 
-  /* ── Tracking roll-up ──────────────────────────────────────────────────── */
-
-  function renderTracker() {
-    var host = document.getElementById("tracker");
-    if (!host) return;
-
-    var all = [];
-    packages.forEach(function (p) { all = all.concat(p.items); });
-
-    if (!all.length) {
-      host.innerHTML = '<p class="vp-empty" style="color:var(--color-ink-soft)">' +
-        "No files found yet — add them to the Drive folder, or list them in " +
-        "<code>assets/js/packages.js</code>.</p>";
-      return;
-    }
-
-    var c = window.Store.counts(all);
-    var reviewed = c.total - (c.open || 0);
-    var pct = Math.round((reviewed / c.total) * 100);
-
-    var html = "";
-    html += '<div class="tracker-top">';
-    html += '<div><p class="eyebrow">Reviewed</p><div class="tracker-figure">' +
-      pct + '%<span> of ' + c.total + " items</span></div></div>";
-    html += '<div><p class="eyebrow">Open Comments</p><div class="tracker-figure">' +
-      c.openNotes + '<span> of ' + c.notes + " total</span></div></div>";
-    html += '<div><p class="eyebrow">Review Sets</p><div class="tracker-figure">' +
-      packages.length + "</div></div>";
-    html += "</div>";
-
-    html += '<div class="tracker-bar">' + segments(c) + "</div>";
-
-    html += '<div class="tracker-legend">' + (S.statuses || []).map(function (s) {
-      return "<span><i style=\"background:" + s.color + "\"></i>" +
-        C.escapeHtml(s.label) + " <b>" + (c[s.key] || 0) + "</b></span>";
-    }).join("") + "</div>";
-
-    host.innerHTML = html;
-  }
-
-  // Stacked proportional bar. Zero-count statuses are dropped rather than
-  // rendered at 0% so the bar has no hairline slivers in it.
-  function segments(c) {
-    return (S.statuses || []).map(function (s) {
-      var n = c[s.key] || 0;
-      if (!n) return "";
-      return '<i style="width:' + ((n / c.total) * 100) + "%;background:" + s.color + '"></i>';
-    }).join("");
-  }
-
   /* ── Package cards ─────────────────────────────────────────────────────── */
 
   function renderPackages() {
@@ -154,9 +102,8 @@
         (pkg.issued ? "Issued " + C.escapeHtml(C.formatDate(pkg.issued)) + " · " : "") +
         C.escapeHtml(mix.join(" · ") || "Empty") + "</div>";
       if (pkg.note) html += '<p class="note">' + C.escapeHtml(pkg.note) + "</p>";
-      html += '<div class="mini-bar">' + (c.total ? segments(c) : "") + "</div>";
-      html += '<div class="counts"><span>' + (c.total - (c.open || 0)) + " / " + c.total +
-        " reviewed</span><span>" + c.openNotes + " open comment" +
+      html += '<div class="counts"><span>' + c.total + " item" + (c.total === 1 ? "" : "s") +
+        "</span><span>" + c.openNotes + " open comment" +
         (c.openNotes === 1 ? "" : "s") + "</span></div>";
       html += "</div></article>";
       return html;

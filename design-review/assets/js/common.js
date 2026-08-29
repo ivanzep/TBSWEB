@@ -215,11 +215,6 @@ window.SiteCommon = (function () {
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  function statusPill(key) {
-    return '<span class="pill" style="--pill:' + window.Store.statusColor(key) + '">' +
-      escapeHtml(window.Store.statusLabel(key)) + "</span>";
-  }
-
   function initPage() {
     renderChrome();
     bindHeaderScroll();
@@ -242,7 +237,6 @@ window.SiteCommon = (function () {
     formatDateTime: formatDateTime,
     toast: toast,
     copyText: copyText,
-    downloadFile: downloadFile,
-    statusPill: statusPill
+    downloadFile: downloadFile
   };
 })();

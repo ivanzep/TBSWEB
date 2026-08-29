@@ -1,5 +1,5 @@
 /*
- * REVIEW STORE — review status, notes and image markups.
+ * REVIEW STORE — comments and image markups.
  *
  * This is a static site with no backend, so review state lives in the
  * reviewer's own browser (localStorage) rather than on a server. That means:
@@ -54,21 +54,14 @@ window.Store = (function () {
   /* ── Items ─────────────────────────────────────────────────────────────── */
 
   function entry(uid) {
-    if (!state.items[uid]) state.items[uid] = { status: "open", notes: [] };
+    if (!state.items[uid]) state.items[uid] = { notes: [] };
     if (!state.items[uid].notes) state.items[uid].notes = [];
     return state.items[uid];
   }
 
   function getItem(uid) {
     var e = state.items[uid];
-    return { status: (e && e.status) || "open", notes: (e && e.notes) || [] };
-  }
-
-  function getStatus(uid) { return getItem(uid).status; }
-
-  function setStatus(uid, status) {
-    entry(uid).status = status;
-    save();
+    return { notes: (e && e.notes) || [] };
   }
 
   function getNotes(uid) { return getItem(uid).notes.slice(); }
@@ -91,9 +84,6 @@ window.Store = (function () {
     };
     if (!note.text) return null;
     entry(uid).notes.push(note);
-    // First comment on an untouched item moves it into review on its own —
-    // one less thing for the reviewer to remember to set.
-    if (entry(uid).status === "open") entry(uid).status = "review";
     save();
     return note;
   }
@@ -139,13 +129,11 @@ window.Store = (function () {
 
   /* ── Roll-ups ──────────────────────────────────────────────────────────── */
 
-  // Status tallies across a list of items, for the dashboard and package cards.
+  // Comment tallies across a list of items, for the package cards.
   function counts(items) {
     var out = { total: items.length, notes: 0, openNotes: 0 };
-    (window.SITE.statuses || []).forEach(function (s) { out[s.key] = 0; });
     items.forEach(function (it) {
       var e = getItem(it.uid);
-      out[e.status] = (out[e.status] || 0) + 1;
       out.notes += e.notes.length;
       out.openNotes += e.notes.filter(function (n) { return !n.resolved; }).length;
     });
@@ -182,8 +170,7 @@ window.Store = (function () {
   }
 
   // Merges an export back in rather than replacing: two reviewers' comment sets
-  // combine instead of one overwriting the other. Notes are de-duplicated by id,
-  // and an incoming status only lands on items the local copy hasn't touched.
+  // combine instead of one overwriting the other. Notes are de-duplicated by id.
   function importJSON(text) {
     var data = JSON.parse(text);
     if (!data || !data.items) throw new Error("Not a review export — no items found.");
@@ -200,7 +187,6 @@ window.Store = (function () {
       mine.notes.sort(function (a, b) {
         return String(a.created).localeCompare(String(b.created));
       });
-      if (mine.status === "open" && incoming.status) mine.status = incoming.status;
     });
     save();
     return added;
@@ -227,7 +213,7 @@ window.Store = (function () {
       withNotes.forEach(function (item) {
         var e = getItem(item.uid);
         var head = item.sheet ? item.sheet + " — " + item.name : item.name;
-        lines.push("### " + head + "  [" + statusLabel(e.status) + "]");
+        lines.push("### " + head);
         e.notes.forEach(function (n, i) {
           var where = n.pin ? " _(markup on image)_"
             : n.page ? " _(page " + n.page + ")_" : "";
@@ -242,16 +228,6 @@ window.Store = (function () {
     return lines.join("\n");
   }
 
-  function statusLabel(key) {
-    var found = (window.SITE.statuses || []).filter(function (s) { return s.key === key; })[0];
-    return found ? found.label : key;
-  }
-
-  function statusColor(key) {
-    var found = (window.SITE.statuses || []).filter(function (s) { return s.key === key; })[0];
-    return found ? found.color : "#9a9384";
-  }
-
   function clearAll() {
     state = blank();
     save();
@@ -260,8 +236,6 @@ window.Store = (function () {
   return {
     subscribe: subscribe,
     getItem: getItem,
-    getStatus: getStatus,
-    setStatus: setStatus,
     getNotes: getNotes,
     addNote: addNote,
     updateNote: updateNote,
@@ -274,8 +248,6 @@ window.Store = (function () {
     exportJSON: exportJSON,
     importJSON: importJSON,
     exportMarkdown: exportMarkdown,
-    statusLabel: statusLabel,
-    statusColor: statusColor,
     clearAll: clearAll
   };
 })();

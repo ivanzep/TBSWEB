@@ -6,8 +6,8 @@
  * item renders the right way. Images get a carousel stage with zoom, pan and
  * click-to-place markup pins; PDFs get Drive's embedded paginated viewer.
  *
- * Alongside the stage sits the review panel — status, comments, and the note
- * composer — so a comment is made while looking at the thing it's about.
+ * Alongside the stage sits the review panel — comments and the note composer —
+ * so a comment is made while looking at the thing it's about.
  *
  * Markup pins are stored as fractions of the image (0–1), not pixels, so a pin
  * placed on a laptop lands on the same detail on a phone. Because the pins are
@@ -190,7 +190,7 @@ window.Viewer = (function () {
       "<p><strong>This image couldn't be loaded.</strong></p>" +
       "<p>If it lives in Google Drive, check that the file is shared " +
       "<em>Anyone with the link → Viewer</em>.</p>" +
-      (openHref ? '<p><a class="btn btn-outline" target="_blank" rel="noopener" href="' +
+      (openHref ? '<p><a class="btn btn-dark-outline" target="_blank" rel="noopener" href="' +
         C.escapeHtml(openHref) + '">Open in Drive</a></p>' : "");
   }
 
@@ -416,15 +416,6 @@ window.Viewer = (function () {
     if (item.note) html += '<p class="vp-note">' + C.escapeHtml(item.note) + "</p>";
     html += "</div>";
 
-    html += '<div class="vp-status"><span class="vp-label">Status</span><div class="status-set">';
-    (window.SITE.statuses || []).forEach(function (s) {
-      html += '<button type="button" class="status-btn' +
-        (state.status === s.key ? " is-active" : "") +
-        '" data-status="' + C.escapeHtml(s.key) + '" style="--pill:' + s.color + '">' +
-        C.escapeHtml(s.label) + "</button>";
-    });
-    html += "</div></div>";
-
     var links = [];
     var openHref = window.Drive.openUrl(item);
     var dlHref = window.Drive.downloadUrl(item);
@@ -473,15 +464,6 @@ window.Viewer = (function () {
   }
 
   function bindPanel(item) {
-    els.panel.querySelectorAll("[data-status]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        window.Store.setStatus(item.uid, btn.getAttribute("data-status"));
-        renderPanel();
-        highlightFilmstrip();
-        onChange();
-      });
-    });
-
     els.panel.querySelectorAll("[data-resolve]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         window.Store.toggleResolved(item.uid, btn.getAttribute("data-resolve"));
@@ -551,15 +533,19 @@ window.Viewer = (function () {
     highlightFilmstrip();
   }
 
+  // The dot is a quick "has this been commented on" signal: accent while any
+  // comment on the item is still unresolved, muted green once every comment on
+  // it is resolved, hidden when there are no comments at all.
   function highlightFilmstrip() {
     els.filmstrip.querySelectorAll(".film").forEach(function (btn, i) {
       var active = i === index;
       btn.classList.toggle("is-active", active);
       var dot = btn.querySelector(".film-dot");
       if (dot && items[i]) {
-        var st = window.Store.getItem(items[i].uid);
-        dot.style.background = window.Store.statusColor(st.status);
-        dot.hidden = st.status === "open" && !st.notes.length;
+        var notes = window.Store.getNotes(items[i].uid);
+        var hasOpen = notes.some(function (n) { return !n.resolved; });
+        dot.hidden = !notes.length;
+        dot.style.background = hasOpen ? "var(--color-accent)" : "#5f7d4f";
       }
       if (active) {
         btn.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });

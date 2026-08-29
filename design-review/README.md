@@ -1,9 +1,9 @@
-# Design Review + Tracking
+# Design Review
 
 A client-facing review portal for The Brown Studio. It points at one Google Drive
 folder and turns it into a reviewable set: renderings open in a full-screen
 carousel, PDF drawings open in an embedded viewer, and anything in either can be
-marked up, commented on and given a review status.
+marked up and commented on.
 
 Static site, no build step — open `index.html` directly or serve the folder.
 Theme tokens match `/clearview-deck` and `/clearview-patio-deck`, so the three
@@ -13,17 +13,17 @@ sites read as one family.
 
 ```
 design-review/
-  index.html            Homepage — hero, overview, tracking roll-up, review sets
+  index.html            Homepage — hero, overview, review sets
   package.html          One review set (?p=<slug>) — item grid + the viewer overlay
   review-log.html       Every comment in one list, with export/import
   assets/
     css/style.css        Theme tokens at :root, then components
     img/logo.png         Studio mark (shared with the sibling sites)
     js/
-      config.js          ← START HERE. Studio, project, Drive folder, statuses
+      config.js          ← START HERE. Studio, project, Drive folder
       packages.js        ← The review sets, when not using live folder mode
       drive.js           Drive URL builders + the optional live folder listing
-      store.js           Review status, comments and markups (localStorage)
+      store.js           Comments and markups (localStorage)
       common.js          Shared header/nav/scroll/reveal/modal + helpers
       viewer.js          The carousel, the PDF viewer and the markup pins
       home.js            Homepage renderer
@@ -85,9 +85,9 @@ falls back to `packages.js`, so it never comes up empty.
   numbered pin drops and the comment attaches to it. Pins are stored as
   fractions of the image, so they land on the same detail at any screen size,
   and they zoom and pan with the drawing.
-- **Status** — Not Reviewed / In Review / Revise / Approved per item, rolled up
-  on the package cards and the homepage tracker. The first comment on an
-  untouched item moves it to In Review automatically.
+- **Comment counts** — each item card and filmstrip thumbnail shows whether it
+  has open comments (a dot or count), so it's obvious at a glance what still
+  needs a look.
 
 Keyboard: `←` `→` move, `M` markup, `+` `−` zoom, `0` reset, `Esc` close,
 `Ctrl/Cmd+Enter` posts a comment.
@@ -143,6 +143,5 @@ array is the order on the site.
   is viewable before any Drive wiring exists. Replace those entries with real
   Drive files (or switch on live folder mode) when standing up a project.
 - Drive's thumbnail endpoint renders PDFs too, so Drive-hosted sheets get a real
-  page-one preview on their cards. Local PDFs can't, and show a placeholder.
-- Statuses are configurable in `config.js`. Add or remove them freely; renaming
-  an existing `key` orphans the marks already filed under it.
+  page-one preview on their cards and in the Review Log. Local PDFs can't, and
+  show a placeholder.
