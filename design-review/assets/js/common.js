@@ -50,12 +50,60 @@ window.SiteCommon = (function () {
   function bindNavToggle() {
     var toggle = document.getElementById("navToggle");
     if (!toggle) return;
+    var backdrop = document.getElementById("navBackdrop");
+
+    function setOpen(open) {
+      document.body.classList.toggle("nav-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    // The toggle button doubles as the close control (it morphs into an ✕
+    // via CSS while open — see .nav-open .nav-toggle span) — plus a backdrop
+    // tap and Escape, so there's always a way back to the page underneath
+    // without having to pick a nav link just to dismiss the menu.
     toggle.addEventListener("click", function () {
-      document.body.classList.toggle("nav-open");
+      setOpen(!document.body.classList.contains("nav-open"));
+    });
+    if (backdrop) backdrop.addEventListener("click", function () { setOpen(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && document.body.classList.contains("nav-open") && !isTyping(e.target)) {
+        setOpen(false);
+      }
     });
     document.querySelectorAll(".nav a").forEach(function (a) {
-      a.addEventListener("click", function () {
-        document.body.classList.remove("nav-open");
+      a.addEventListener("click", function () { setOpen(false); });
+    });
+  }
+
+  // Thumbnail size control (package.html and all-files.html only — both
+  // absent on every other page, so this is a no-op there). Swaps a size-*
+  // class on #itemGrid, which .item-grid's --item-min custom property reads
+  // to change the grid's minmax() column width — see style.css. Persisted
+  // per browser, not per project, same as the Drive sidebar's open state.
+  var GRID_SIZES = ["sm", "md", "lg"];
+  var GRID_SIZE_KEY = "tbs-grid-size";
+
+  function bindGridSize() {
+    var grid = document.getElementById("itemGrid");
+    var group = document.getElementById("gridSize");
+    if (!grid || !group) return;
+
+    function apply(size) {
+      GRID_SIZES.forEach(function (s) { grid.classList.toggle("size-" + s, s === size); });
+      group.querySelectorAll("[data-size]").forEach(function (btn) {
+        btn.classList.toggle("is-active", btn.getAttribute("data-size") === size);
+      });
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(GRID_SIZE_KEY); } catch (e) { /* private mode, etc. */ }
+    apply(GRID_SIZES.indexOf(saved) !== -1 ? saved : "md");
+
+    group.querySelectorAll("[data-size]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var size = btn.getAttribute("data-size");
+        apply(size);
+        try { localStorage.setItem(GRID_SIZE_KEY, size); } catch (e) { /* ignore */ }
       });
     });
   }
@@ -156,6 +204,10 @@ window.SiteCommon = (function () {
     if (loadResult && loadResult.error) {
       msgs.push("<strong>Drive listing unavailable</strong> (" + escapeHtml(loadResult.error) + ").");
     }
+    // .page-banner reads this to skip its own header-clearance padding when
+    // the notice is already the element clearing the header — see style.css.
+    document.body.classList.toggle("has-setup-notice", !!msgs.length);
+
     if (!msgs.length) { host.hidden = true; return; }
 
     host.hidden = false;
@@ -238,6 +290,7 @@ window.SiteCommon = (function () {
     renderChrome(projectMeta);
     bindHeaderScroll();
     bindNavToggle();
+    bindGridSize();
     bindScrollProgress();
     bindReveal();
     bindGlobalEscape();

@@ -230,8 +230,14 @@
       var open = notes.filter(function (n) { return !n.resolved; }).length;
       var thumb = window.Drive.thumbUrl(item, 800);
 
+      // Full identity (sheet + which set, since this grid mixes sets) is
+      // still one hover away via the title attribute — trimmed to just the
+      // filename on screen, not lost.
+      var full = (item.sheet ? item.sheet + " — " : "") + item.name + " · " + item.pkgTitle;
+
       var html = '<button type="button" class="item-card' +
-        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal>';
+        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal title="' +
+        C.escapeHtml(full) + '">';
       html += '<span class="shot">';
       html += thumb
         ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
@@ -244,11 +250,8 @@
       }
       html += "</span>";
 
-      html += '<span class="body">';
-      if (item.sheet) html += '<span class="sheet">' + C.escapeHtml(item.sheet) + "</span>";
-      html += '<span class="name">' + C.escapeHtml(item.name) + "</span>";
-      html += '<span class="pkg-label">' + C.escapeHtml(item.pkgTitle) + "</span>";
-      html += "</span></button>";
+      html += '<span class="body"><span class="name">' + C.escapeHtml(item.name) + "</span></span>";
+      html += "</button>";
       return html;
     }).join("");
 

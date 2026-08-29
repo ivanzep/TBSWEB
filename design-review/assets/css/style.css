@@ -195,6 +195,26 @@ code {
 .site-header.is-solid .nav-toggle span,
 .nav-open .nav-toggle span { background: var(--color-ink); }
 
+/* The hamburger morphs into an ✕ while the mobile nav is open, so the same
+   button that opened it visibly doubles as the way to close it again. */
+.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Tapping outside the mobile nav closes it too — same pattern as the Drive
+   sidebar's own backdrop, and deliberately below the header (900) so the
+   toggle itself stays clickable while this is up. */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 6, 0.4);
+  z-index: 890;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+}
+.nav-open .nav-backdrop { opacity: 1; pointer-events: auto; }
+
 /* ---- Drive sidebar ----
    A collapsible folder tree, off-canvas by default (transform: translateX,
    same pattern the mobile nav drawer already uses) rather than a permanent
@@ -470,14 +490,20 @@ section { position: relative; }
 
 .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-/* ---- Setup notice ---- */
+/* ---- Setup notice ----
+   Sits in normal flow right after the fixed header on every page except
+   project.html (where it follows the full-height .hero instead, which
+   already clears the header on its own) — needs its own header clearance
+   or the header sits on top of it, clipping its first lines out of view. */
 .setup-notice {
   background: #f4ead6;
   border-bottom: 1px solid rgba(138, 109, 75, 0.28);
   padding: 1rem 0;
+  margin-top: var(--header-h);
   position: relative;
   z-index: 5;
 }
+.hero + .setup-notice { margin-top: 0; }
 
 .setup-notice .notice {
   font-size: 0.88rem;
@@ -671,6 +697,12 @@ section { position: relative; }
 /* ---- Package page ---- */
 .page-banner { padding: calc(var(--header-h) + 3rem) 0 2rem; }
 
+/* When the setup notice is showing, it — not .page-banner — is the element
+   sitting right below the fixed header and clearing it (see .setup-notice's
+   own margin-top above); .page-banner then just needs ordinary breathing
+   room, not a second header-clearance stacked underneath the first. */
+body.has-setup-notice .page-banner { padding-top: 2.5rem; }
+
 .page-banner h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   margin: 0.4rem 0 1rem;
@@ -770,13 +802,25 @@ section { position: relative; }
   white-space: nowrap;
 }
 
-/* ---- Item grid ---- */
+/* Thumbnail size — three filter-btns acting as a segmented control, tighter
+   gap than the toolbar's other buttons so it reads as one grouped control. */
+.grid-size { display: inline-flex; gap: 0.25rem; }
+.grid-size .filter-btn { min-width: 2.1rem; text-align: center; padding: 0.5rem 0.6rem; }
+
+/* ---- Item grid ----
+   Column count comes from a min card width, not a fixed count, so it's
+   naturally responsive on its own (no breakpoint overrides needed below)
+   and the thumbnail-size control (bindGridSize() in common.js) just swaps
+   --item-min instead of juggling column counts per breakpoint. */
 .item-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(var(--item-min, 300px), 1fr));
   gap: 1.8rem;
   padding-bottom: 5rem;
 }
+.item-grid.size-sm { --item-min: 160px; }
+.item-grid.size-md { --item-min: 300px; }
+.item-grid.size-lg { --item-min: 440px; }
 
 .item-card {
   position: relative;
@@ -860,46 +904,19 @@ section { position: relative; }
   border-radius: var(--radius);
 }
 
-/* The card is a <button>, so its inner parts are spans — they need an explicit
-   block display or the name and description run together on one line. */
-.item-card .body {
-  display: block;
-  padding: 1rem 1.1rem 1.2rem;
-}
-
-.item-card .sheet {
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  display: block;
-  margin-bottom: 0.3rem;
-}
+/* No caption — just the file name, small, so the thumbnail stays the card's
+   main element. Sheet number / set / note (when a card had them) are still
+   one hover away via the button's own title attribute, not lost. */
+.item-card .body { padding: 0.6rem 0.7rem; }
 
 .item-card .name {
   display: block;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  line-height: 1.25;
-}
-
-.item-card .sub {
-  display: block;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   color: var(--color-ink-soft);
-  margin: 0.4rem 0 0;
-}
-
-/* All Files: which review set a card belongs to, since the grid mixes sets. */
-.item-card .pkg-label {
-  display: block;
-  font-size: 0.72rem;
-  color: var(--color-ink-soft);
-  letter-spacing: 0.03em;
-  margin: 0.35rem 0 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .empty-state {
@@ -1586,7 +1603,6 @@ section { position: relative; }
 @media (max-width: 980px) {
   .overview .grid { grid-template-columns: 1fr; gap: 2.4rem; }
   .packages-grid { grid-template-columns: repeat(2, 1fr); }
-  .item-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* Below this width the side-by-side stage + panel stops working: stack the
      panel under the stage and let the whole overlay scroll. Every row is
@@ -1637,9 +1653,30 @@ section { position: relative; }
   .nav .sidebar-toggle { color: var(--color-ink); font-size: 1rem; padding: 0; text-align: left; }
   .nav-open .nav { transform: translateX(0); }
   .nav-open { overflow: hidden; }
+  /* .nav-toggle is an unpositioned sibling of .nav inside the same header —
+     without its own stacking context it paints below .nav's z-index (910)
+     once the drawer is open, covering the very button that should close it.
+     Lift it above the drawer so the now-✕ toggle stays clickable. */
+  .nav-toggle { position: relative; z-index: 920; }
+
+  /* The fixed header needs real clearance, but the extra breathing room
+     .page-banner adds beyond that (3rem) is the "empty space" a small
+     screen can't spare — cut it down to just enough to clear the header. */
+  .page-banner { padding: calc(var(--header-h) + 1rem) 0 1.2rem; }
+  body.has-setup-notice .page-banner { padding-top: 1.2rem; }
+  .page-banner h1 { margin: 0.3rem 0 0.7rem; }
+  .page-banner-note { font-size: 0.92rem; margin-bottom: 1rem; }
+
+  /* Toolbar controls compressed to a smaller footprint — same controls,
+     less vertical space, since a set/sort/search row each on its own line
+     already costs more height here than on desktop. */
+  .toolbar, .toolbar-stack { padding: 0.7rem 0; gap: 0.55rem; margin-bottom: 1.5rem; }
+  .toolbar-row { gap: 0.5rem; }
+  .filter-btn { padding: 0.4rem 0.65rem; font-size: 0.63rem; }
+  .field { font-size: 0.62rem; gap: 0.4rem; }
+  .field input, .field select { padding: 0.4rem 0.55rem; font-size: 0.8rem; }
 
   .packages-grid { grid-template-columns: 1fr; }
-  .item-grid { grid-template-columns: 1fr; }
   .log-row { grid-template-columns: auto 1fr; }
   .log-row .log-side {
     grid-column: 1 / -1;

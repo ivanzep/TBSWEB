@@ -150,8 +150,14 @@
       var thumb = window.Drive.thumbUrl(item, 800);
       var open = state.notes.filter(function (n) { return !n.resolved; }).length;
 
+      // Full identity (sheet + note the card no longer shows) is still one
+      // hover away via the title attribute — trimmed to just the filename on
+      // screen, not lost.
+      var full = (item.sheet ? item.sheet + " — " : "") + item.name + (item.note ? " · " + item.note : "");
+
       var html = '<button type="button" class="item-card' +
-        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal>';
+        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal title="' +
+        C.escapeHtml(full) + '">';
       html += '<span class="shot">';
       html += thumb
         ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
@@ -164,11 +170,8 @@
       }
       html += "</span>";
 
-      html += '<span class="body">';
-      if (item.sheet) html += '<span class="sheet">' + C.escapeHtml(item.sheet) + "</span>";
-      html += '<span class="name">' + C.escapeHtml(item.name) + "</span>";
-      if (item.note) html += '<span class="sub">' + C.escapeHtml(item.note) + "</span>";
-      html += "</span></button>";
+      html += '<span class="body"><span class="name">' + C.escapeHtml(item.name) + "</span></span>";
+      html += "</button>";
       return html;
     }).join("");
 

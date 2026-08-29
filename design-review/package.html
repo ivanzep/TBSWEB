@@ -27,11 +27,12 @@
       <a href="./all-files.html">All Files</a>
       <a href="./review-log.html">Review Log</a>
     </nav>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="siteNav">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
+<div class="nav-backdrop" id="navBackdrop"></div>
 
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <aside class="drive-sidebar" id="driveSidebar">
@@ -59,6 +60,11 @@
       <button class="filter-btn" data-filter="image">Images</button>
       <button class="filter-btn" data-filter="pdf">Drawings</button>
       <span class="spacer"></span>
+      <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
+        <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
+        <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
+        <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
+      </div>
       <button class="filter-btn" id="openFirst">Open Carousel</button>
       <a class="filter-btn" id="pkgDrive" href="#" target="_blank" rel="noopener">Open in Drive</a>
     </div>
