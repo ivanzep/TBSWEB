@@ -35,6 +35,8 @@
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         C.renderSetupNotice(result);
         pkg = pick(result.packages, param("p"));
+        window.SiteSidebar.render(project, window.Drive.buildTree(project.slug, result.packages),
+          pkg ? pkg.slug : null);
 
         if (!pkg) {
           renderMissing(result.packages);

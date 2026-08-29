@@ -195,6 +195,153 @@ code {
 .site-header.is-solid .nav-toggle span,
 .nav-open .nav-toggle span { background: var(--color-ink); }
 
+/* ---- Drive sidebar ----
+   A collapsible folder tree, off-canvas by default (transform: translateX,
+   same pattern the mobile nav drawer already uses) rather than a permanent
+   docked column — it's a second way to get around a project, not a
+   replacement for the top nav, so it shouldn't reflow every page's layout
+   just to exist. */
+.sidebar-toggle {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 6px 0;
+  cursor: pointer;
+  transition: color 0.3s var(--ease);
+}
+.site-header.is-scrolled .sidebar-toggle,
+.site-header.is-solid .sidebar-toggle { color: var(--color-ink-soft); }
+.sidebar-toggle:hover { color: var(--color-accent); }
+
+/* Sits below the header (900) on purpose — the header (and its own Folders
+   toggle, which doubles as the close control) must stay clickable while the
+   sidebar is open, not get swallowed by a full-viewport click-catcher. */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 6, 0.4);
+  z-index: 890;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+}
+.sidebar-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
+
+.drive-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: min(320px, 84vw);
+  background: var(--color-card);
+  border-right: 1px solid var(--color-line);
+  z-index: 945;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.4s var(--ease);
+}
+.sidebar-open .drive-sidebar { transform: translateX(0); }
+
+.sidebar-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 1.3rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sidebar-head .eyebrow { margin: 0 0 0.3rem; }
+
+.sidebar-project-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sidebar-close {
+  flex: none;
+  width: 32px; height: 32px;
+  border: none;
+  background: none;
+  color: var(--color-ink-soft);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+}
+.sidebar-close:hover { color: var(--color-ink); }
+
+.sidebar-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.8rem 0.6rem 1.6rem;
+}
+
+.sidebar-empty {
+  color: var(--color-ink-soft);
+  font-size: 0.85rem;
+  padding: 0.6rem 0.7rem;
+}
+
+.tree-root, .tree-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tree-children { padding-left: 1.1rem; }
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tree-caret {
+  flex: none;
+  width: 22px; height: 28px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: relative;
+}
+.tree-caret::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent var(--color-ink-soft);
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: transform 0.25s var(--ease);
+}
+.tree-node.is-open > .tree-row > .tree-caret::before { transform: translate(-50%, -50%) rotate(180deg); }
+
+.tree-spacer { flex: none; width: 22px; }
+
+.tree-label {
+  display: block;
+  padding: 0.4rem 0.4rem;
+  font-size: 0.86rem;
+  color: var(--color-ink-soft);
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+a.tree-label { transition: color 0.2s var(--ease), background 0.2s var(--ease); }
+a.tree-label:hover { color: var(--color-ink); background: var(--color-bg-alt); }
+a.tree-label.is-active { color: var(--color-accent); font-weight: 600; background: var(--color-bg-alt); }
+span.tree-label { color: var(--color-ink); font-weight: 600; }
+
+.tree-children { display: block; overflow: hidden; }
+.tree-node:not(.is-open) > .tree-children { display: none; }
+
 /* ---- Buttons ---- */
 .btn {
   display: inline-flex;
@@ -459,6 +606,34 @@ section { position: relative; }
   justify-content: space-between;
   gap: 1rem;
 }
+
+/* A project page's review-sets grid, grouped to match the real Drive folder
+   structure (folder-tree.js) instead of one flat list — see
+   project-page.js's renderGroup(). Nesting reads as indentation plus a
+   lighter left rule, deepest first. */
+.pkg-group {
+  margin-top: 2.4rem;
+  padding-left: calc(var(--pkg-group-depth, 0) * 1.6rem);
+}
+.pkg-group:first-child { margin-top: 0; }
+.pkg-group .pkg-group { border-left: 2px solid var(--color-line); }
+
+.pkg-group-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+  margin: 0 0 1.4rem;
+  padding-left: 0.2rem;
+}
+
+/* A nested group's indent shrinks its available width, so a fixed 3-column
+   grid there squeezes cards too narrow — let column count adapt instead. */
+.pkg-group .packages-grid {
+  margin-bottom: 0;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.pkg-group + .pkg-group,
+.packages-grid + .pkg-group { margin-top: 2.4rem; }
 
 /* Landing page — with the hero and Drive-folder section gone, the project
    grid is the whole page, so give each card more room than a review-set
@@ -1444,6 +1619,7 @@ section { position: relative; }
     z-index: 910;
   }
   .nav a { color: var(--color-ink); font-size: 1rem; }
+  .nav .sidebar-toggle { color: var(--color-ink); font-size: 1rem; padding: 0; text-align: left; }
   .nav-open .nav { transform: translateX(0); }
   .nav-open { overflow: hidden; }
 

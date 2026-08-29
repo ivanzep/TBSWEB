@@ -51,6 +51,7 @@
         fillSetFilter();
         bindControls();
         render();
+        window.SiteSidebar.render(project, window.Drive.buildTree(project.slug, packages), null);
       });
 
       // Marks made in the viewer change comment counts/badges on screen, and

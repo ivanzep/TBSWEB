@@ -34,6 +34,7 @@
         C.renderSetupNotice(result);
         fillPackageFilter();
         render();
+        window.SiteSidebar.render(project, window.Drive.buildTree(project.slug, packages), null);
       });
 
       window.Store.subscribe(render);

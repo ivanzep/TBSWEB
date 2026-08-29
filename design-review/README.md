@@ -53,9 +53,11 @@ design-review/
       config.js          ← START HERE. Studio branding + the master Drive folder
       projects.js        ← The project list, when not auto-discovering from Drive
       packages.js        ← Review sets for any project without a live Drive folder
+      folder-tree.js     ← How those review sets nest under Drive subfolders
       drive.js           Drive URL builders + the two levels of live listing
       store.js           Comments and markups (localStorage), namespaced per project
       common.js          Shared header/nav/scroll/reveal/modal + helpers
+      sidebar.js          The collapsible Drive-folder sidebar (every project page)
       viewer.js          The carousel, the PDF viewer and the markup pins
       landing.js         Landing-page renderer
       project-page.js    Project-page renderer
@@ -206,6 +208,44 @@ PDF does (Drive's file preview plays video natively there). Order within a
 project's array is the order shown on the site. This manifest only applies to
 a project with no `driveFolderId` of its own — a live-discovered project's
 review sets come from its Drive subfolders instead, with no manifest involved.
+
+## The Drive-folder sidebar
+
+Every project-scoped page has a collapsible sidebar (the **Folders** button
+in the header) that mirrors the project's Drive folder tree as a second way
+to get around besides the top nav — expand/collapse a folder, click a review
+set to open it. It's built from the same `packages.js` sets every other view
+uses, just nested: `assets/js/folder-tree.js` says which sets sit under which
+subfolder, for any project whose Drive folder actually nests review sets that
+way (`la-costa`'s `BUNGALOW A` subfolder, for one). A project with no entry
+there — every live-discovered project, and any manifest project whose sets
+aren't nested — falls back to one flat level, same order as `packages.js`,
+so most projects need no tree entry at all. The project page's own
+**Review Sets** grid reads the same tree, grouping cards under a folder
+heading instead of always showing one flat grid.
+
+Add an entry to `window.FOLDER_TREE` only when a project's Drive folder
+nests review sets under an intermediate subfolder:
+
+```js
+window.FOLDER_TREE = {
+  "some-other-project": [
+    { set: "front-elevations" },               // a flat set — no folder of its own
+    {
+      title: "Kitchen",                        // a Drive subfolder...
+      children: [
+        { set: "kitchen-v1" },
+        { set: "kitchen-v2" }
+      ]
+    }
+  ]
+};
+```
+
+A node can have both `set` and `children` — a Drive folder that holds files
+of its own *and* a subfolder (like `BUNGALOW A`'s `20260416-…-AI` set, which
+also has its own `ARCHIVE` subfolder) — see the comment at the top of
+`folder-tree.js` for the full node shape.
 
 ## Notes
 

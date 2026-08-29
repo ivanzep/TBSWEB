@@ -21,6 +21,7 @@
       <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
     </a>
     <nav class="nav" id="siteNav">
+      <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-expanded="false" aria-controls="driveSidebar">Folders</button>
       <a href="./project.html#overview">Overview</a>
       <a href="./project.html#packages">Review Sets</a>
       <a href="./all-files.html">All Files</a>
@@ -31,6 +32,18 @@
     </button>
   </div>
 </header>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<aside class="drive-sidebar" id="driveSidebar">
+  <div class="sidebar-head">
+    <div>
+      <p class="eyebrow">Drive Folders</p>
+      <p class="sidebar-project-title" id="sidebarProjectTitle"></p>
+    </div>
+    <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close folder panel">✕</button>
+  </div>
+  <nav class="sidebar-tree" id="sidebarTree" aria-label="Project folders"></nav>
+</aside>
 
 <div class="setup-notice" id="setupNotice" hidden></div>
 
@@ -95,9 +108,11 @@
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/projects.js"></script>
 <script src="./assets/js/packages.js"></script>
+<script src="./assets/js/folder-tree.js"></script>
 <script src="./assets/js/drive.js"></script>
 <script src="./assets/js/store.js"></script>
 <script src="./assets/js/common.js"></script>
+<script src="./assets/js/sidebar.js"></script>
 <script src="./assets/js/review-log.js"></script>
 </body>
 </html>

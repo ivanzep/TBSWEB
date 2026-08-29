@@ -337,6 +337,30 @@ window.Drive = (function () {
     });
   }
 
+  // The nested view of a project's own review sets — see folder-tree.js.
+  // `packages` is this project's already-loaded set list (loadPackages()'s
+  // result), so a node's `set` reference resolves to a real title/item count
+  // rather than a bare slug. No FOLDER_TREE entry for this project (the
+  // common case — every live-discovered project, and any manifest project
+  // whose sets aren't nested) falls back to one flat level, same order as
+  // `packages` itself, so callers never need to branch on whether a tree was
+  // hand-authored.
+  function buildTree(projectSlug, packages) {
+    var bySlug = {};
+    packages.forEach(function (p) { bySlug[p.slug] = p; });
+
+    function resolve(node) {
+      var pkg = node.set ? bySlug[node.set] : null;
+      var children = (node.children || []).map(resolve).filter(Boolean);
+      if (!pkg && !children.length) return null; // dangling reference — nothing to show
+      return { title: node.title || (pkg ? pkg.title : ""), pkg: pkg, children: children };
+    }
+
+    var manifestTree = (window.FOLDER_TREE || {})[projectSlug];
+    if (manifestTree) return manifestTree.map(resolve).filter(Boolean);
+    return packages.map(function (p) { return { title: p.title, pkg: p, children: [] }; });
+  }
+
   return {
     inferType: inferType,
     thumbUrl: thumbUrl,
@@ -351,6 +375,7 @@ window.Drive = (function () {
     loadPackages: loadPackages,
     listProjects: listProjects,
     resolveProject: resolveProject,
+    buildTree: buildTree,
     slugify: slugify
   };
 })();

@@ -240,6 +240,130 @@ window.PACKAGES = {
         { id: "1MTiZa5h6dV_gY0lZDTOovKy_ErfrB6_e", name: "V28.1.B – 03", type: "image" },
         { id: "1QzIn6P8HWSovF6yrKia6R6KjwsxN2MZv", name: "V28.1.B – 04", type: "image" }
       ]
+    },
+
+    // ── Bungalow A — a subfolder of LA COSTA with its own run of dated review
+    // sets (PROJECT REVIEWS/LA COSTA/BUNGALOW A/...). How these nest under
+    // "Bungalow A" (and, for the 20260416 set, its own ARCHIVE subfolder) is
+    // described in folder-tree.js, not here — this array only ever holds flat
+    // leaf sets, one per Drive folder, same as every set above.
+    {
+      slug: "ba-20260331",
+      title: "20260331 — Bungalow A",
+      issued: "2026-03-31",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1dG9mOjFCaCvBLZozowzecFisQ8BEq2Fs", name: "Image 01", type: "image" },
+        { id: "1e5qrmq0KtOB_bI1Fkj4HNS_op2GyMD7P", name: "Image 02", type: "image" },
+        { id: "1zGzUlMD0HW84QJZ4f7FLVZpeZkH5-S6I", name: "Image 03", type: "image" },
+        { id: "1pVg-F9FWjVYj2bBeEMPCxCbxLbCD4X7B", name: "Image 04", type: "image" },
+        { id: "1JIq7-aXgCM82cp8hYwTt-ehG8vFBy5Aw", name: "Image 05", type: "image" },
+        { id: "1FvERppwwoH9_4sQQma1MkhCNmOfwRmmB", name: "Image 06", type: "image" },
+        { id: "1xUEWBQBWIqfb6R13NWZN0FuE1mf8YpiB", name: "Image 07", type: "image" },
+        { id: "1MilgNrEej78qszeBtZ3n6J_7mrMynpUl", name: "Image 08", type: "image" },
+        { id: "1VX7seWESdCMAEHO91jK4wpbNqN3j3uqn", name: "Image 09", type: "image" },
+        { id: "1w3ja8zQNITymYaatHlQOfh3NoR8ijX_8", name: "Image 10", type: "image" },
+        { id: "1EKZE3ah2a8HzfSToY21o-qjAG61-O51I", name: "Image 11", type: "image" },
+        { id: "1kJuDsTPvm1SiH-dcLIeYpRWcBsyI8dfd", name: "Image 12", type: "image" },
+        { id: "1PTcMV3PAVr3E0yytP1MyxVUuGTYTjkp1", name: "Image 13", type: "image" },
+        { id: "1C8V2U9v8drXpp6S_kowRmwCVAhcNbn6q", name: "Image 14", type: "image" },
+        { id: "1vYLnwpNRp0rVUxmGnDxrhDyhazWtjI96", name: "Image 15", type: "image" }
+      ]
+    },
+
+    {
+      slug: "ba-20260416-ai",
+      title: "20260416 — Bungalow A (AI)",
+      issued: "2026-04-16",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1H7eKAS4g55yLTQL4q7syNRWUrpwQ5s05", name: "Bunks 1", type: "image" },
+        { id: "117ClkuV8JIPuHFBbU6y1iVl4pbetPNoT", name: "Bunks 2", type: "image" },
+        { id: "1K3S08aosv0IDWuX6qhLGyEIdVIljKDoV", name: "Dble Queen 3", type: "image" },
+        { id: "1ydHrivG7GrmpT3GUdozIKZW5EzUGe7At", name: "Dble Queen 4", type: "image" },
+        { id: "1oYful4FtdYrLUx4rw77pb3r0vqipvLhb", name: "Dining Bench 1", type: "image" },
+        { id: "1kKYOD8cQA1KsNzBJvfOIJzn2ExoCnexJ", name: "Dining Bench 2", type: "image" },
+        { id: "16KZ4aOXgzre-CwGZ9I_FTZQSe9qxxEWk", name: "King Bed 1", type: "image" },
+        { id: "1iKJQILeZFk4ByNC9sJsLYBz8LlP6qkzB", name: "King Bed 2", type: "image" },
+        { id: "1ivL0EFqwB2zjUPtCWRt6-MKwGc_OeBpG", name: "Living Rm 1", type: "image" },
+        { id: "1ow3nCH35P5-uhluse_W3gtR17XaBY8Qn", name: "Living Rm 2", type: "image" },
+        { id: "1i4UJiKZ1n4MWjowlS_FMfBYKQ_Nc5OXh", name: "Primary Bath 1", type: "image" },
+        { id: "1SU25VNKi9cL-tIH7URCe3snI-d7E8ZR-", name: "Primary Bath 2", type: "image" },
+        { id: "1SQw095DwMzHc64CVNDDVlGIDSZGbtBCd", name: "Primary Queen Bed 1", type: "image" }
+      ]
+    },
+
+    // Nested one level deeper than every other set here — see
+    // BUNGALOW A/20260416-BUNGALOW A-AI/ARCHIVE in the real folder tree.
+    {
+      slug: "ba-20260416-ai-archive",
+      title: "Archive",
+      issued: "2026-04-16",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1iHNwaCv3qeY3QYGZLfW13rzKGYc8Dm95", name: "Dble Queen 1", type: "image" },
+        { id: "1cgl7-DAfhVFbaMxcPr2DZXMEP2m3Jx7N", name: "Dble Queen 2", type: "image" },
+        { id: "13-B8hr9TJZ558EOEqx9F2DAXKwTIA_d5", name: "Dble Queen 5", type: "image" }
+      ]
+    },
+
+    {
+      slug: "ba-20260526-ai",
+      title: "20260526 — Bungalow A (AI)",
+      issued: "2026-05-26",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "10hj-IGBd9BVNucxdzhJNUKc2UFyF_WWW", name: "Exterior 1", type: "image" },
+        { id: "1TFHOBtH57s4ku-7GYUksarNgTjsmjqK6", name: "Exterior 2", type: "image" },
+        { id: "1fEnVAkD3DxfV1lye8SlPRG4g4uivstZv", name: "Exterior 3", type: "image" }
+      ]
+    },
+
+    {
+      slug: "ba-20260708-decks",
+      title: "20260708 — Decks",
+      issued: "2026-07-08",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1gCGdcg9ks7h1brGXREtcN3QwBPKkZkR_", name: "V20 – 01", type: "video" },
+        { id: "1HDxRQJAdO6nC6PUwN8wbgsKdaDg3hchV", name: "V20 – 02", type: "image" }
+      ]
+    },
+
+    {
+      slug: "ba-20260824",
+      title: "20260824 — Bungalow A",
+      issued: "2026-08-24",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1q1UGiKkOKAnz15i8Ni-Yl_SwgBYtnJjN", name: "V24 – 01", type: "image" },
+        { id: "1iU6L1JimEokziC26PkBtvCqjMk2t8wW4", name: "V24 – 02", type: "image" },
+        { id: "1LNphh3EiZhyUCbfpmiMQghsQHEEnxJQK", name: "V25 – 01", type: "image" },
+        { id: "1EBWd22e7pzIreasd_AZO6naA2WRdxxRP", name: "V25 – 02", type: "image" },
+        { id: "1_1cUWPVHi8Pk7kcW2C8e-D4fKUDQithc", name: "V25b – 01", type: "image" },
+        { id: "1MrZ9q3NCrqFCfNWEJPFiNNJZ2S1ljCa1", name: "V25b – 02", type: "image" }
+      ]
+    },
+
+    // Nested one level deeper — BUNGALOW A/20260825-BUNGALOW A/V26.
+    {
+      slug: "ba-20260825-v26",
+      title: "V26",
+      issued: "2026-08-25",
+      note: "",
+      driveFolderId: "",
+      items: [
+        { id: "1ghZmggURBtCnofknflvUZ5ySX9i20bs9", name: "V26 – 01", type: "image" },
+        { id: "1cCtygWiR7Ugf-nCJuvDig6ud2hhw4ZOP", name: "V26 – 02", type: "image" },
+        { id: "1kXfm69VDrxBuvScccu592E-3bljqyVrf", name: "V26 – 03", type: "image" },
+        { id: "1OzoO71l9eCDu-5yo4wKCLJ7YWiivQ9M5", name: "V26 – 04", type: "image" }
+      ]
     }
   ]
 
