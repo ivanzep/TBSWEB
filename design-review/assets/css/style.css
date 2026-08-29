@@ -460,6 +460,24 @@ section { position: relative; }
   gap: 1rem;
 }
 
+/* Landing page — with the hero and Drive-folder section gone, the project
+   grid is the whole page, so give each card more room than a review-set
+   card gets: a squarer thumbnail and a centered title, nothing else
+   competing with it. auto-fill (rather than a fixed column count) keeps
+   this responsive on its own, overriding .packages-grid's breakpoints
+   below by specificity (#id.class beats .class regardless of source order). */
+#projectsGrid.packages-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.6rem;
+}
+#projectsGrid .pkg-card .thumb { aspect-ratio: 4 / 3; }
+#projectsGrid .pkg-card .body {
+  padding: 1.1rem 1rem 1.6rem;
+  align-items: center;
+  text-align: center;
+}
+#projectsGrid .pkg-card .label { font-size: 1.3rem; margin-bottom: 0; }
+
 /* ---- Package page ---- */
 .page-banner { padding: calc(var(--header-h) + 3rem) 0 2rem; }
 

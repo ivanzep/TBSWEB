@@ -15,14 +15,13 @@
 
 <div id="scrollProgress"></div>
 
-<header class="site-header" id="siteHeader">
+<header class="site-header is-solid" id="siteHeader">
   <div class="header-inner">
     <a href="./index.html" class="logo">
       <img class="logo-img" id="logoImg" src="./assets/img/logo.png" alt="">
     </a>
     <nav class="nav" id="siteNav">
-      <a href="#projects">Projects</a>
-      <a href="#drive">Drive</a>
+      <a href="#" data-drive-folder target="_blank" rel="noopener">Drive</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -30,43 +29,18 @@
   </div>
 </header>
 
-<section class="hero" id="home">
-  <div class="hero-media" id="heroMedia"></div>
-  <div class="hero-content">
-    <p class="eyebrow" id="heroEyebrow">The Brown Studio — Design + Build</p>
-    <h1 id="heroTitle">Projects</h1>
-    <p class="hero-sub" id="heroSubtitle">Design Review</p>
-    <div class="hero-actions">
-      <a href="#projects" class="btn btn-outline">Browse Projects</a>
-    </div>
+<div class="setup-notice" id="setupNotice" hidden></div>
+
+<section class="page-banner">
+  <div class="container">
+    <p class="eyebrow">Every Project, One Place</p>
+    <h1>Projects</h1>
   </div>
 </section>
-
-<div class="setup-notice" id="setupNotice" hidden></div>
 
 <section class="packages" id="projects">
   <div class="container">
-    <div class="section-head" data-reveal>
-      <div>
-        <p class="eyebrow">Every Project, One Place</p>
-        <h2>Projects</h2>
-      </div>
-    </div>
     <div class="packages-grid" id="projectsGrid"></div>
-  </div>
-</section>
-
-<section class="download" id="drive">
-  <div class="container">
-    <p class="eyebrow">Source of Truth</p>
-    <h2>The Master Drive Folder</h2>
-    <p>Every project on this site is a subfolder of one Google Drive folder. Open it
-       directly to add a new project, or to browse anything not surfaced here.</p>
-    <div class="download-actions">
-      <a class="btn btn-outline" data-drive-folder href="#" target="_blank" rel="noopener">
-        Open Drive Folder
-      </a>
-    </div>
   </div>
 </section>
 

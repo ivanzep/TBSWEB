@@ -11,25 +11,13 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     C.initPage(); // no projectMeta — this page isn't about any one project
-    renderHero();
+    document.title = "Projects | " + S.studio.name;
 
     window.Drive.listProjects().then(function (result) {
       C.renderSetupNotice(result, "projects");
       renderProjects(result.projects);
     });
   });
-
-  /* ── Hero ──────────────────────────────────────────────────────────────── */
-
-  function renderHero() {
-    document.getElementById("heroEyebrow").textContent = S.studio.name + " — " + S.studio.tagline;
-    document.getElementById("heroTitle").textContent = "Projects";
-    document.getElementById("heroSubtitle").textContent = "Design Review";
-    document.title = "Projects | " + S.studio.name;
-
-    var media = document.getElementById("heroMedia");
-    if (S.fallbackHeroImage) media.style.backgroundImage = "url('" + S.fallbackHeroImage + "')";
-  }
 
   /* ── Project cards ─────────────────────────────────────────────────────── */
 
