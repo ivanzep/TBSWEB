@@ -43,7 +43,7 @@ window.SITE = {
    *                Leave as the PLACEHOLDER string and the site runs in demo
    *                mode with an on-screen setup notice.
    */
-  driveFolderId: "PASTE_DRIVE_FOLDER_ID_HERE",
+  driveFolderId: "1LMkGxtyunIvuBy_hg2xfdiCzfOkmdtFF",
 
   /* ── Live folder mode (optional) ────────────────────────────────────────
    * Off by default. With it off, the site renders the hand-authored manifest
