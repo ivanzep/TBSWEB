@@ -1504,6 +1504,20 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   letter-spacing: 0.03em;
 }
 
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.footer-sync {
+  color: var(--color-ink-soft);
+  transition: color 0.25s var(--ease);
+}
+.footer-sync:hover { color: var(--color-accent); }
+.footer-sync.is-disabled { opacity: 0.4; pointer-events: none; }
+
 /* ---- Toast ---- */
 #toast {
   position: fixed;
