@@ -17,7 +17,7 @@ window.PROJECTS = [
     "phase": "",
     "year": "",
     "summary": "",
-    "thumbnail": "",
+    "thumbnail": "https://drive.google.com/thumbnail?id=1j7pczbq1c1IdZ5y45OT9Le65_0SQ4APf&sz=w1600",
     "driveFolderId": ""
   },
   {
@@ -29,7 +29,7 @@ window.PROJECTS = [
     "phase": "",
     "year": "",
     "summary": "",
-    "thumbnail": "",
+    "thumbnail": "https://drive.google.com/thumbnail?id=1NHVqH2glmUHtkCLSYli7b2lf0wRVPf3Q&sz=w1600",
     "driveFolderId": ""
   }
 ];

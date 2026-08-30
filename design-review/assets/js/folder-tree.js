@@ -103,10 +103,6 @@ window.FOLDER_TREE = {
       "title": "BUNGALOW B",
       "children": [
         {
-          "title": "20260331-BUNGALOW B",
-          "set": "bungalow-b-20260331-bungalow-b"
-        },
-        {
           "title": "20260414-V32a-AI",
           "set": "bungalow-b-20260414-v32a-ai"
         },
@@ -121,6 +117,60 @@ window.FOLDER_TREE = {
         {
           "title": "20260526-BUNGALOW B-AI",
           "set": "bungalow-b-20260526-bungalow-b-ai"
+        }
+      ]
+    },
+    {
+      "title": "RESTAURANT",
+      "children": [
+        {
+          "title": "20260401",
+          "set": "restaurant-20260401"
+        },
+        {
+          "title": "20260402-V41b",
+          "set": "restaurant-20260402-v41b"
+        },
+        {
+          "title": "20260423-EXTERIOR-AI",
+          "set": "restaurant-20260423-exterior-ai"
+        },
+        {
+          "title": "20260427-INTERIOR-AI",
+          "set": "restaurant-20260427-interior-ai"
+        },
+        {
+          "title": "20260513-INTERIOR-AI",
+          "set": "restaurant-20260513-interior-ai"
+        },
+        {
+          "title": "20260514-REST. EXTERIOR-AI",
+          "set": "restaurant-20260514-rest-exterior-ai"
+        },
+        {
+          "title": "20260519-REST-V41f-AI",
+          "set": "restaurant-20260519-rest-v41f-ai"
+        },
+        {
+          "title": "20260526-v43g-AI",
+          "set": "restaurant-20260526-v43g-ai"
+        },
+        {
+          "title": "20260605",
+          "children": [
+            {
+              "title": "V43i",
+              "set": "restaurant-20260605-v43i"
+            },
+            {
+              "title": "V44",
+              "set": "restaurant-20260605-v44"
+            }
+          ]
+        },
+        {
+          "title": "20260626",
+          "set": "restaurant-20260626"
         }
       ]
     }

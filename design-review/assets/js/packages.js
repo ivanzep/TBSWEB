@@ -225,6 +225,760 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "restaurant-20260626",
+      "title": "20260626",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1pi5D8ndI5R6yHIJY--YvgoPESd40ZDD8",
+          "name": "LA COSTA-20260626-V45-01",
+          "type": "image"
+        },
+        {
+          "id": "1MnLzKVrih3qculQMceTAGBTBgn6lmXId",
+          "name": "LA COSTA-20260626-V45-02",
+          "type": "image"
+        },
+        {
+          "id": "1Di9ko1TYoM40PEJG7vekiswCpcNeimOD",
+          "name": "LA COSTA-20260626-V45-03",
+          "type": "image"
+        },
+        {
+          "id": "1yWwPHv7lbubojnSHgXs_jPagBvYlWFap",
+          "name": "LA COSTA-20260626-V45-04",
+          "type": "image"
+        },
+        {
+          "id": "1CPC6My-0_J2tUEKr0sG-s0xE6bxICGGn",
+          "name": "LA COSTA-20260626-V45-05",
+          "type": "image"
+        },
+        {
+          "id": "16yVtVFSv9CY117q5Ys657_WCxt3jsPk1",
+          "name": "LA COSTA-20260626-V45-06",
+          "type": "image"
+        },
+        {
+          "id": "1rnPT0VJ3jI8gcxxW1f1F9q4CGV1r4Yz7",
+          "name": "LA COSTA-20260626-V45-07",
+          "type": "image"
+        },
+        {
+          "id": "1qaG8VvHCBBb4xQsZlL-ArY3ID97bFI5x",
+          "name": "LA COSTA-20260626-V45-08",
+          "type": "image"
+        },
+        {
+          "id": "1b84tSdh-7rLaHKM-Xzwz5-6lkskb4x0d",
+          "name": "Thumbs",
+          "type": "file"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260605-v44",
+      "title": "V44",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1aYbbJZTy6cVto9z-J9JUwg2DhsqtkYQd",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-01",
+          "type": "image"
+        },
+        {
+          "id": "1TcIupClrsN5VBikYjoT9hXeZtDMp1sYi",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-02",
+          "type": "image"
+        },
+        {
+          "id": "1uPvZMwrn_FN2P2Fsl6Sgse3iY9e9m4Ve",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-03",
+          "type": "image"
+        },
+        {
+          "id": "1HwmcjQpW-_qxKaVxE9g_KgH2nVmRs9K4",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-04",
+          "type": "image"
+        },
+        {
+          "id": "1-p38JvLd01CsL27MvTK-orbBMjhOzwOr",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-05",
+          "type": "image"
+        },
+        {
+          "id": "1Di1wrKiFw-AhSdNW215Cc4vXwh2h36L7",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-06",
+          "type": "image"
+        },
+        {
+          "id": "1Ni_nkJYtpQbnLlJSZSGuSkpyJA1SKS7e",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-07",
+          "type": "image"
+        },
+        {
+          "id": "10SFOf1n1pKTcPeVjC6akYEq7b3uiIzDi",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-08",
+          "type": "image"
+        },
+        {
+          "id": "1cOexjqkZZgwueXdGz-IrgYg9piRt9Uga",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-09",
+          "type": "image"
+        },
+        {
+          "id": "16OO3FgknmsuxPtrnBsBoalNXeNXb1dDZ",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-10",
+          "type": "image"
+        },
+        {
+          "id": "11hfhZadXEit6zkcWT-H6INApG_YWcyyw",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-11",
+          "type": "image"
+        },
+        {
+          "id": "1pKQp2lNnqZG_4w2XCicezB_obxzQ92tu",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-12",
+          "type": "image"
+        },
+        {
+          "id": "1WyIcZoo0LhVFLJhntyKg97ajVJqDZVlk",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-13",
+          "type": "image"
+        },
+        {
+          "id": "1GzAAuF9iNy-TsyoJwm-Oti4G5tsalB3K",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-14",
+          "type": "image"
+        },
+        {
+          "id": "1o4PlD_J2lk4eVvbGnwx30fg6R5bIbkW1",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-15",
+          "type": "image"
+        },
+        {
+          "id": "1PUg5QJWNyXDU3pDLpOj90kRcxorERrYk",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-16",
+          "type": "image"
+        },
+        {
+          "id": "12Ns21a8YYrj-Mj8DC6IqR_YnMhmS96ad",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-17",
+          "type": "image"
+        },
+        {
+          "id": "1ZfRfv_JHJXmOA95kvQGiDXCkKji3XBQc",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-18",
+          "type": "image"
+        },
+        {
+          "id": "1CMuXpJzjFqW7cwFcb4b0FFktxGiT8chs",
+          "name": "LA COSTA-20260605-RESTAURANT-V44-19",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260605-v43i",
+      "title": "V43i",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "18rw3h_2laDxSoAiAEiP6YX5GF17QsFZA",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-01",
+          "type": "image"
+        },
+        {
+          "id": "15FSfe_wbFsJVbU6ctFTXP2dK1m2JqwZh",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-02",
+          "type": "image"
+        },
+        {
+          "id": "1-aq260wyGowh_DEMhWSNgeQO_0PEqAaJ",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-03",
+          "type": "image"
+        },
+        {
+          "id": "1GOBV6zYx7Fy91Vspu0_nBUeTB100mWvW",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-04",
+          "type": "image"
+        },
+        {
+          "id": "128BZapM9Sf-aNxH8yIk_j5fFPDRxB6ZM",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-05",
+          "type": "image"
+        },
+        {
+          "id": "1cISbr0vEcp5bkpzi012Bdsm39HY91pUG",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-06",
+          "type": "image"
+        },
+        {
+          "id": "1eQX8Axn8YW5uFm5grUaS88MTEcEguP8v",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-07",
+          "type": "image"
+        },
+        {
+          "id": "17Xcha72p2JmpKbMOteVTMxAyd_5J6tkG",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-08",
+          "type": "image"
+        },
+        {
+          "id": "1IY66YMaYynb3eOF_pd28eI7_kSSh9JsF",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-09",
+          "type": "image"
+        },
+        {
+          "id": "15GEXshHezs0UPfDi5_m252hWJifDT21H",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-10",
+          "type": "image"
+        },
+        {
+          "id": "1rGifi3cbc0vPDAcpZFGXyT4HKPdR3QZB",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-11",
+          "type": "image"
+        },
+        {
+          "id": "1r5yrvqkUw6SSMO2Cw9OEicsRpyFnz6my",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-12",
+          "type": "image"
+        },
+        {
+          "id": "1lZqx8grw92xTGxyeg3dsUnLY_dRSE0yb",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-13",
+          "type": "image"
+        },
+        {
+          "id": "1aY8zQ8LlagK3dNoNMFHZdvgAfSGV-KCW",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-14",
+          "type": "image"
+        },
+        {
+          "id": "1bp1B6tXEnh_3p8M3OGwy-BU1fNJivTq0",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-15",
+          "type": "image"
+        },
+        {
+          "id": "1mVZmOkN0arng26Eicf5UkW2Po_05gjn2",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-16",
+          "type": "image"
+        },
+        {
+          "id": "1v8x0Hb2ZJx0rplQYMjUdEs2-eQBEKkH6",
+          "name": "LA COSTA-20260605-RESTAURANT-V43i-17",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260514-rest-exterior-ai",
+      "title": "20260514-REST. EXTERIOR-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1pViW932ho7YEUQKrSKujTY0sENH9Rakt",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR FRONT-20260520 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1wFIvbDhEUFTpoSx3SAKeq6Zcv6eJ5FKy",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR FRONT-20260520 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1YD2sXafTI70XHGcoJMW3UgZ6_4NEWIGZ",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL-20260520 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1QF8cUC7xJZak2-QwO21SRmfKXGVVfgPM",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL-20260520 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1g8OYqOEX0JWpzlFrV-AXXbMSGo-vKiPW",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL-20260520 (3)",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260427-interior-ai",
+      "title": "20260427-INTERIOR-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1Nx4cy2CIMQ7_K_KI5CgFHse-Bs9Om8Oo",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR SEATING-UPSTAIRS 1-20260427",
+          "type": "image"
+        },
+        {
+          "id": "11w992FHcdcGC1hbzt1VM46evP1FZHqoM",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR SEATING-UPSTAIRS 2-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1YXAmpKR7APdA0x-NTPRYf5ycJnkMyXKA",
+          "name": "LA COSTA-RESTAURANT-INTERIOR LOBBY 2-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1Cd4QadqawaGEc2NHLPbN4wPgZYGawHYi",
+          "name": "LA COSTA-RESTAURANT-INTERIOR LOBBY 3-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1CK9MKq4uvwQu0LXnROPL5EIUR_4t9NTN",
+          "name": "LA COSTA-RESTAURANT-INTERIOR LOBBY HALL 1-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1iBVIiG0NdEpXpX4cO-H42-khBl2qnDH6",
+          "name": "LA COSTA-RESTAURANT-INTERIOR LOBBY HALL 2-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1c0aHhHplDN0jvLOsXS6P75rO0gnrQB7c",
+          "name": "LA COSTA-RESTAURANT-INTERIOR SEATING-UPSTAIRS 1-20260427",
+          "type": "image"
+        },
+        {
+          "id": "1Jbqwiv9kxUscq2YARMlYQPLGW5J3JfCC",
+          "name": "LA COSTA-RESTAURANT-INTERIOR SEATING-UPSTAIRS-NIGHT 2-20260427",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260402-v41b",
+      "title": "20260402-V41b",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1yn1YEjSBB1DBa8qeNgLLoLFnOPwSnJlR",
+          "name": "",
+          "type": "file"
+        },
+        {
+          "id": "1eMXplERye8wUWxxePI7-tETH5BNu3x3-",
+          "name": "LA COSTA-20260402-V41b-01",
+          "type": "image"
+        },
+        {
+          "id": "1R7kQl84s_4bSCCrC8ulYb90tclIBKAo-",
+          "name": "LA COSTA-20260402-V41b-02",
+          "type": "image"
+        },
+        {
+          "id": "1b1elmgxZjBWEDaUM4qM2p01p_LQFhGIU",
+          "name": "LA COSTA-20260402-V41b-03",
+          "type": "image"
+        },
+        {
+          "id": "1GztTPE90TsYihv98UgrRbZ5fZ2YgTFjD",
+          "name": "LA COSTA-20260402-V41b-04",
+          "type": "image"
+        },
+        {
+          "id": "15km93LFXs74uz_6FYLsI1_KByassIgw5",
+          "name": "LA COSTA-20260402-V41b-05",
+          "type": "image"
+        },
+        {
+          "id": "1rtvKQdByPO1Fs6FZpA7Wh1IVNt1_0gxp",
+          "name": "LA COSTA-20260402-V41b-06",
+          "type": "image"
+        },
+        {
+          "id": "1IXes5C5ps8hL6rTUiuHnQhVi--bjQ6P8",
+          "name": "LA COSTA-20260402-V41b-07",
+          "type": "image"
+        },
+        {
+          "id": "1ustwDHR-aR0nzFV1wN2D06HYDl8cgp5p",
+          "name": "LA COSTA-20260402-V41b-08",
+          "type": "image"
+        },
+        {
+          "id": "1yAq0cLMwnqPvZr7QsMkldpUgCYMAM7Fx",
+          "name": "LA COSTA-20260402-V41b-09",
+          "type": "image"
+        },
+        {
+          "id": "18J7Pu8qeZ2sFtsnoo9PQ-v3KqaFB-Ony",
+          "name": "LA COSTA-20260402-V41b-10",
+          "type": "image"
+        },
+        {
+          "id": "1CBLyiEYybZwyzG_MPp8hI1_YYwiuRq9s",
+          "name": "LA COSTA-20260402-V41b-11",
+          "type": "image"
+        },
+        {
+          "id": "1bB3W7JzeFqssUn-cdkab_GBbbesU42z6",
+          "name": "LA COSTA-20260402-V41b-12",
+          "type": "image"
+        },
+        {
+          "id": "10uKcSoMqj-e0M0-eNhRy3yfunOkmQRm8",
+          "name": "LA COSTA-20260402-V41b-13",
+          "type": "image"
+        },
+        {
+          "id": "1yLzvEkXYf7XbrwsHzKf7xWYU8jvM00n8",
+          "name": "LA COSTA-20260402-V41b-14",
+          "type": "image"
+        },
+        {
+          "id": "1BVQp-qkmf0TmnFq0HCPs_9dm-JP_rQ9i",
+          "name": "LA COSTA-20260402-V41b-15",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260423-exterior-ai",
+      "title": "20260423-EXTERIOR-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1cfAKjyPm_d0kvTDxFhu46GfieAJ25xN5",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR 1-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1JAEKcb6eiMUYraWMZhdcfnJUBocmHqqK",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR 2-20260423",
+          "type": "image"
+        },
+        {
+          "id": "15DCGYNggTAnntaZyv-XiNPcZUn0HAj-t",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR 3-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1XGyQCyMYcryEMFFnjRVaUuwuw7FVNArv",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR BACK 1-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1pSSGjAzen8WPXdY34S5oTMtNwoXnEoOY",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR BACK 2-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1lhy4OQM_3O0mbHmBAHG_NHrmRv8IyjCl",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL 1-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1KDACaPruchdXdN7VOG1G43CXIRsYsslr",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL 2-20260423",
+          "type": "image"
+        },
+        {
+          "id": "1ZvuptXvWUBJtSetyWcFeR1XcdyQtjHZ6",
+          "name": "LA COSTA-RESTAURANT-EXTERIOR POOL 3-20260423",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260519-rest-v41f-ai",
+      "title": "20260519-REST-V41f-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1VPCuK4iggE6Hb-phI99sRnoFTByIlCSH",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260519 (1)",
+          "type": "image"
+        },
+        {
+          "id": "18tCY5VtDIUatl9FAtrwN3OZzYUCGfWcu",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260519 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1EV4GBKskKd0vx9oIXWweXH4DqY_zoaww",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260519 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1VmMNQKg8-L3SRv5nuDI8IrAOOyB2e8U9",
+          "name": "LA COSTA-RESTAURANT-INTERIOR CHEFS TABLE-20260519 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1EF0TMnm9hPU88efx1fIL9cvhG3Fnl3BN",
+          "name": "LA COSTA-RESTAURANT-INTERIOR CHEFS TABLE-20260519 (2)",
+          "type": "image"
+        },
+        {
+          "id": "17eODhpB7e_Hm_w-QT6L7WmgOPmo1PgSy",
+          "name": "LA COSTA-RESTAURANT-INTERIOR CHEFS TABLE-20260519 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1csvOtMaSzJtIO0v1KlmwqEywJImmoJaM",
+          "name": "LA COSTA-RESTAURANT-INTERIOR KITCHEN VIEW-20260519 (1)",
+          "type": "image"
+        },
+        {
+          "id": "14WAS0W83b5S3xfKKS5jZXO9tzuF3IziH",
+          "name": "LA COSTA-RESTAURANT-INTERIOR KITCHEN VIEW-20260519 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1_3Auj43y7ZhN1AZcEgAU2-OcWMiSbT-1",
+          "name": "LA COSTA-RESTAURANT-INTERIOR KITCHEN VIEW-20260519 (3)",
+          "type": "image"
+        },
+        {
+          "id": "198gCEL1ilHURt742Wqg5r-D89k3q87HK",
+          "name": "LA COSTA-RESTAURANT-INTERIOR KITCHEN VIEW-20260519 (4)",
+          "type": "image"
+        },
+        {
+          "id": "1bpPFVqw3xNjTxQU190jjmtCK8CnjSNXd",
+          "name": "LA COSTA-RESTAURANT-INTERIOR KITCHEN VIEW-20260519 (5)",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260513-interior-ai",
+      "title": "20260513-INTERIOR-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "16QjniyXI31hISfeWS46sWzpcrn3bVL1x",
+          "name": "LA COSTA-RESTAURANT- INTERIOR BAR-20260507 (1)",
+          "type": "image"
+        },
+        {
+          "id": "16bCKijnTaOU4Xba_40oLBx2oPjz4CtrA",
+          "name": "LA COSTA-RESTAURANT- INTERIOR BAR-20260507 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1rICxxOBhNaxBCmJIFN8ZkHV7Gxy4UB56",
+          "name": "LA COSTA-RESTAURANT- INTERIOR BAR-20260508",
+          "type": "image"
+        },
+        {
+          "id": "1D8zXFUOZm2-wiwoq__iB8qmJeeVrR8U4",
+          "name": "LA COSTA-RESTAURANT- INTERIOR CHEFS TABLE-20260507 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1Qb-0E8erNowdf5u2OkMDR0zrbCaCUIM5",
+          "name": "LA COSTA-RESTAURANT- INTERIOR CHEFS TABLE-20260507 (2)",
+          "type": "image"
+        },
+        {
+          "id": "16rYUhePA3ta4LdJ6rTmqoDROtwUzCPV9",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260506",
+          "type": "image"
+        },
+        {
+          "id": "1cLLNm84H_HMiOU-SiWOcozl3_qfd85i6",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1vSqt5hrAH4DrAEoiEJm9UqJbEHKBXyQD",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1MGe3BCCTd2yIPz3-wFJoLdp72NrsCybY",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1ZKFNN51TRvmLLLrJ_dXZKmG6Msws3xLd",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (4)",
+          "type": "image"
+        },
+        {
+          "id": "1CeOTIhq55DbBwoHffwHWaeZpfbl97fgv",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (5)",
+          "type": "image"
+        },
+        {
+          "id": "18GSS2iPQlJPszWhSapCQX1aWSfaoLheW",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508 (6)",
+          "type": "image"
+        },
+        {
+          "id": "1K6yDAqET4wrL_RYz_fzjhsND_tueQ1hK",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260508",
+          "type": "image"
+        },
+        {
+          "id": "1WaiIzA-uNE2VinaPML6itCDSEAmsBZ0E",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260514 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1MykqPJBXGgJTm57M-qqyJ9cajXdsJrR7",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260514 (2)",
+          "type": "image"
+        },
+        {
+          "id": "15NzMyQBJFUDQSw7h0pl_OXTjTH8XT4WZ",
+          "name": "LA COSTA-RESTAURANT- INTERIOR KITCHEN VIEW-20260514 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1LvnIR1CzAtBrJyfNWqcVIwJ7ViFLYVc3",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY HALL-20260506",
+          "type": "image"
+        },
+        {
+          "id": "1gaQhjeEs2DxUpJaiAqLPQgcAINxZQjNt",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY HALL-20260507 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1HuqgsOLBdLRZQkEjwcxxvNLdze-acEFC",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY HALL-20260507 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1Y8P2apKJVKrWNszGfafstuFlb9pv6pMd",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY HALL-20260507 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1hoX0u5RORiHe1WT4w_1Z6xUrSCKCHWKH",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY-20260506",
+          "type": "image"
+        },
+        {
+          "id": "1Yni1Yg3MapUKw5YPe2k7dSTwXW0eurHS",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY-20260507 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1i0payaNKyrYUtAAELbIONGlD_0_AoPmM",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY-20260507 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1I6GQ7V97pr0zh79So4Zn2_sYakQ9D87I",
+          "name": "LA COSTA-RESTAURANT- INTERIOR LOBBY-20260507 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1ZTDw1lIpNSIRpe5LJjOQ1qTD133ThQRE",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260514 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1tSeI1LvlwFslGaiM3XTqVUjVT9FDi1Mf",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260514 (2)",
+          "type": "image"
+        },
+        {
+          "id": "1OBWWmWctc9A9_xJhQb6MRf3DRv5TJb68",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260514 (3)",
+          "type": "image"
+        },
+        {
+          "id": "1JxPNPS2diqzs25OAcOzq43LnrcZsM3ac",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260514 (4)",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260526-v43g-ai",
+      "title": "20260526-v43g-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1GNjZKY19I97u4yRTFwKpDSooTVGsQOkO",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260526 (1)",
+          "type": "image"
+        },
+        {
+          "id": "1n5G0NVhcoCjdkxmxOIpLqPe2EWWRcx6y",
+          "name": "LA COSTA-RESTAURANT-INTERIOR BAR-20260526 (2)",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260401",
+      "title": "20260401",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1F15gN6V3lop7qad8iauK0jmEH2-0mgMm",
+          "name": "LA COSTA-20260402-V41-01",
+          "type": "image"
+        },
+        {
+          "id": "1NkD5EEXtsKGZ1zyFyqY58tObQzs4PKG7",
+          "name": "LA COSTA-20260402-V41-02",
+          "type": "image"
+        },
+        {
+          "id": "1apUCsRH3rJhgwG-S-9WnmxrPcNTtgRVn",
+          "name": "LA COSTA-20260402-V41-03",
+          "type": "image"
+        },
+        {
+          "id": "1XpC9GH5T8SKf93jKCDkcqRV8gcLoV3h9",
+          "name": "LA COSTA-20260402-V41-04",
+          "type": "image"
+        },
+        {
+          "id": "1RByl0CpQP5cjEP8oBx2VgZjcBsFnr1wZ",
+          "name": "LA COSTA-20260402-V41-05",
+          "type": "image"
+        },
+        {
+          "id": "1RiQVOye7ivGU22jj_f-Xx_ty5tbQWDd6",
+          "name": "LA COSTA-20260402-V41-06",
+          "type": "image"
+        },
+        {
+          "id": "1WApai5aOnDgcGdsY8OgAgq9_dCHUC8ZL",
+          "name": "LA COSTA-20260402-V41-07",
+          "type": "image"
+        },
+        {
+          "id": "1DSraAk_00y8CIC2NRzCPUYt9uBEfy9Mu",
+          "name": "LA COSTA-20260402-V41-08",
+          "type": "image"
+        }
+      ]
+    },
+    {
       "slug": "bungalow-b-20260414-v32a-ai",
       "title": "20260414-V32a-AI",
       "issued": "",
@@ -401,65 +1155,6 @@ window.PACKAGES = {
         {
           "id": "11eLzCVG9f97G7VH_tEZhVhEBRxBVkqQ0",
           "name": "LA COSTA-BUNGALOW B-EXTERIOR 5-20260416",
-          "type": "image"
-        }
-      ]
-    },
-    {
-      "slug": "bungalow-b-20260331-bungalow-b",
-      "title": "20260331-BUNGALOW B",
-      "issued": "",
-      "note": "",
-      "driveFolderId": "",
-      "items": [
-        {
-          "id": "16lJWSNlJ1siSRBcVaX0aFLeGl4frK-1D",
-          "name": "IMAGE 1",
-          "type": "image"
-        },
-        {
-          "id": "1dRy_e9yedKQTfY-UYuVUUndmDu-YlO1V",
-          "name": "IMAGE 2",
-          "type": "image"
-        },
-        {
-          "id": "1LLcKX9k3sPE3pcpDs-ym-5lgoOhQmCU-",
-          "name": "IMAGE 3",
-          "type": "image"
-        },
-        {
-          "id": "1_aF4exGu-3d2XCPj06VwgxM3sNVElee7",
-          "name": "IMAGE 4",
-          "type": "image"
-        },
-        {
-          "id": "1te0h1NxD50IXY9Tsg9yHHjbPP4AWqtCQ",
-          "name": "IMAGE 5",
-          "type": "image"
-        },
-        {
-          "id": "1K91qUvkqi4clNTadqpOUzMg7KuX_lLsn",
-          "name": "IMAGE 6",
-          "type": "image"
-        },
-        {
-          "id": "1_eMjUhtiGA6fpSJLYEMhpawEhTk9hy4c",
-          "name": "IMAGE 7",
-          "type": "image"
-        },
-        {
-          "id": "1vcZ5R8kBQhVh6YfMRyxMZqK6s_P8VxAH",
-          "name": "IMAGE 8",
-          "type": "image"
-        },
-        {
-          "id": "1Vg9mZkbAB2ckVWan-l_e-gMP6LPHyfX7",
-          "name": "IMAGE 9",
-          "type": "image"
-        },
-        {
-          "id": "10GUsnPQHB4HSuayeUxB4vMiTN_j79X55",
-          "name": "IMAGE 10",
           "type": "image"
         }
       ]
