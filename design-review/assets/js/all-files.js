@@ -15,6 +15,7 @@
   var project = null;
   var packages = [];
   var allItems = [];
+  var tree = [];
 
   var typeFilter = "all";
   var commentsOnly = false;
@@ -44,7 +45,7 @@
       bindDriveLink();
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
-        var tree = window.Drive.buildTree(project.slug, result.packages);
+        tree = window.Drive.buildTree(project.slug, result.packages);
         var folderSlug = param("folder");
         var folderNode = folderSlug ? window.Drive.findFolderNode(tree, folderSlug) : null;
 
@@ -168,9 +169,35 @@
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 
+  // Depth-first walk of the folder tree, in the same order the sidebar and
+  // the project page's grouped grid already render it — a folder's own set
+  // (if it has one) before its subfolders', so a set slug's position here
+  // reflects "where this set actually sits in Drive," not just "which
+  // order packages.js happens to list sets in" (that's what "Set Order"
+  // already gives you, and the two can genuinely differ once sets get
+  // reordered or added out of folder order in the source sheet).
+  function folderOrderIndex() {
+    var order = {};
+    var i = 0;
+    function walk(nodes) {
+      nodes.forEach(function (n) {
+        if (n.pkg) order[n.pkg.slug] = i++;
+        if (n.children && n.children.length) walk(n.children);
+      });
+    }
+    walk(tree);
+    return order;
+  }
+
   function sortItems(list) {
     var copy = list.slice();
-    if (sortKey === "name") {
+    if (sortKey === "folder") {
+      var order = folderOrderIndex();
+      // Stable sort (guaranteed by spec in every engine this site targets)
+      // keeps an item's position relative to same-set siblings, so within
+      // one set the order is still that set's own item order.
+      copy.sort(function (a, b) { return (order[a.pkgSlug] || 0) - (order[b.pkgSlug] || 0); });
+    } else if (sortKey === "name") {
       copy.sort(function (a, b) { return naturalCompare(a.name, b.name); });
     } else if (sortKey === "sheet") {
       // Items with no sheet number sort after every item that has one.
