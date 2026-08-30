@@ -759,6 +759,72 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
 .item-grid.size-md { --item-min: 300px; }
 .item-grid.size-lg { --item-min: 440px; }
 
+/* Grouped ("Folder Order") view — the outer grid becomes a plain stack of
+   collapsible folder groups; each group's own .item-grid (nested inside)
+   still lays its cards out with the grid rules above, and still inherits
+   whatever --item-min the S/M/L control set on the outer element. */
+.item-grid.is-grouped { display: block; }
+
+.file-group { margin-top: 1.6rem; }
+.file-group:first-child { margin-top: 0; }
+.file-group .file-group { margin-left: 1.4rem; padding-left: 1rem; border-left: 2px solid var(--color-line); }
+
+.file-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.2rem;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.file-group-caret {
+  flex: none;
+  width: 18px; height: 18px;
+  position: relative;
+}
+.file-group-caret::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent var(--color-ink-soft);
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: transform 0.25s var(--ease);
+}
+.file-group.is-collapsed > .file-group-header .file-group-caret::before {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.file-group-title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.file-group-count {
+  color: var(--color-ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.file-group-body {
+  display: block;
+  overflow: hidden;
+  padding-top: 0.6rem;
+}
+.file-group.is-collapsed > .file-group-body { display: none; }
+
+.file-group .item-grid { padding-bottom: 0; margin-bottom: 1.6rem; }
+.file-group .item-grid:last-child { margin-bottom: 0; }
+
 .item-card {
   position: relative;
   background: var(--color-card);

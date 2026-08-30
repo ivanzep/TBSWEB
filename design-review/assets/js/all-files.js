@@ -23,6 +23,12 @@
   var sortKey = "set";
   var searchText = "";
 
+  // Collapse state for the grouped ("Folder Order") view, keyed by a tree
+  // node's stable slug so it survives the re-renders Store.subscribe(render)
+  // triggers (e.g. adding a comment elsewhere) — without this every such
+  // re-render would silently re-expand any folder the user had collapsed.
+  var collapsedGroups = {};
+
   document.addEventListener("DOMContentLoaded", function () {
     window.Viewer.init(function () { render(); });
 
@@ -234,6 +240,133 @@
 
   /* ── Render ────────────────────────────────────────────────────────────── */
 
+  // Shared by both render paths below so the card markup lives in one place.
+  // `i` is the item's index in the current visibleItems() result — the
+  // click handler looks the item back up there, so arrowing in the viewer
+  // always matches whatever's on screen, flat or grouped.
+  function itemCardHtml(item, i) {
+    var notes = window.Store.getNotes(item.uid);
+    var open = notes.filter(function (n) { return !n.resolved; }).length;
+    var thumb = window.Drive.thumbUrl(item, 800);
+
+    // Full identity (sheet + which set, since this grid mixes sets) is
+    // still one hover away via the title attribute — trimmed to just the
+    // filename on screen, not lost.
+    var full = (item.sheet ? item.sheet + " — " : "") + item.name + " · " + item.pkgTitle;
+
+    var html = '<button type="button" class="item-card' +
+      (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal title="' +
+      C.escapeHtml(full) + '">';
+    html += '<span class="shot">';
+    html += thumb
+      ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
+      : '<span class="shot-empty">' +
+          (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
+    html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
+    if (notes.length) {
+      html += '<span class="note-count">' + notes.length +
+        (open ? " · " + open + " open" : "") + "</span>";
+    }
+    html += "</span>";
+
+    html += '<span class="body"><span class="name">' + C.escapeHtml(item.name) + "</span></span>";
+    html += "</button>";
+    return html;
+  }
+
+  function bindItemClicks(host) {
+    host.querySelectorAll(".item-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        // The viewer pages through exactly what's on screen, so arrowing never
+        // lands on an item the active filters are hiding.
+        window.Viewer.open(visibleItems(), Number(card.getAttribute("data-i")));
+      });
+    });
+  }
+
+  // Buckets the already-filtered-and-sorted item list by which set each item
+  // belongs to, keeping each item's index in that list — since "Folder Order"
+  // sorts by exactly this same set order, every bucket comes out contiguous
+  // and in the right place once the tree walk below visits it.
+  function groupItemsBySet(items) {
+    var map = {};
+    items.forEach(function (item, i) {
+      (map[item.pkgSlug] = map[item.pkgSlug] || []).push({ item: item, i: i });
+    });
+    return map;
+  }
+
+  // Visible-item count under a node — its own set's items plus every
+  // descendant's. A node with zero is skipped entirely in renderGroupNodes,
+  // so a folder the active filters have emptied out doesn't still show up
+  // as an empty collapsible shell.
+  function countUnder(node, map) {
+    var n = node.pkg && map[node.pkg.slug] ? map[node.pkg.slug].length : 0;
+    node.children.forEach(function (c) { n += countUnder(c, map); });
+    return n;
+  }
+
+  function renderGroupNodes(nodes, map) {
+    return nodes.map(function (n) {
+      return countUnder(n, map) ? renderNode(n, map) : "";
+    }).join("");
+  }
+
+  function renderNode(n, map) {
+    var count = countUnder(n, map);
+    var collapsed = !!collapsedGroups[n.slug];
+    var ownEntries = n.pkg && map[n.pkg.slug] ? map[n.pkg.slug] : [];
+    var ownHtml = ownEntries.length
+      ? '<div class="item-grid">' +
+          ownEntries.map(function (e) { return itemCardHtml(e.item, e.i); }).join("") +
+        "</div>"
+      : "";
+
+    var html = '<div class="file-group' + (collapsed ? " is-collapsed" : "") + '">';
+    html += '<button type="button" class="file-group-header" data-group-toggle="' +
+      C.escapeHtml(n.slug) + '">';
+    html += '<span class="file-group-caret"></span>';
+    html += '<span class="file-group-title">' + C.escapeHtml(n.title) + "</span>";
+    html += '<span class="file-group-count">' + count + (count === 1 ? " file" : " files") + "</span>";
+    html += "</button>";
+    html += '<div class="file-group-body">' + ownHtml + renderGroupNodes(n.children, map) + "</div>";
+    html += "</div>";
+    return html;
+  }
+
+  function bindGroupToggles(host) {
+    host.querySelectorAll("[data-group-toggle]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var slug = btn.getAttribute("data-group-toggle");
+        collapsedGroups[slug] = !collapsedGroups[slug];
+        // Toggle the class directly rather than a full re-render, so
+        // collapsing one group doesn't reset scroll position or re-run
+        // every other group's own toggle state for nothing.
+        btn.closest(".file-group").classList.toggle("is-collapsed", collapsedGroups[slug]);
+      });
+    });
+  }
+
+  function renderFlat(host, items) {
+    host.classList.remove("is-grouped");
+    host.innerHTML = items.map(itemCardHtml).join("");
+    bindItemClicks(host);
+    C.revealWithin(host);
+  }
+
+  // "Folder Order" is the one sort that reflects real Drive nesting, so it
+  // doubles as the grouped view — grouping under any other sort (Name,
+  // Comments, Modified…) would cut across sets in a way that wouldn't read
+  // as folder structure at all.
+  function renderGrouped(host, items) {
+    host.classList.add("is-grouped");
+    var map = groupItemsBySet(items);
+    host.innerHTML = renderGroupNodes(tree, map);
+    bindGroupToggles(host);
+    bindItemClicks(host);
+    C.revealWithin(host);
+  }
+
   function render() {
     var host = document.getElementById("itemGrid");
     var empty = document.getElementById("emptyState");
@@ -243,6 +376,7 @@
     if (countEl) countEl.textContent = items.length + " file" + (items.length === 1 ? "" : "s");
 
     if (!items.length) {
+      host.classList.remove("is-grouped");
       host.innerHTML = "";
       empty.hidden = false;
       empty.textContent = allItems.length
@@ -252,45 +386,8 @@
     }
     empty.hidden = true;
 
-    host.innerHTML = items.map(function (item, i) {
-      var notes = window.Store.getNotes(item.uid);
-      var open = notes.filter(function (n) { return !n.resolved; }).length;
-      var thumb = window.Drive.thumbUrl(item, 800);
-
-      // Full identity (sheet + which set, since this grid mixes sets) is
-      // still one hover away via the title attribute — trimmed to just the
-      // filename on screen, not lost.
-      var full = (item.sheet ? item.sheet + " — " : "") + item.name + " · " + item.pkgTitle;
-
-      var html = '<button type="button" class="item-card' +
-        (item.type === "pdf" ? " is-pdf" : "") + '" data-i="' + i + '" data-reveal title="' +
-        C.escapeHtml(full) + '">';
-      html += '<span class="shot">';
-      html += thumb
-        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
-        : '<span class="shot-empty">' +
-            (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
-      html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
-      if (notes.length) {
-        html += '<span class="note-count">' + notes.length +
-          (open ? " · " + open + " open" : "") + "</span>";
-      }
-      html += "</span>";
-
-      html += '<span class="body"><span class="name">' + C.escapeHtml(item.name) + "</span></span>";
-      html += "</button>";
-      return html;
-    }).join("");
-
-    host.querySelectorAll(".item-card").forEach(function (card) {
-      card.addEventListener("click", function () {
-        // The viewer pages through exactly what's on screen, so arrowing never
-        // lands on an item the active filters are hiding.
-        window.Viewer.open(visibleItems(), Number(card.getAttribute("data-i")));
-      });
-    });
-
-    C.revealWithin(host);
+    if (sortKey === "folder") renderGrouped(host, items);
+    else renderFlat(host, items);
   }
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
