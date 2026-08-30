@@ -98,6 +98,31 @@ window.FOLDER_TREE = {
           ]
         }
       ]
+    },
+    {
+      "title": "BUNGALOW B",
+      "children": [
+        {
+          "title": "20260331-BUNGALOW B",
+          "set": "bungalow-b-20260331-bungalow-b"
+        },
+        {
+          "title": "20260414-V32a-AI",
+          "set": "bungalow-b-20260414-v32a-ai"
+        },
+        {
+          "title": "20260415-BUNGALOW B-V32-AI",
+          "set": "bungalow-b-20260415-bungalow-b-v32-ai"
+        },
+        {
+          "title": "20260416-BUNGALOW B-AI",
+          "set": "bungalow-b-20260416-bungalow-b-ai"
+        },
+        {
+          "title": "20260526-BUNGALOW B-AI",
+          "set": "bungalow-b-20260526-bungalow-b-ai"
+        }
+      ]
     }
   ]
 };

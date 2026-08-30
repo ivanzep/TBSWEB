@@ -225,6 +225,246 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "bungalow-b-20260414-v32a-ai",
+      "title": "20260414-V32a-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1bx1teMMXl_26NozOGWqqUpY519MKUC0B",
+          "name": "LA COSTA-BUNGALOW B-3D SECTION-20260414",
+          "type": "image"
+        },
+        {
+          "id": "17uLYv-SonZIFjmXh6plXKJQRdvc4LW5K",
+          "name": "LA COSTA-BUNGALOW B-BEDROOM 1-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1r5rTRp5jY_F3b0aXPIxESWl_AYeQz7Sz",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 1-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1RreauNY1fjEO6d2fyNHdDV-4GjaN8dYy",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 2-20260414",
+          "type": "image"
+        },
+        {
+          "id": "10_Ky0RtlniVIfTXkC2ETQAQn57b7FIoH",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 3-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1wvqoD5f7EYLPx2YuLjbEwu32O69Qs-h6",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 4-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1ovhURo4rP9TIo71iv-3cBWKNzO9hRVDe",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 4.1-20260414",
+          "type": "image"
+        },
+        {
+          "id": "11V10VYp7VXb1PR3BXCEjTai_oTIKQSGv",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK 4.2-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1-NXZveucZ_x3jY0js-Wl9YBGevFbpZZM",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR DECK VIDEO-20260414",
+          "type": "video"
+        },
+        {
+          "id": "1SfyKOJzeZhp-ByxrDnO0ebGDe4LExKdj",
+          "name": "LA COSTA-BUNGALOW B-LIVING RM 1-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1I6KofYvajgaGM7WTI6H7az4NeuDNxSB6",
+          "name": "LA COSTA-BUNGALOW B-LIVING RM 2-20260414",
+          "type": "image"
+        },
+        {
+          "id": "1MoxYIhYC9G67exy8apJGqVj21ecpLBxy",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH 1-20260414",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-b-20260415-bungalow-b-v32-ai",
+      "title": "20260415-BUNGALOW B-V32-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1-PEads0VTNao5eYVjADGQrtGNaCFae1q",
+          "name": "LA COSTA-BUNGALOW B-DINING & STAIR 1-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1tK0hqp-GZkm429m5tRYaR_emQELYffSw",
+          "name": "LA COSTA-BUNGALOW B-DINING & STAIR 2-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1gDHmDLlWUne0N1Zk654Zxgk2YXzETKro",
+          "name": "LA COSTA-BUNGALOW B-DINING & STAIR 3-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1l-n7LrIjPZKKyepO6th_rnrk8-ttZRYR",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH 1-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1lwTtFAkmZdlF4zLPzf5Z5cw-q6x1bPc5",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH 2-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1F9ezicEvX707xLJNDuj9zWMwol0768-2",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH 3-V32-20260415",
+          "type": "image"
+        },
+        {
+          "id": "1YL_kd_O_offAnKTqf0D79qoCtN4mj159",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH 4-V32-20260415",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-b-20260416-bungalow-b-ai",
+      "title": "20260416-BUNGALOW B-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1zKyyM-lg_ZBEzDYKPiPIKqTk2ZisWYNF",
+          "name": "LA COSTA-BUNGALOW B-BUNKS 1-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1OiYVenW40z6fi0rESWm6DoL0w6pXWUNH",
+          "name": "LA COSTA-BUNGALOW B-BUNKS 2-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1QkFYeQsKG39IPxqHw4RC00hskRnek3Jd",
+          "name": "LA COSTA-BUNGALOW B-BUNKS 3-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1ElGJhZtQOIB9Qn1P3oZpELslRG7-vVy4",
+          "name": "LA COSTA-BUNGALOW B-BUNKS 4-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1zk8Mm1vsTr2vPTdueygKlxw_cG2NWEDh",
+          "name": "LA COSTA-BUNGALOW B-PRIMARY BATH-20260416",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-b-20260526-bungalow-b-ai",
+      "title": "20260526-BUNGALOW B-AI",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1EmChiU0Q9SFrNv7m79VT-5MBQIE6VUX7",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR 1-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1OZlchFr1TfLCyCw71JgnkmxygslCLWKJ",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR 2-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1H1TID8ktDYQZk2uz6oxUmnbWOOj-GXBS",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR 3-20260416",
+          "type": "image"
+        },
+        {
+          "id": "1wvtJF-bZiDxIzbnjg6CkQbclcvBHhfIL",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR 4-20260416",
+          "type": "image"
+        },
+        {
+          "id": "11eLzCVG9f97G7VH_tEZhVhEBRxBVkqQ0",
+          "name": "LA COSTA-BUNGALOW B-EXTERIOR 5-20260416",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-b-20260331-bungalow-b",
+      "title": "20260331-BUNGALOW B",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "16lJWSNlJ1siSRBcVaX0aFLeGl4frK-1D",
+          "name": "IMAGE 1",
+          "type": "image"
+        },
+        {
+          "id": "1dRy_e9yedKQTfY-UYuVUUndmDu-YlO1V",
+          "name": "IMAGE 2",
+          "type": "image"
+        },
+        {
+          "id": "1LLcKX9k3sPE3pcpDs-ym-5lgoOhQmCU-",
+          "name": "IMAGE 3",
+          "type": "image"
+        },
+        {
+          "id": "1_aF4exGu-3d2XCPj06VwgxM3sNVElee7",
+          "name": "IMAGE 4",
+          "type": "image"
+        },
+        {
+          "id": "1te0h1NxD50IXY9Tsg9yHHjbPP4AWqtCQ",
+          "name": "IMAGE 5",
+          "type": "image"
+        },
+        {
+          "id": "1K91qUvkqi4clNTadqpOUzMg7KuX_lLsn",
+          "name": "IMAGE 6",
+          "type": "image"
+        },
+        {
+          "id": "1_eMjUhtiGA6fpSJLYEMhpawEhTk9hy4c",
+          "name": "IMAGE 7",
+          "type": "image"
+        },
+        {
+          "id": "1vcZ5R8kBQhVh6YfMRyxMZqK6s_P8VxAH",
+          "name": "IMAGE 8",
+          "type": "image"
+        },
+        {
+          "id": "1Vg9mZkbAB2ckVWan-l_e-gMP6LPHyfX7",
+          "name": "IMAGE 9",
+          "type": "image"
+        },
+        {
+          "id": "10GUsnPQHB4HSuayeUxB4vMiTN_j79X55",
+          "name": "IMAGE 10",
+          "type": "image"
+        }
+      ]
+    },
+    {
       "slug": "bungalow-a-20260826-bungalow-a-v28-1",
       "title": "V28.1",
       "issued": "",
