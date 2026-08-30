@@ -255,6 +255,16 @@ A row whose path doesn't start with `PROJECT REVIEWS/`, or has nothing
 between the project name and the file (a file sitting in the project's own
 root, with no set folder to belong to), is skipped rather than guessed at.
 
+A folder named **Cover** directly under a project (`PROJECT REVIEWS/La
+Costa/Cover/...`) is the one exception — it isn't a review set at all.
+Its first image (naturally sorted by filename, so name it something like
+`01-hero.jpg` if there's more than one file in there and you care which
+wins) becomes that project's `thumbnail`: the landing page's project card
+image and the project page's hero banner both use it. A `Cover` folder
+nested any deeper (inside a project's own subfolders) is just a normal
+review set named "Cover" — only one path segment, directly under the
+project, counts.
+
 Share it "Anyone with the link" (same as every Drive folder this site
 already needs shared that way) and copy its normal **Share → Copy link**
 URL — the generator turns a plain share link into the CSV it actually needs
@@ -287,11 +297,13 @@ is overwritten on the next run. What it can't do:
   folder named `20260416-BUNGALOW A-AI` on Drive shows on the site exactly
   that way, not reformatted to "20260416 — Bungalow A (AI)". Rename the
   Drive folder to change how it reads on the site.
-- **Project metadata beyond title is empty** — `client`/`location`/`scope`/
-  `phase`/`summary`/`thumbnail` in `projects.js` all come out blank, since
-  none of that lives in the sheet. (Currently unused anyway — the project
-  page's Overview section that displayed them was removed.) A future
-  version could read them from extra sheet columns if that's ever needed.
+- **Project metadata beyond title and thumbnail is empty** —
+  `client`/`location`/`scope`/`phase`/`summary` in `projects.js` all come
+  out blank, since none of that lives in the sheet. (Currently unused
+  anyway — the project page's Overview section that displayed them was
+  removed.) `thumbnail` is the one exception — see the Cover folder note
+  above. A future version could read the rest from extra sheet columns if
+  that's ever needed.
 - **Slugs are derived, not chosen** — a set's slug is its full path under
   the project, slugified (e.g. `bungalow-a-20260416-bungalow-a-ai`), so
   URLs are uglier than the short hand-picked ones a manual edit could use,

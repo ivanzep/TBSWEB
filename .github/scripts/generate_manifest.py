@@ -29,6 +29,16 @@ both `set` and `children` — see folder-tree.js's own header for that shape.
 A row whose Folder Path doesn't start with ROOT_PREFIX, or has nothing
 after the project name (a file sitting directly in the project's own root,
 with no set folder to hold it), is skipped rather than guessed at.
+
+A folder named "Cover" (any case) directly under a project — i.e.
+PROJECT REVIEWS/<Project Name>/Cover/... — is a special case: it isn't a
+review set at all, and doesn't appear anywhere in packages.js/
+folder-tree.js. Its first image (naturally sorted by filename) becomes
+that project's `thumbnail` in projects.js — the landing page's project
+card image and the project page's hero background both just read that
+field already. A Cover folder nested any deeper (e.g. inside Bungalow A)
+is NOT treated specially — only exactly one path segment under the
+project counts.
 """
 import csv
 import io
@@ -40,9 +50,17 @@ from collections import OrderedDict, defaultdict
 from urllib.request import urlopen
 
 ROOT_PREFIX = "PROJECT REVIEWS/"
+COVER_FOLDER_NAME = "cover"
 
 IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif", "avif", "bmp", "tif", "tiff"}
 VIDEO_EXT = {"mp4", "mov", "webm", "m4v"}
+
+
+# Same URL shape Drive.thumbUrl()/fullUrl() build client-side — a size
+# that reads fine both small (the landing page's project card) and large
+# (the project page's full-width hero background).
+def thumb_url(file_id, width=1600):
+    return "https://drive.google.com/thumbnail?id=%s&sz=w%d" % (file_id, width)
 
 
 def slugify(s):
@@ -127,6 +145,9 @@ def fetch_rows(url):
 def group_by_project(rows):
     # project name -> { path-segments-under-project (tuple) -> [row, ...] }
     projects = OrderedDict()
+    # project name -> [row, ...] from its Cover folder (kept separate —
+    # never becomes a review set; see build_cover_thumbnail()).
+    covers = OrderedDict()
     skipped = 0
     for row in rows:
         path = (row.get("Folder Path") or "").strip()
@@ -140,8 +161,24 @@ def group_by_project(rows):
             skipped += 1
             continue
         project_name, rel_parts = parts[0], tuple(parts[1:])
+        if len(rel_parts) == 1 and rel_parts[0].strip().lower() == COVER_FOLDER_NAME:
+            covers.setdefault(project_name, []).append(row)
+            continue
         projects.setdefault(project_name, defaultdict(list))[rel_parts].append(row)
-    return projects, skipped
+    return projects, covers, skipped
+
+
+# Picks the Cover folder's first image (falling back to its first file of
+# any type, in case someone drops something non-image in there) and
+# returns a ready-to-use thumbnail URL, or "" if there's no Cover folder
+# (or nothing usable in it) for this project.
+def build_cover_thumbnail(cover_rows):
+    if not cover_rows:
+        return ""
+    images = [r for r in cover_rows if infer_type(r.get("File Name", ""), r.get("MIME Type")) == "image"]
+    candidates = sorted(images or cover_rows, key=lambda r: natural_key(r.get("File Name", "")))
+    file_id = (candidates[0].get("File ID") or "").strip()
+    return thumb_url(file_id) if file_id else ""
 
 
 def build_tree(prefix, set_slug_by_path):
@@ -225,7 +262,7 @@ def main():
         return
 
     rows = fetch_rows(url)
-    projects, skipped = group_by_project(rows)
+    projects, covers, skipped = group_by_project(rows)
     if skipped:
         print("Skipped %d row(s) with no recognizable project/set path." % skipped, file=sys.stderr)
     if not projects:
@@ -235,17 +272,21 @@ def main():
     packages_out = OrderedDict()
     tree_out = OrderedDict()
     project_list = []
+    covers_used = 0
 
     for project_name, sets_by_path in projects.items():
         proj_slug = slugify(project_name)
         sets, tree = build_project(project_name, sets_by_path)
         packages_out[proj_slug] = sets
         tree_out[proj_slug] = tree
+        thumbnail = build_cover_thumbnail(covers.get(project_name))
+        if thumbnail:
+            covers_used += 1
         project_list.append({
             "slug": proj_slug,
             "title": project_name,
             "client": "", "location": "", "scope": "", "phase": "", "year": "",
-            "summary": "", "thumbnail": "", "driveFolderId": ""
+            "summary": "", "thumbnail": thumbnail, "driveFolderId": ""
         })
 
     js_dir = os.path.join(site_dir, "assets", "js")
@@ -254,7 +295,8 @@ def main():
     write_js(os.path.join(js_dir, "projects.js"), "PROJECTS", project_list)
 
     total_items = sum(len(s["items"]) for sets in packages_out.values() for s in sets)
-    print("Wrote %d project(s), %d item(s) total." % (len(project_list), total_items))
+    print("Wrote %d project(s), %d item(s) total, %d with a Cover thumbnail." %
+          (len(project_list), total_items, covers_used))
 
 
 if __name__ == "__main__":
