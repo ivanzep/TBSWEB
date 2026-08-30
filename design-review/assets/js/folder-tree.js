@@ -59,8 +59,41 @@ window.FOLDER_TREE = {
           "title": "20260825-BUNGALOW A",
           "children": [
             {
+              "title": "V25",
+              "set": "bungalow-a-20260825-bungalow-a-v25"
+            },
+            {
               "title": "V26",
               "set": "bungalow-a-20260825-bungalow-a-v26"
+            },
+            {
+              "title": "V27",
+              "set": "bungalow-a-20260825-bungalow-a-v27"
+            }
+          ]
+        },
+        {
+          "title": "20260826-BUNGALOW A",
+          "children": [
+            {
+              "title": "V26",
+              "set": "bungalow-a-20260826-bungalow-a-v26"
+            },
+            {
+              "title": "V26.b",
+              "set": "bungalow-a-20260826-bungalow-a-v26-b"
+            },
+            {
+              "title": "V26.c",
+              "set": "bungalow-a-20260826-bungalow-a-v26-c"
+            },
+            {
+              "title": "V28.1",
+              "set": "bungalow-a-20260826-bungalow-a-v28-1"
+            },
+            {
+              "title": "V28.1.B",
+              "set": "bungalow-a-20260826-bungalow-a-v28-1-b"
             }
           ]
         }

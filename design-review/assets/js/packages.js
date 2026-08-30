@@ -225,6 +225,126 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "bungalow-a-20260826-bungalow-a-v28-1",
+      "title": "V28.1",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1hQxfe22TZpBy6e8EAiLN3amxYkL1ihQR",
+          "name": "LA COSTA-20260826-BA-V28.1-01",
+          "type": "image"
+        },
+        {
+          "id": "1Ysps-HosROPdeglDc6R9Qnxftc2BWFwm",
+          "name": "LA COSTA-20260826-BA-V28.1-02",
+          "type": "image"
+        },
+        {
+          "id": "1Sgxm0pm0znr5LmjGsXXsSpGFtNJUnBHD",
+          "name": "LA COSTA-20260826-BA-V28.1-03",
+          "type": "image"
+        },
+        {
+          "id": "1BDjglGW07VNd0DdXg40ajmIltVOTL3YV",
+          "name": "LA COSTA-20260826-BA-V28.1-04",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260826-bungalow-a-v26",
+      "title": "V26",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1M_iJ9AlbSXMhxKlsi72kISjMH81yQgaX",
+          "name": "LA COSTA-20260826-BA-V26-01",
+          "type": "image"
+        },
+        {
+          "id": "1CUmBJjrb-m-9IrTkPq6dbslHuMPDoDHV",
+          "name": "LA COSTA-20260826-BA-V26-02",
+          "type": "image"
+        },
+        {
+          "id": "13yg8dOB-swfbBfyOc811MAV1KkwTTu5U",
+          "name": "LA COSTA-20260826-BA-V26-03",
+          "type": "image"
+        },
+        {
+          "id": "1AFktVO1C8JsiRuxvGrdN00Py46Iv3-OM",
+          "name": "LA COSTA-20260826-BA-V26-04",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260826-bungalow-a-v28-1-b",
+      "title": "V28.1.B",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1AJ6XoHbgxooWhmhp6WEM3RaSQZ8v9Ufx",
+          "name": "LA COSTA-20260826-BA-V28.1.B-01",
+          "type": "image"
+        },
+        {
+          "id": "14mMRTJm1FCNULXtUAJ1hkmBhlpkpJMTN",
+          "name": "LA COSTA-20260826-BA-V28.1.B-02",
+          "type": "image"
+        },
+        {
+          "id": "1JAgoTqIzB_CYRICQO1KdHbPquYwpcWtQ",
+          "name": "LA COSTA-20260826-BA-V28.1.B-03",
+          "type": "image"
+        },
+        {
+          "id": "1El3EPs-c10y6sqAUeRladMQ7yO9ICDwN",
+          "name": "LA COSTA-20260826-BA-V28.1.B-04",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260826-bungalow-a-v26-c",
+      "title": "V26.c",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "18p0hqZmdvNywoHu58A_UdVqbZ2cxfpC6",
+          "name": "LA COSTA-20260826-BA-V26.c-01",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260826-bungalow-a-v26-b",
+      "title": "V26.b",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1ZAz_j1_fy6eEJd_LSClpiEf15LJ6pHQ7",
+          "name": "LA COSTA-20260826-BA-V26.b-01",
+          "type": "image"
+        },
+        {
+          "id": "1WnSiDNjaPZG3Mip7HM8HcSuOOMDGIgWv",
+          "name": "LA COSTA-20260826-BA-V26.b-02",
+          "type": "image"
+        }
+      ]
+    },
+    {
       "slug": "bungalow-a-20260331-bungalow-a",
       "title": "20260331-BUNGALOW A",
       "issued": "",
@@ -489,6 +609,50 @@ window.PACKAGES = {
       ]
     },
     {
+      "slug": "bungalow-a-20260825-bungalow-a-v27",
+      "title": "V27",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1RGulQ-WdrvdA4MDk6Xdshv4Lcyw4_wT8",
+          "name": "LA COSTA-20260825-BA-V27-01",
+          "type": "image"
+        },
+        {
+          "id": "1MIhhfiBzhkbfQOU3i_AK-cizu6RrIAHP",
+          "name": "LA COSTA-20260825-BA-V27-02",
+          "type": "image"
+        },
+        {
+          "id": "1EfN22ccguPQiEUXAeVOkcmnMIFnsC0hw",
+          "name": "LA COSTA-20260825-BA-V27-03",
+          "type": "image"
+        },
+        {
+          "id": "1FBRO64lBp39gduse8nu8UW22C1qbnjlN",
+          "name": "LA COSTA-20260825-BA-V27-04",
+          "type": "image"
+        },
+        {
+          "id": "10ELbvqyy-GWWKI6gTDR090--ionUod62",
+          "name": "LA COSTA-20260825-BA-V27-05-2",
+          "type": "video"
+        },
+        {
+          "id": "1-NnTJCThbqLfY9kjxX56nKkTedpYdX4W",
+          "name": "LA COSTA-20260825-BA-V27-05-3",
+          "type": "video"
+        },
+        {
+          "id": "19X7Ai1HoyQuSgt-c-u1Rp3M8D4cOmlUB",
+          "name": "LA COSTA-20260825-BA-V27-05",
+          "type": "video"
+        }
+      ]
+    },
+    {
       "slug": "bungalow-a-20260825-bungalow-a-v26",
       "title": "V26",
       "issued": "",
@@ -514,6 +678,55 @@ window.PACKAGES = {
           "id": "1OzoO71l9eCDu-5yo4wKCLJ7YWiivQ9M5",
           "name": "LA COSTA-20260825-BA-V26-04",
           "type": "image"
+        },
+        {
+          "id": "10B7RpQ9pUyaHjIwUxqlVMi7gxYKBR2Cx",
+          "name": "LA COSTA-20260825-BA-V26-05-2",
+          "type": "video"
+        },
+        {
+          "id": "1it3vlVtqhCZ_McwxdpVZwRoazyqcwl2e",
+          "name": "LA COSTA-20260825-BA-V26-05",
+          "type": "video"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260825-bungalow-a-v25",
+      "title": "V25",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1UtJowkZ_gvcBUCEsWFLmJndr_J4FnpvQ",
+          "name": "LA COSTA-20260825-BA-V25-01",
+          "type": "image"
+        },
+        {
+          "id": "1TORph85ag1w128j831AVj4jbElhImArE",
+          "name": "LA COSTA-20260825-BA-V25-02",
+          "type": "image"
+        },
+        {
+          "id": "1JSbFPWcAx4lKWCx_4u1u2nv3gAyIOtCv",
+          "name": "LA COSTA-20260825-BA-V25-03",
+          "type": "image"
+        },
+        {
+          "id": "1lkSHghrKjvWZbPICAjBs-sTt8io6mJkl",
+          "name": "LA COSTA-20260825-BA-V25-04",
+          "type": "image"
+        },
+        {
+          "id": "10Hrr12lYSyDf4Pi7xJHmIGb7OfhQGrk_",
+          "name": "LA COSTA-20260825-BA-V25-05-2",
+          "type": "video"
+        },
+        {
+          "id": "15y-UUQmWw3q8vLLdJQATcpPMQzcUumnd",
+          "name": "LA COSTA-20260825-BA-V25-05",
+          "type": "video"
         }
       ]
     }
