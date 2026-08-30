@@ -1,68 +1,35 @@
 /*
- * PROJECTS — the demo/fallback project list.
+ * GENERATED FILE — do not hand-edit.
  *
- * Used when the master Drive folder in config.js isn't set, or when listing
- * it fails for any reason — same "never come up empty" fallback pattern as
- * packages.js one level down. Each entry here is a full project in its own
- * right: it can point at its own Drive folder (driveFolderId) and go live for
- * ITS review sets even while the site-level project LIST is running off this
- * manifest — exactly how a single package can be Drive-backed while the
- * package list itself is hand-authored.
- *
- * ── An entry ─────────────────────────────────────────────────────────────
- *   {
- *     slug: "clearview-deck",        used in URLs: project.html?p=clearview-deck
- *     title: "Clearview Deck",
- *     client: "...", location: "...", scope: "...", phase: "...", year: "...",
- *     summary: "...",
- *     driveFolderId: "1AbC...",      optional — this project's OWN Drive
- *                                    folder (its review sets live under it).
- *                                    Leave "" to use the local packages.js
- *                                    manifest for this project instead.
- *   }
- *
- * Once config.js's master driveFolderId + driveApiKey are set, the landing
- * page lists live subfolders of that folder as projects instead of this list
- * — each becomes { slug: slugified folder name, title: folder name,
- * driveFolderId: that subfolder's id }. An entry here whose `slug` matches a
- * live-discovered folder's slugified name still applies as a metadata
- * override (title/client/location/etc.) on top of it, the same way a
- * review-set's meta.json overrides a live-listed folder's bare name — see
- * Drive.listProjects() in drive.js.
+ * Produced by .github/scripts/generate_manifest.py from the published Drive
+ * sheet (design-review/README.md → "Keeping it in sync automatically"). To
+ * change what's here, edit the sheet and either wait for the scheduled sync
+ * or run the "Sync Drive Sheet" workflow by hand — a hand edit to this file
+ * is overwritten on the next run.
  */
 window.PROJECTS = [
   {
-    slug: "clearview-deck",
-    title: "Clearview Deck",
-    client: "Private Residence",
-    location: "Placeholder, CA",
-    scope: "Outdoor Pergola · Pool Deck · Fireplace",
-    phase: "Design Development",
-    year: "2026",
-    summary:
-      "Every drawing set, rendering and revision for the project lives in one Google " +
-      "Drive folder. This site reads that folder directly — renderings open in a " +
-      "full-screen carousel, PDF sheets open in an embedded viewer, and any of them " +
-      "can be marked up and commented on so nothing gets lost between sets.",
-    // Wired to the project's own Drive folder — its review sets list live
-    // from here even though the project LIST above is the local fallback.
-    driveFolderId: "1LMkGxtyunIvuBy_hg2xfdiCzfOkmdtFF"
+    "slug": "clearview-deck",
+    "title": "CLEARVIEW DECK",
+    "client": "",
+    "location": "",
+    "scope": "",
+    "phase": "",
+    "year": "",
+    "summary": "",
+    "thumbnail": "",
+    "driveFolderId": ""
   },
-
-  // Added from a flat file-ID list (name/ID/MIME/URL only) — no folder was
-  // ever given for this one, only individual files, so it has no
-  // driveFolderId and runs entirely off its packages.js entry (same key,
-  // "la-costa"). Client/location/scope/phase/summary below are unknown and
-  // left blank on purpose rather than invented.
   {
-    slug: "la-costa",
-    title: "La Costa",
-    client: "",
-    location: "",
-    scope: "",
-    phase: "",
-    year: "2026",
-    summary: "",
-    driveFolderId: ""
+    "slug": "la-costa",
+    "title": "LA COSTA",
+    "client": "",
+    "location": "",
+    "scope": "",
+    "phase": "",
+    "year": "",
+    "summary": "",
+    "thumbnail": "",
+    "driveFolderId": ""
   }
 ];
