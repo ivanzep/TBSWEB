@@ -43,7 +43,7 @@
         var empty = document.getElementById("emptyState");
         empty.hidden = false;
         empty.textContent = "That project doesn't exist. Pick one from the homepage.";
-        document.getElementById("toolbarStack").hidden = true;
+        document.getElementById("toolbarWrap").hidden = true;
         return;
       }
 
@@ -416,7 +416,38 @@
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
 
+  var TOOLBAR_OPEN_KEY = "tbs-toolbar-open";
+
+  // Every filter/sort/view control lives behind one collapsible drawer so
+  // the page opens straight into files, not a wall of controls — persisted
+  // per browser (same pattern as the grid-size control and the Drive
+  // sidebar's open state) so a reviewer who opens it once doesn't have to
+  // every time.
+  function bindToolbarToggle() {
+    var toggle = document.getElementById("toolbarToggle");
+    var stack = document.getElementById("toolbarStack");
+    if (!toggle || !stack) return;
+
+    function apply(open) {
+      stack.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.classList.toggle("is-open", open);
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(TOOLBAR_OPEN_KEY); } catch (e) { /* private mode, etc. */ }
+    apply(saved === "1");
+
+    toggle.addEventListener("click", function () {
+      var open = stack.hidden;
+      apply(open);
+      try { localStorage.setItem(TOOLBAR_OPEN_KEY, open ? "1" : "0"); } catch (e) { /* ignore */ }
+    });
+  }
+
   function bindControls() {
+    bindToolbarToggle();
+
     document.querySelectorAll("[data-filter]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         typeFilter = btn.getAttribute("data-filter");

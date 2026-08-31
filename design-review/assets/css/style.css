@@ -711,17 +711,61 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   color: #fff;
 }
 
-/* Two-row toolbar (All Files): quick-filter buttons on top, the finer-grained
-   set/sort/search controls below. One outer border pair rather than each row
-   carrying its own, so stacking rows doesn't double up the divider lines. */
+/* All Files' whole toolbar (quick filters, set/sort/search, view controls)
+   lives behind one collapsible drawer — .toolbar-bar is the always-visible
+   header button; .toolbar-stack is the body it shows/hides. Collapsed is
+   the common case (screen space back for files), so the bar alone carries
+   the section's framing border; the stack adds its own only while open. */
+.toolbar-wrap { margin-bottom: 2.4rem; }
+
+.toolbar-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 1.1rem 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  font: inherit;
+  text-align: left;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.toolbar-bar:hover { color: var(--color-accent); }
+
+.toolbar-bar-caret {
+  flex: none;
+  width: 16px; height: 16px;
+  position: relative;
+}
+.toolbar-bar-caret::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 5px 4px 0 4px;
+  border-color: var(--color-ink-soft) transparent transparent transparent;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  transition: transform 0.25s var(--ease);
+}
+.toolbar-bar.is-open .toolbar-bar-caret::before { transform: translate(-50%, -50%) rotate(0deg); }
+
+.toolbar-bar-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .toolbar-stack {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  padding: 1.1rem 0;
-  border-top: 1px solid var(--color-line);
+  padding: 1.1rem 0 0.2rem;
   border-bottom: 1px solid var(--color-line);
-  margin-bottom: 2.4rem;
 }
 
 .toolbar-row {
@@ -731,7 +775,7 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   flex-wrap: wrap;
 }
 
-.toolbar-row .spacer { flex: 1; }
+.toolbar-row .spacer, .toolbar-bar .spacer { flex: 1; }
 
 .results-count {
   font-size: 0.74rem;
@@ -1691,7 +1735,11 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   /* Toolbar controls compressed to a smaller footprint — same controls,
      less vertical space, since a set/sort/search row each on its own line
      already costs more height here than on desktop. */
-  .toolbar, .toolbar-stack { padding: 0.7rem 0; gap: 0.55rem; margin-bottom: 1.5rem; }
+  .toolbar { padding: 0.7rem 0; gap: 0.55rem; margin-bottom: 1.5rem; }
+  .toolbar-wrap { margin-bottom: 1.5rem; }
+  .toolbar-bar { padding: 0.8rem 0; }
+  .toolbar-bar-label { font-size: 0.66rem; }
+  .toolbar-stack { padding: 0.7rem 0 0.1rem; gap: 0.55rem; }
   .toolbar-row { gap: 0.5rem; }
   .filter-btn { padding: 0.4rem 0.65rem; font-size: 0.63rem; }
   .field { font-size: 0.62rem; gap: 0.4rem; }
