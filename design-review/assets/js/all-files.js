@@ -20,7 +20,10 @@
   var typeFilter = "all";
   var commentsOnly = false;
   var setFilter = "";
-  var sortKey = "set";
+  // Folder Order is the default view — it's also the grouped/collapsible
+  // one, so opening this page lands somewhere that reflects real Drive
+  // structure rather than an arbitrary flattened list.
+  var sortKey = "folder";
   var searchText = "";
 
   // Collapse state for the grouped ("Folder Order") view, keyed by a tree
@@ -90,11 +93,17 @@
     var noteEl = document.getElementById("pageNote");
     if (eyebrowEl) eyebrowEl.textContent = folderNode ? "Drive Folder" : "Every Set, One View";
     if (titleEl) titleEl.textContent = title;
-    if (noteEl) noteEl.textContent = folderNode
-      ? "Everything under this folder — its own files and every nested subfolder, together."
-      : "Every image and drawing across every review set, together. Sort and filter to " +
-        "find what you need, then open it straight into the carousel or PDF viewer — " +
-        "arrowing through moves across sets, not just within one.";
+    // Only the scoped-folder case gets a note — it's genuinely useful context
+    // ("you're inside a subfolder, here's what that includes"); the unscoped
+    // page needs no explainer, so the element just stays hidden.
+    if (noteEl) {
+      if (folderNode) {
+        noteEl.textContent = "Everything under this folder — its own files and every nested subfolder, together.";
+        noteEl.hidden = false;
+      } else {
+        noteEl.hidden = true;
+      }
+    }
   }
 
   // Fragment-safe — see package-page.js's withProj for why the naive version
@@ -334,6 +343,17 @@
     return html;
   }
 
+  // Every node's slug, leaves and folders alike — walked fresh on each call
+  // rather than cached, since the tree itself never changes after load.
+  function allNodeSlugs(nodes) {
+    var acc = [];
+    nodes.forEach(function (n) {
+      acc.push(n.slug);
+      if (n.children && n.children.length) acc = acc.concat(allNodeSlugs(n.children));
+    });
+    return acc;
+  }
+
   function bindGroupToggles(host) {
     host.querySelectorAll("[data-group-toggle]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -374,6 +394,10 @@
 
     var countEl = document.getElementById("resultsCount");
     if (countEl) countEl.textContent = items.length + " file" + (items.length === 1 ? "" : "s");
+
+    // Expand/Collapse All only mean anything in the grouped view.
+    var groupToggle = document.getElementById("groupToggle");
+    if (groupToggle) groupToggle.hidden = sortKey !== "folder";
 
     if (!items.length) {
       host.classList.remove("is-grouped");
@@ -417,6 +441,16 @@
 
     document.getElementById("sortBy").addEventListener("change", function (e) {
       sortKey = e.target.value;
+      render();
+    });
+
+    document.getElementById("expandAll").addEventListener("click", function () {
+      collapsedGroups = {};
+      render();
+    });
+
+    document.getElementById("collapseAll").addEventListener("click", function () {
+      allNodeSlugs(tree).forEach(function (slug) { collapsedGroups[slug] = true; });
       render();
     });
 

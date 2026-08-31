@@ -774,14 +774,19 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   align-items: center;
   gap: 0.6rem;
   width: 100%;
-  padding: 0.5rem 0.2rem;
+  padding: 0.6rem 0.5rem;
   background: none;
   border: none;
+  border-radius: var(--radius);
   font: inherit;
   text-align: left;
   color: var(--color-ink);
   cursor: pointer;
+  transition: background 0.2s var(--ease);
 }
+.file-group-header:hover,
+.file-group-header:focus-visible { background: var(--color-bg-alt); }
+.file-group-header:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 
 .file-group-caret {
   flex: none;
@@ -1691,6 +1696,14 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
   .filter-btn { padding: 0.4rem 0.65rem; font-size: 0.63rem; }
   .field { font-size: 0.62rem; gap: 0.4rem; }
   .field input, .field select { padding: 0.4rem 0.55rem; font-size: 0.8rem; }
+
+  /* Nested folder groups indent themselves twice per level (margin + border
+     padding); on a narrow screen that eats into card width fast, so pull it
+     in — still enough to read the nesting, not enough to starve the grid. */
+  .file-group { margin-top: 1.2rem; }
+  .file-group .file-group { margin-left: 0.7rem; padding-left: 0.6rem; }
+  .file-group-title { font-size: 0.9rem; }
+  .file-group-count { font-size: 0.66rem; }
 
   .packages-grid { grid-template-columns: 1fr; }
   .log-row { grid-template-columns: auto 1fr; }

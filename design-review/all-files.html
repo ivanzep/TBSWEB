@@ -52,11 +52,7 @@
     <a class="back-link" href="./project.html#packages" id="backLink">← Review Sets</a>
     <p class="eyebrow" id="pageEyebrow">Every Set, One View</p>
     <h1 id="pageTitle">All Files</h1>
-    <p class="page-banner-note" id="pageNote">
-      Every image and drawing across every review set, together. Sort and filter to
-      find what you need, then open it straight into the carousel or PDF viewer —
-      arrowing through moves across sets, not just within one.
-    </p>
+    <p class="page-banner-note" id="pageNote" hidden></p>
 
     <div class="toolbar-stack" id="toolbarStack">
       <div class="toolbar-row">
@@ -66,13 +62,6 @@
         <button class="filter-btn" id="filterComments">With Comments</button>
         <span class="spacer"></span>
         <span class="results-count" id="resultsCount"></span>
-        <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
-          <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
-          <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
-          <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
-        </div>
-        <button class="filter-btn" id="openFirst">Open Carousel</button>
-        <a class="filter-btn" data-project-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
       </div>
       <div class="toolbar-row">
         <label class="field">Set
@@ -80,8 +69,8 @@
         </label>
         <label class="field">Sort
           <select id="sortBy">
-            <option value="set">Set Order</option>
             <option value="folder">Folder Order</option>
+            <option value="set">Set Order</option>
             <option value="name">Name (A–Z)</option>
             <option value="sheet">Sheet Number</option>
             <option value="type">Type</option>
@@ -92,6 +81,18 @@
         <label class="field">Find
           <input type="search" id="filterText" placeholder="Search files…">
         </label>
+        <span class="spacer"></span>
+        <div class="grid-size" id="groupToggle" role="group" aria-label="Group view" hidden>
+          <button type="button" class="filter-btn" id="expandAll">Expand All</button>
+          <button type="button" class="filter-btn" id="collapseAll">Collapse All</button>
+        </div>
+        <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
+          <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
+          <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
+          <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
+        </div>
+        <button class="filter-btn" id="openFirst">Open Carousel</button>
+        <a class="filter-btn" data-project-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
       </div>
     </div>
   </div>
