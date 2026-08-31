@@ -181,6 +181,10 @@ window.FOLDER_TREE = {
               "set": "restaurant-20260626-veras"
             }
           ]
+        },
+        {
+          "title": "20260807-RESTAURANT",
+          "set": "restaurant-20260807-restaurant"
         }
       ]
     }

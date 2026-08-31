@@ -225,6 +225,35 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "restaurant-20260807-restaurant",
+      "title": "20260807-RESTAURANT",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1aJ46muBjvrcwXMz8eRnu5eEANzRJm4Wm",
+          "name": "LA COSTA-20260807-V47-1-RESTAURANT - FLOOR PLAN - 1",
+          "type": "pdf"
+        },
+        {
+          "id": "11ZaRcnuM5uJTT93sYNP8_eGYvnXSvfjS",
+          "name": "LA COSTA-20260807-V47-2-RESTAURANT - FLOOR PLAN - L2",
+          "type": "pdf"
+        },
+        {
+          "id": "1TGxmobPKk67aZ0NRob57PemoAmbuvUJg",
+          "name": "LA COSTA-20260807-V47-7-ENLARGED RESTAURANT - FLOOR PLAN - 1",
+          "type": "pdf"
+        },
+        {
+          "id": "1lj7owuT7xx6PswywtNqMSkdBn-eivbt-",
+          "name": "LA COSTA-20260807-V47-8-ENLARGED RESTAURANT - FLOOR PLAN - 2",
+          "type": "pdf"
+        }
+      ]
+    },
+    {
       "slug": "restaurant-20260626",
       "title": "20260626",
       "issued": "",
