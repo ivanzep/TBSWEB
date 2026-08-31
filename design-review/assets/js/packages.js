@@ -279,6 +279,100 @@ window.PACKAGES = {
       ]
     },
     {
+      "slug": "restaurant-20260626-veras",
+      "title": "VERAS",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1IzUBbA0-qebnuEhY8VKuoNDBnBfN0jJm",
+          "name": "LA COSTA-20260626-REST-V45-AI-01",
+          "type": "image"
+        },
+        {
+          "id": "13ab8HdVXvRVmmlM9NyDcuP4aU8RJLpA1",
+          "name": "LA COSTA-20260626-REST-V45-AI-02",
+          "type": "image"
+        },
+        {
+          "id": "1Dt7cd1GpkeB8taJJYNCYbU1oVHMcxEor",
+          "name": "LA COSTA-20260626-REST-V45-AI-03",
+          "type": "image"
+        },
+        {
+          "id": "15q-Wch5IZuJL0Pr4bixLPW69Bss7XNFk",
+          "name": "LA COSTA-20260626-REST-V45-AI-04",
+          "type": "image"
+        },
+        {
+          "id": "1Wt5HC8YvkHmZ0jP0gPNXIqES53f0yOT7",
+          "name": "LA COSTA-20260626-REST-V45-AI-05",
+          "type": "image"
+        },
+        {
+          "id": "1AYxQJWTcwyqfcPngMa1_ieCtNqA7dI5u",
+          "name": "LA COSTA-20260626-REST-V45-AI-06",
+          "type": "image"
+        },
+        {
+          "id": "1O84A9pR1Idgrcvf6FqK06bonQHSfHZmR",
+          "name": "LA COSTA-20260626-REST-V45-AI-07",
+          "type": "image"
+        },
+        {
+          "id": "1PtYynZ6mp5dG5kWYZkhno4UmAr66pIPd",
+          "name": "LA COSTA-20260626-REST-V45-AI-08",
+          "type": "image"
+        },
+        {
+          "id": "1SKNbSw-IY7et2Im75CV_p83AC5tnef7d",
+          "name": "LA COSTA-20260626-REST-V45-AI-09",
+          "type": "image"
+        },
+        {
+          "id": "1-lVS_lh-q8YMuEouA83ZVilAohJb-TFg",
+          "name": "LA COSTA-20260626-REST-V45-AI-10",
+          "type": "image"
+        },
+        {
+          "id": "1xWJXzH7rQo1Jg0g_xBRg7gg2r3Kid2af",
+          "name": "LA COSTA-20260626-REST-V45-AI-11",
+          "type": "image"
+        },
+        {
+          "id": "1Loi5yRdtkSeJAJTvLPGbYsX3IK7RVzcG",
+          "name": "LA COSTA-20260626-REST-V45-AI-12",
+          "type": "image"
+        },
+        {
+          "id": "1e1gSxnkGrhYWokdV6NYxLXYlPCeFt2Qk",
+          "name": "LA COSTA-20260626-REST-V45-AI-13",
+          "type": "image"
+        },
+        {
+          "id": "1vP4BtRZWNaVjIyeiySYqmUiGPTtWP-Lw",
+          "name": "LA COSTA-20260626-REST-V45-AI-14",
+          "type": "image"
+        },
+        {
+          "id": "1g_Pd9UqTEnYWRLQ-adDR4u9chjeDjhvi",
+          "name": "LA COSTA-20260626-REST-V45-AI-15",
+          "type": "video"
+        },
+        {
+          "id": "1TkET3szVjkDASYSFG_Go1ECI97BQZGkm",
+          "name": "LA COSTA-20260626-REST-V45-AI-16",
+          "type": "video"
+        },
+        {
+          "id": "1fT-HL-slUjP3cJNW4crETjAXRtw-xbay",
+          "name": "LA COSTA-20260626-REST-V45-AI-17",
+          "type": "video"
+        }
+      ]
+    },
+    {
       "slug": "restaurant-20260605-v44",
       "title": "V44",
       "issued": "",
@@ -1275,90 +1369,6 @@ window.PACKAGES = {
         {
           "id": "1WnSiDNjaPZG3Mip7HM8HcSuOOMDGIgWv",
           "name": "LA COSTA-20260826-BA-V26.b-02",
-          "type": "image"
-        }
-      ]
-    },
-    {
-      "slug": "bungalow-a-20260331-bungalow-a",
-      "title": "20260331-BUNGALOW A",
-      "issued": "",
-      "note": "",
-      "driveFolderId": "",
-      "items": [
-        {
-          "id": "1dG9mOjFCaCvBLZozowzecFisQ8BEq2Fs",
-          "name": "IMAGE 1",
-          "type": "image"
-        },
-        {
-          "id": "1e5qrmq0KtOB_bI1Fkj4HNS_op2GyMD7P",
-          "name": "IMAGE 2",
-          "type": "image"
-        },
-        {
-          "id": "1zGzUlMD0HW84QJZ4f7FLVZpeZkH5-S6I",
-          "name": "IMAGE 3",
-          "type": "image"
-        },
-        {
-          "id": "1pVg-F9FWjVYj2bBeEMPCxCbxLbCD4X7B",
-          "name": "IMAGE 4",
-          "type": "image"
-        },
-        {
-          "id": "1JIq7-aXgCM82cp8hYwTt-ehG8vFBy5Aw",
-          "name": "IMAGE 5",
-          "type": "image"
-        },
-        {
-          "id": "1FvERppwwoH9_4sQQma1MkhCNmOfwRmmB",
-          "name": "IMAGE 6",
-          "type": "image"
-        },
-        {
-          "id": "1xUEWBQBWIqfb6R13NWZN0FuE1mf8YpiB",
-          "name": "IMAGE 7",
-          "type": "image"
-        },
-        {
-          "id": "1MilgNrEej78qszeBtZ3n6J_7mrMynpUl",
-          "name": "IMAGE 8",
-          "type": "image"
-        },
-        {
-          "id": "1VX7seWESdCMAEHO91jK4wpbNqN3j3uqn",
-          "name": "IMAGE 9",
-          "type": "image"
-        },
-        {
-          "id": "1w3ja8zQNITymYaatHlQOfh3NoR8ijX_8",
-          "name": "IMAGE 10",
-          "type": "image"
-        },
-        {
-          "id": "1EKZE3ah2a8HzfSToY21o-qjAG61-O51I",
-          "name": "IMAGE 11",
-          "type": "image"
-        },
-        {
-          "id": "1kJuDsTPvm1SiH-dcLIeYpRWcBsyI8dfd",
-          "name": "IMAGE 12",
-          "type": "image"
-        },
-        {
-          "id": "1PTcMV3PAVr3E0yytP1MyxVUuGTYTjkp1",
-          "name": "IMAGE 13",
-          "type": "image"
-        },
-        {
-          "id": "1C8V2U9v8drXpp6S_kowRmwCVAhcNbn6q",
-          "name": "IMAGE 14",
-          "type": "image"
-        },
-        {
-          "id": "1vYLnwpNRp0rVUxmGnDxrhDyhazWtjI96",
-          "name": "IMAGE 15",
           "type": "image"
         }
       ]

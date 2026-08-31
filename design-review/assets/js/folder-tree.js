@@ -30,10 +30,6 @@ window.FOLDER_TREE = {
       "title": "BUNGALOW A",
       "children": [
         {
-          "title": "20260331-BUNGALOW A",
-          "set": "bungalow-a-20260331-bungalow-a"
-        },
-        {
           "title": "20260416-BUNGALOW A-AI",
           "set": "bungalow-a-20260416-bungalow-a-ai",
           "children": [
@@ -170,7 +166,13 @@ window.FOLDER_TREE = {
         },
         {
           "title": "20260626",
-          "set": "restaurant-20260626"
+          "set": "restaurant-20260626",
+          "children": [
+            {
+              "title": "VERAS",
+              "set": "restaurant-20260626-veras"
+            }
+          ]
         }
       ]
     }
