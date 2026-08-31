@@ -170,7 +170,7 @@
         ? "<p>No comments match those filters.</p>"
         : "<p>No comments yet. Open a review set, click any drawing, and add one.</p>" +
           '<p><a class="btn btn-dark-outline" href="' + withProj("./project.html#packages") +
-          '">Go to Review Sets</a></p>';
+          '">Go to All Files</a></p>';
       return;
     }
     empty.hidden = true;

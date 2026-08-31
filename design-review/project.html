@@ -22,10 +22,8 @@
     </a>
     <nav class="nav" id="siteNav">
       <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-expanded="false" aria-controls="driveSidebar">Folders</button>
-      <a href="#packages">Review Sets</a>
       <a href="./all-files.html">All Files</a>
       <a href="./review-log.html">Review Log</a>
-      <a href="#drive">Drive</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="siteNav">
       <span></span><span></span><span></span>
@@ -53,10 +51,6 @@
     <p class="eyebrow" id="heroEyebrow">The Brown Studio — Design + Build</p>
     <h1 id="heroTitle">Project</h1>
     <p class="hero-sub" id="heroSubtitle">Design Review</p>
-    <div class="hero-actions">
-      <a href="#packages" class="btn btn-outline">Start Reviewing</a>
-      <a href="./review-log.html" class="btn btn-outline">Review Log</a>
-    </div>
   </div>
 </section>
 
@@ -66,38 +60,118 @@
   <div class="container">
     <div class="section-head" data-reveal>
       <div>
-        <p class="eyebrow">Drive Folder</p>
-        <h2>Review Sets</h2>
+        <p class="eyebrow">Every File, One View</p>
+        <h2>All Files</h2>
+      </div>
+      <label class="project-switch">
+        <span class="sr-only">Switch project</span>
+        <select id="projectSwitch"></select>
+      </label>
+    </div>
+
+    <div class="toolbar-wrap" id="toolbarWrap">
+      <button type="button" class="toolbar-bar" id="toolbarToggle" aria-expanded="false" aria-controls="toolbarStack">
+        <span class="toolbar-bar-caret"></span>
+        <span class="toolbar-bar-label">Filters &amp; Sort</span>
+        <span class="spacer"></span>
+        <span class="results-count" id="resultsCount"></span>
+      </button>
+      <div class="toolbar-stack" id="toolbarStack" hidden>
+        <div class="toolbar-row">
+          <button class="filter-btn is-active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="image">Images</button>
+          <button class="filter-btn" data-filter="pdf">Drawings</button>
+          <button class="filter-btn" id="filterComments">With Comments</button>
+        </div>
+        <div class="toolbar-row">
+          <label class="field">Set
+            <select id="filterSet"><option value="">All sets</option></select>
+          </label>
+          <label class="field">Sort
+            <select id="sortBy">
+              <option value="folder">Folder Order</option>
+              <option value="set">Set Order</option>
+              <option value="name">Name</option>
+              <option value="sheet">Sheet Number</option>
+              <option value="type">Type</option>
+              <option value="comments">Most Comments</option>
+              <option value="modified">Recently Modified</option>
+            </select>
+          </label>
+          <button type="button" class="filter-btn" id="sortReverse" aria-pressed="false" aria-label="Reverse sort order" title="Reverse sort order">
+            <span class="sort-reverse-icon"></span>
+          </button>
+          <label class="field">Find
+            <input type="search" id="filterText" placeholder="Search files…">
+          </label>
+          <span class="spacer"></span>
+          <div class="grid-size" id="groupToggle" role="group" aria-label="Group view" hidden>
+            <button type="button" class="filter-btn" id="expandAll">Expand All</button>
+            <button type="button" class="filter-btn" id="collapseAll">Collapse All</button>
+          </div>
+          <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
+            <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
+            <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
+            <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
+          </div>
+          <button class="filter-btn" id="openFirst">Open Carousel</button>
+          <a class="filter-btn" data-project-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
+        </div>
       </div>
     </div>
-    <div id="packagesGrid"></div>
-  </div>
-</section>
 
-<section class="download" id="drive">
-  <div class="container">
-    <p class="eyebrow">Source of Truth</p>
-    <h2>This Project's Drive Folder</h2>
-    <p>Everything on this page is read from one Google Drive folder. Open it directly to
-       upload new sheets, check version history, or grab full-resolution files.</p>
-    <div class="download-actions">
-      <a class="btn btn-outline" data-project-drive-folder href="#" target="_blank" rel="noopener">
-        Open Drive Folder
-      </a>
-      <a class="btn btn-outline" href="./review-log.html">Export Comments</a>
-    </div>
+    <div class="item-grid" id="itemGrid"></div>
+    <div class="empty-state" id="emptyState" hidden></div>
   </div>
 </section>
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <span id="footerName">The Brown Studio · Design + Build</span>
-    <span class="footer-actions">
-      <a class="footer-sync" data-sync-workflow href="#" target="_blank" rel="noopener">Sync Drive Data ↗</a>
-      <span id="footerMeta"></span>
-    </span>
+    <span id="footerMeta"></span>
   </div>
 </footer>
+
+<!-- ── Viewer overlay ─────────────────────────────────────────────────────
+     Same overlay as All Files / a single review set's page — opened here
+     with whatever the current filter/sort has on screen. -->
+<div class="modal-overlay viewer" id="viewer">
+
+  <div class="viewer-bar">
+    <span class="v-title" id="viewerTitle"></span>
+    <span class="v-counter" id="viewerCounter"></span>
+    <span class="spacer"></span>
+
+    <span class="viewer-zoom" id="viewerZoom">
+      <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
+      <span id="zoomLevel">100%</span>
+      <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+      <button type="button" id="zoomReset" aria-label="Reset zoom">⤢</button>
+    </span>
+
+    <button type="button" class="v-btn" id="viewerMarkup">Add Markup</button>
+    <button type="button" class="v-btn" id="viewerPanelToggle">Panel</button>
+    <button type="button" class="v-btn" id="viewerClose">Close ✕</button>
+  </div>
+
+  <div class="viewer-stage" id="viewerStage">
+    <div class="viewer-wrap" id="viewerWrap">
+      <img id="viewerImg" alt="">
+      <div class="viewer-pins" id="viewerPins"></div>
+    </div>
+    <div class="viewer-fallback" id="viewerFallback" hidden></div>
+  </div>
+
+  <div class="viewer-embed" id="viewerEmbed" hidden>
+    <iframe id="viewerFrame" title="Document viewer" allow="autoplay"></iframe>
+  </div>
+
+  <button type="button" class="viewer-nav prev" id="viewerPrev" aria-label="Previous">‹</button>
+  <button type="button" class="viewer-nav next" id="viewerNext" aria-label="Next">›</button>
+
+  <div class="viewer-filmstrip" id="viewerFilmstrip"></div>
+  <aside class="viewer-panel" id="viewerPanel"></aside>
+</div>
 
 <div id="toast"></div>
 
@@ -109,6 +183,8 @@
 <script src="./assets/js/store.js"></script>
 <script src="./assets/js/common.js"></script>
 <script src="./assets/js/sidebar.js"></script>
+<script src="./assets/js/viewer.js"></script>
+<script src="./assets/js/items-grid.js"></script>
 <script src="./assets/js/project-page.js"></script>
 </body>
 </html>

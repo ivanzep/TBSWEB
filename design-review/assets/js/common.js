@@ -26,23 +26,6 @@ window.SiteCommon = (function () {
       var label = projectMeta ? projectMeta.title + " Design Review" : "Design Review Projects";
       footerMeta.innerHTML = "© " + new Date().getFullYear() + " — " + escapeHtml(label);
     }
-
-    // The master folder link (landing page only — a project-scoped page binds
-    // its OWN folder link separately, since data-drive-folder always means
-    // "the master folder" here).
-    document.querySelectorAll("[data-drive-folder]").forEach(function (el) {
-      var url = window.Drive.folderUrl(S.driveFolderId);
-      if (url) el.href = url;
-      else el.classList.add("is-disabled");
-    });
-
-    // Footer "Sync Drive Data" link — see config.js's syncWorkflowUrl for
-    // why this is a deep link to GitHub's own "Run workflow" button rather
-    // than something that fires the sync itself from here.
-    document.querySelectorAll("[data-sync-workflow]").forEach(function (el) {
-      if (S.syncWorkflowUrl) el.href = S.syncWorkflowUrl;
-      else el.classList.add("is-disabled");
-    });
   }
 
   function bindHeaderScroll() {

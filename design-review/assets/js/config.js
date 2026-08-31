@@ -70,20 +70,7 @@ window.SITE = {
   liveIgnore: ["_wip", "_archive", "working", ".DS_Store"],
 
   /* Shown in a project's hero when it has no cover image of its own yet. */
-  fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg",
-
-  /* The "Sync Drive Data" footer link — jumps straight to the GitHub Action
-   * that regenerates packages.js/folder-tree.js/projects.js from the Drive
-   * sheet (see design-review/README.md → "Keeping it in sync
-   * automatically"). Deliberately just a deep link, not a one-click
-   * trigger: actually dispatching the workflow needs an authenticated
-   * GitHub API call, and there's no way to make that call from a public
-   * static page without embedding a write-capable token in client-side
-   * code — which anyone viewing the site could then use to spam-trigger
-   * (or worse) the workflow. One extra click on GitHub's own "Run
-   * workflow" button avoids ever shipping that credential.
-   */
-  syncWorkflowUrl: "https://github.com/ivanzep/TBSWEB/actions/workflows/sync-drive-sheet.yml"
+  fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg"
 };
 
 /* True while config still carries the shipped placeholder — the pages use this

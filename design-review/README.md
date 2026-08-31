@@ -60,9 +60,12 @@ design-review/
       sidebar.js          The collapsible Drive-folder sidebar (every project page)
       viewer.js          The carousel, the PDF viewer and the markup pins
       landing.js         Landing-page renderer
-      project-page.js    Project-page renderer
+      project-page.js    Project-page hero + hands off to items-grid.js
       package-page.js    Review-set page renderer
-      all-files.js       All Files page renderer — flattens every set, sorts/filters
+      items-grid.js      The sortable/filterable/collapsible file grid, toolbar
+                          and viewer wiring — shared by project-page.js and
+                          all-files.js so the two stay in lockstep
+      all-files.js       Resolves ?proj=/?folder=, then hands off to items-grid.js
       review-log.js      Review log renderer + export/import
 
 .github/
@@ -320,19 +323,20 @@ subfolder, for any project whose Drive folder actually nests review sets that
 way (`la-costa`'s `BUNGALOW A` subfolder, for one). A project with no entry
 there — every live-discovered project, and any manifest project whose sets
 aren't nested — falls back to one flat level, same order as `packages.js`,
-so most projects need no tree entry at all. The project page's own
-**Review Sets** grid reads the same tree, grouping cards under a folder
-heading instead of always showing one flat grid.
+so most projects need no tree entry at all. The project page itself shows
+this same tree as a grouped, collapsible **All Files** grid (see
+`assets/js/items-grid.js`) rather than a flat set of review-set cards, so a
+project's own page and `all-files.html` read as the same view — one embedded
+on the project page, the other reachable on its own URL.
 
 Every level of the tree is clickable, not just a leaf review set — a folder
-row (in the sidebar, or the project page's own group heading) opens
-`all-files.html?folder=<slug>`, the same sortable/filterable grid a whole
-project gets, pre-scoped to everything under that folder: its own files (if
-it has any directly) plus every nested subfolder, flattened together. A
-folder that's also directly a review set — `Bungalow A/20260416-…-AI`, which
-has both its own images and a nested `ARCHIVE` subfolder — shows one row for
-both; there's no separate leaf row for its own files, since the folder link
-already includes them.
+row in the sidebar opens `all-files.html?folder=<slug>`, the same
+sortable/filterable grid a whole project gets, pre-scoped to everything
+under that folder: its own files (if it has any directly) plus every nested
+subfolder, flattened together. A folder that's also directly a review
+set — `Bungalow A/20260416-…-AI`, which has both its own images and a
+nested `ARCHIVE` subfolder — shows one row for both; there's no separate
+leaf row for its own files, since the folder link already includes them.
 
 Add an entry to `window.FOLDER_TREE` only when a project's Drive folder
 nests review sets under an intermediate subfolder:
