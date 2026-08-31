@@ -13,7 +13,11 @@
   var project = null;
 
   document.addEventListener("DOMContentLoaded", function () {
-    var slug = param("p");
+    // Every other project-scoped page (package.html, all-files.html,
+    // review-log.html) links back here with ?proj=, same as they use for
+    // each other — ?p= is only still read as a fallback for any old link
+    // built before this page matched that convention.
+    var slug = param("proj") || param("p");
 
     window.Drive.resolveProject(slug).then(function (resolved) {
       project = resolved.project;
@@ -43,7 +47,7 @@
           packages: result.packages,
           tree: tree,
           projects: resolved.listResult.projects,
-          projectHref: function (s) { return "./project.html?p=" + encodeURIComponent(s); }
+          projectHref: function (s) { return "./project.html?proj=" + encodeURIComponent(s); }
         });
         window.SiteSidebar.render(project, tree, null);
       });

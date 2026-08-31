@@ -37,7 +37,7 @@
     }
 
     host.innerHTML = projects.map(function (p) {
-      var href = "./project.html?p=" + encodeURIComponent(p.slug);
+      var href = "./project.html?proj=" + encodeURIComponent(p.slug);
       var cover = p.thumbnail || "";
 
       var html = '<article class="pkg-card" data-reveal>';

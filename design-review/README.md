@@ -26,23 +26,25 @@ Master folder (config.js → driveFolderId)
 ```
 
 The landing page lists live subfolders of the master folder as projects.
-Clicking one goes to that project's own page — the review-sets grid, drive
-link, etc. — which in turn lists live subfolders of *that* project's folder as
+Clicking one goes to that project's own page — its hero, then its All Files
+grid — which in turn lists live subfolders of *that* project's folder as
 review sets, exactly the way a single-project version of this site already
 worked. Add a project by adding a subfolder to Drive; no code change, no new
 files to create.
 
 Four page **templates** serve every project — there's no per-project copy of
 `package.html` etc. — a `?proj=<slug>` query param says which project a page
-is scoped to (`project.html` uses `?p=<slug>` instead, since the project *is*
-the page's whole subject there). Internal links carry this automatically.
+is scoped to, `project.html` included. (`project.html` also still reads the
+older `?p=<slug>` as a fallback, since that was its convention before it
+matched the other three — don't build new links with it.) Internal links
+carry `?proj=` automatically.
 
 ## Structure
 
 ```
 design-review/
   index.html            Landing page — lists every project
-  project.html           One project (?p=<slug>) — overview + review sets grid
+  project.html           One project (?proj=<slug>) — hero + All Files grid
   package.html            One review set (?proj=<slug>&p=<setSlug>) — item grid + viewer
   all-files.html            Every item in one project, one grid, sortable + filterable
   review-log.html            Every comment in one project, with export/import
