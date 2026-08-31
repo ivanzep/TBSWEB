@@ -24,6 +24,7 @@
   // one, so opening this page lands somewhere that reflects real Drive
   // structure rather than an arbitrary flattened list.
   var sortKey = "folder";
+  var sortReverse = false;
   var searchText = "";
 
   // Collapse state for the grouped ("Folder Order") view, keyed by a tree
@@ -184,6 +185,15 @@
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 
+  // A level of tree nodes in display order — reversed when sortReverse is on.
+  // The one traversal used both to number sets (folderOrderIndex, below) and
+  // to walk the tree for the grouped view's own DOM order (renderGroupNodes),
+  // so the two can never disagree about "which set/folder comes first" —
+  // reversing is just handing both the same mirrored tree to walk.
+  function orderedNodes(nodes) {
+    return sortReverse ? nodes.slice().reverse() : nodes;
+  }
+
   // Depth-first walk of the folder tree, in the same order the sidebar and
   // the project page's grouped grid already render it — a folder's own set
   // (if it has one) before its subfolders', so a set slug's position here
@@ -195,7 +205,7 @@
     var order = {};
     var i = 0;
     function walk(nodes) {
-      nodes.forEach(function (n) {
+      orderedNodes(nodes).forEach(function (n) {
         if (n.pkg) order[n.pkg.slug] = i++;
         if (n.children && n.children.length) walk(n.children);
       });
@@ -206,30 +216,38 @@
 
   function sortItems(list) {
     var copy = list.slice();
+    // Flips the actual comparison only — an item missing the field being
+    // sorted on (no sheet number, never modified) still sorts to the end
+    // either way, rather than jumping to the front just because the button
+    // was clicked.
+    var dir = sortReverse ? -1 : 1;
     if (sortKey === "folder") {
+      // folderOrderIndex() already numbers sets in reversed order when
+      // sortReverse is on (see orderedNodes above), so no dir flip here —
+      // applying one on top would reverse an already-reversed sequence.
       var order = folderOrderIndex();
       // Stable sort (guaranteed by spec in every engine this site targets)
       // keeps an item's position relative to same-set siblings, so within
       // one set the order is still that set's own item order.
       copy.sort(function (a, b) { return (order[a.pkgSlug] || 0) - (order[b.pkgSlug] || 0); });
     } else if (sortKey === "name") {
-      copy.sort(function (a, b) { return naturalCompare(a.name, b.name); });
+      copy.sort(function (a, b) { return dir * naturalCompare(a.name, b.name); });
     } else if (sortKey === "sheet") {
       // Items with no sheet number sort after every item that has one.
       copy.sort(function (a, b) {
-        if (!a.sheet && !b.sheet) return naturalCompare(a.name, b.name);
+        if (!a.sheet && !b.sheet) return dir * naturalCompare(a.name, b.name);
         if (!a.sheet) return 1;
         if (!b.sheet) return -1;
-        return naturalCompare(a.sheet, b.sheet);
+        return dir * naturalCompare(a.sheet, b.sheet);
       });
     } else if (sortKey === "type") {
       copy.sort(function (a, b) {
-        if (a.type !== b.type) return a.type === "image" ? -1 : 1;
-        return naturalCompare(a.name, b.name);
+        if (a.type !== b.type) return dir * (a.type === "image" ? -1 : 1);
+        return dir * naturalCompare(a.name, b.name);
       });
     } else if (sortKey === "comments") {
       copy.sort(function (a, b) {
-        return window.Store.getNotes(b.uid).length - window.Store.getNotes(a.uid).length;
+        return dir * (window.Store.getNotes(b.uid).length - window.Store.getNotes(a.uid).length);
       });
     } else if (sortKey === "modified") {
       // ISO timestamps compare correctly as strings; items without one (the
@@ -239,11 +257,14 @@
         if (!a.modified && !b.modified) return 0;
         if (!a.modified) return 1;
         if (!b.modified) return -1;
-        return String(b.modified).localeCompare(String(a.modified));
+        return dir * String(b.modified).localeCompare(String(a.modified));
       });
+    } else if (sortReverse) {
+      // "set" has no comparator (the flattened order already follows package
+      // order, then each package's own item order) — reversing it just means
+      // reversing that order outright.
+      copy.reverse();
     }
-    // "set" (default): the flattened order already follows package order,
-    // then each package's own item order — nothing to do.
     return copy;
   }
 
@@ -316,7 +337,7 @@
   }
 
   function renderGroupNodes(nodes, map) {
-    return nodes.map(function (n) {
+    return orderedNodes(nodes).map(function (n) {
       return countUnder(n, map) ? renderNode(n, map) : "";
     }).join("");
   }
@@ -472,6 +493,14 @@
 
     document.getElementById("sortBy").addEventListener("change", function (e) {
       sortKey = e.target.value;
+      render();
+    });
+
+    var reverseBtn = document.getElementById("sortReverse");
+    reverseBtn.addEventListener("click", function () {
+      sortReverse = !sortReverse;
+      reverseBtn.classList.toggle("is-active", sortReverse);
+      reverseBtn.setAttribute("aria-pressed", sortReverse ? "true" : "false");
       render();
     });
 

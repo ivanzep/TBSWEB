@@ -777,6 +777,30 @@ body.has-setup-notice .page-banner { padding-top: 2.5rem; }
 
 .toolbar-row .spacer, .toolbar-bar .spacer { flex: 1; }
 
+/* Reverse-sort toggle, sat right next to the Sort field — an up/down arrow
+   that flips to point the other way once active, same "still there, just
+   confirming direction" treatment as the S/M/L size control's active state. */
+#sortReverse { padding: 0.5rem 0.7rem; }
+.sort-reverse-icon {
+  display: block;
+  width: 10px; height: 12px;
+  position: relative;
+}
+.sort-reverse-icon::before, .sort-reverse-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: currentColor transparent transparent transparent;
+  transform: translateX(-50%);
+}
+.sort-reverse-icon::before { top: 0; }
+.sort-reverse-icon::after { top: 6px; transform: translateX(-50%) rotate(180deg); opacity: 0.35; }
+#sortReverse.is-active .sort-reverse-icon::before { opacity: 0.35; }
+#sortReverse.is-active .sort-reverse-icon::after { opacity: 1; }
+
 .results-count {
   font-size: 0.74rem;
   color: var(--color-ink-soft);
