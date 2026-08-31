@@ -92,6 +92,10 @@ window.FOLDER_TREE = {
               "set": "bungalow-a-20260826-bungalow-a-v28-1-b"
             }
           ]
+        },
+        {
+          "title": "20260826-UNIT PLANS",
+          "set": "bungalow-a-20260826-unit-plans"
         }
       ]
     },
@@ -113,6 +117,10 @@ window.FOLDER_TREE = {
         {
           "title": "20260526-BUNGALOW B-AI",
           "set": "bungalow-b-20260526-bungalow-b-ai"
+        },
+        {
+          "title": "20260826-UNIT PLANS",
+          "set": "bungalow-b-20260826-unit-plans"
         }
       ]
     },

@@ -1073,6 +1073,20 @@ window.PACKAGES = {
       ]
     },
     {
+      "slug": "bungalow-b-20260826-unit-plans",
+      "title": "20260826-UNIT PLANS",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1QGgsAEzPLXaWNaXiJERYbQHmJIB_YJSk",
+          "name": "LA COSTA-BB-20260826-V33a-BUNGALOW B - FLOOR PLAN",
+          "type": "pdf"
+        }
+      ]
+    },
+    {
       "slug": "bungalow-b-20260414-v32a-ai",
       "title": "20260414-V32a-AI",
       "issued": "",
@@ -1250,6 +1264,25 @@ window.PACKAGES = {
           "id": "11eLzCVG9f97G7VH_tEZhVhEBRxBVkqQ0",
           "name": "LA COSTA-BUNGALOW B-EXTERIOR 5-20260416",
           "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260826-unit-plans",
+      "title": "20260826-UNIT PLANS",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "156bT5Br-8PyA042ohszRN2sE3FBV5cZg",
+          "name": "LA COSTA-BA-20260826-V3.3-23b ADA-BUILDING A - PLANS ADA",
+          "type": "pdf"
+        },
+        {
+          "id": "1yrOKYmDZJjAqh_Pkj2e76KZrW-7THe68",
+          "name": "LA COSTA-BA-20260826-V3.3-25-1-BUILDING A - PLANS",
+          "type": "pdf"
         }
       ]
     },
