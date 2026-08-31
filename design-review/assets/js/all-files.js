@@ -41,9 +41,10 @@
 
       if (!project) {
         C.initPage();
+        bindProjectSwitch(resolved.listResult.projects, null);
         var empty = document.getElementById("emptyState");
         empty.hidden = false;
-        empty.textContent = "That project doesn't exist. Pick one from the homepage.";
+        empty.textContent = "That project doesn't exist. Pick one below or from the homepage.";
         document.getElementById("toolbarWrap").hidden = true;
         return;
       }
@@ -53,6 +54,7 @@
       C.initPage(project);
       fixupNavLinks();
       bindDriveLink();
+      bindProjectSwitch(resolved.listResult.projects, project.slug);
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         tree = window.Drive.buildTree(project.slug, result.packages);
@@ -129,6 +131,31 @@
     var url = window.Drive.folderUrl(project.driveFolderId);
     if (url) el.href = url;
     else el.classList.add("is-disabled");
+  }
+
+  // Lets a reviewer jump straight to another project's All Files instead of
+  // retracing back through Review Sets → the homepage → into a new project.
+  // Always lands unscoped (drops any ?folder=) since a folder slug only ever
+  // means something within the project it came from.
+  function bindProjectSwitch(projects, currentSlug) {
+    var sel = document.getElementById("projectSwitch");
+    if (!sel) return;
+
+    // Nothing to switch to — leave the control out of the way entirely
+    // rather than showing a dropdown of one.
+    if (!projects || projects.length < 2) {
+      sel.closest("label").hidden = true;
+      return;
+    }
+
+    sel.innerHTML = projects.map(function (p) {
+      return '<option value="' + C.escapeHtml(p.slug) + '">' + C.escapeHtml(p.title) + '</option>';
+    }).join("");
+    if (currentSlug) sel.value = currentSlug;
+
+    sel.addEventListener("change", function (e) {
+      location.href = "./all-files.html?proj=" + encodeURIComponent(e.target.value);
+    });
   }
 
   // Carries pkgTitle alongside the fields Drive.normalizeItem already put on
