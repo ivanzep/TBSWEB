@@ -70,6 +70,19 @@
     </div>
 
     <div class="toolbar-wrap" id="toolbarWrap">
+      <div class="toolbar-row toolbar-quick">
+        <button class="filter-btn is-active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="image">Images</button>
+        <button class="filter-btn" data-filter="pdf">Drawings</button>
+        <button class="filter-btn" id="filterComments">With Comments</button>
+        <span class="spacer"></span>
+        <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
+          <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
+          <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
+          <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
+        </div>
+      </div>
+
       <button type="button" class="toolbar-bar" id="toolbarToggle" aria-expanded="false" aria-controls="toolbarStack">
         <span class="toolbar-bar-caret"></span>
         <span class="toolbar-bar-label">Filters &amp; Sort</span>
@@ -77,12 +90,6 @@
         <span class="results-count" id="resultsCount"></span>
       </button>
       <div class="toolbar-stack" id="toolbarStack" hidden>
-        <div class="toolbar-row">
-          <button class="filter-btn is-active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="image">Images</button>
-          <button class="filter-btn" data-filter="pdf">Drawings</button>
-          <button class="filter-btn" id="filterComments">With Comments</button>
-        </div>
         <div class="toolbar-row">
           <label class="field">Set
             <select id="filterSet"><option value="">All sets</option></select>
@@ -108,11 +115,6 @@
           <div class="grid-size" id="groupToggle" role="group" aria-label="Group view" hidden>
             <button type="button" class="filter-btn" id="expandAll">Expand All</button>
             <button type="button" class="filter-btn" id="collapseAll">Collapse All</button>
-          </div>
-          <div class="grid-size" id="gridSize" role="group" aria-label="Thumbnail size">
-            <button type="button" class="filter-btn" data-size="sm" aria-label="Small thumbnails">S</button>
-            <button type="button" class="filter-btn is-active" data-size="md" aria-label="Medium thumbnails">M</button>
-            <button type="button" class="filter-btn" data-size="lg" aria-label="Large thumbnails">L</button>
           </div>
           <button class="filter-btn" id="openFirst">Open Carousel</button>
           <a class="filter-btn" data-project-drive-folder href="#" target="_blank" rel="noopener">Open in Drive</a>
