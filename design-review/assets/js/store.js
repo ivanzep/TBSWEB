@@ -1,11 +1,24 @@
 /*
  * REVIEW STORE — comments and image markups.
  *
- * This is a static site with no backend, so review state lives in the
- * reviewer's own browser (localStorage) rather than on a server. That means:
- * marks are private to the person who made them and to that browser, and they
- * are shared by exporting — Copy for Email / Download JSON on the Review Log
- * page. The UI says so plainly rather than implying marks sync.
+ * The single source of truth is always the reviewer's own browser
+ * (localStorage) — every read in this file comes from there, and every
+ * write lands there first, synchronously, before anything else happens.
+ * Nothing here ever blocks on the network. On top of that local copy, when
+ * config.js's commentsSyncUrl is set (see sheet-sync.js), two things happen
+ * automatically:
+ *
+ *   - init() kicks off a background pull of that project's rows from the
+ *     sheet and merges in whatever the browser doesn't already have — so
+ *     opening any page picks up comments left by someone else, or by this
+ *     same person on another device.
+ *   - Every addNote/updateNote/deleteNote/toggleResolved schedules a
+ *     debounced push of the whole project back to the sheet a couple
+ *     seconds later, so a comment doesn't sit only-local for long.
+ *
+ * Without commentsSyncUrl configured, none of that runs — comments are
+ * private to that person, that browser, and that project, shared only by
+ * the Review Log's manual exports, exactly as before.
  *
  * Everything is filed under an item's uid (see Drive.normalizeItem), so notes
  * survive reordering a package, renaming a file, or switching between the
@@ -27,6 +40,7 @@ window.Store = (function () {
 
   var VERSION = 1;
   var KEY = null;
+  var projectSlug = null;
   var projectTitle = "";
 
   var listeners = [];
@@ -34,17 +48,61 @@ window.Store = (function () {
 
   /* ── Namespace ─────────────────────────────────────────────────────────── */
 
-  function init(projectSlug, title) {
-    KEY = "tbs-design-review:" + (projectSlug || "project");
-    projectTitle = title || projectSlug || "Project";
+  function init(slug, title) {
+    projectSlug = slug;
+    KEY = "tbs-design-review:" + (slug || "project");
+    projectTitle = title || slug || "Project";
     state = load();
     listeners.forEach(function (fn) { fn(state); });
+    loadFromSheet();
   }
 
   function requireInit() {
     if (state === null) {
       throw new Error("Store.init(projectSlug, title) must be called before use.");
     }
+  }
+
+  /* ── Sheet sync (optional — see the header comment above) ─────────────── */
+
+  function syncEnabled() {
+    return !!(window.SheetSync && window.SheetSync.configured());
+  }
+
+  // Runs once per init(), in the background — never blocks the page, and a
+  // failure (offline, bad token, sheet not deployed yet) is swallowed rather
+  // than shown, the same "this is best-effort infrastructure, not a user
+  // action" treatment a failed save gets below. The buttons on the Review
+  // Log page still surface errors when someone explicitly clicks them.
+  function loadFromSheet() {
+    if (!syncEnabled()) return;
+    window.SheetSync.load(projectSlug).then(function (res) {
+      // save(), not scheduleSync() — echoing straight back out what was
+      // just pulled in would double every page load's network traffic
+      // against a quota-limited endpoint for no reason; the sheet already
+      // has this data, that's where it came from.
+      if (mergeItems(res.items || {})) save();
+    }).catch(function () { /* best-effort — see comment above */ });
+  }
+
+  var SYNC_DEBOUNCE_MS = 1500;
+  var syncTimer = null;
+
+  // Debounced so resolving five comments in a row, or a fast typing-then-
+  // submitting session, collapses into one push instead of one per action —
+  // a save always sends the WHOLE project's current items (see
+  // sheet-sync.js), so there's nothing to gain from sending it more often
+  // than that. Deliberately not called from setReviewer (fires on every
+  // keystroke in the name field, not a comment) or clearAll (a LOCAL wipe —
+  // echoing it out would delete everyone else's comments from the shared
+  // sheet too).
+  function scheduleSync() {
+    if (!syncEnabled()) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(function () {
+      window.SheetSync.save(projectSlug, projectTitle, state.items)
+        .catch(function () { /* best-effort — see loadFromSheet() above */ });
+    }, SYNC_DEBOUNCE_MS);
   }
 
   /* ── Persistence ───────────────────────────────────────────────────────── */
@@ -117,6 +175,7 @@ window.Store = (function () {
     if (!note.text) return null;
     entry(uid).notes.push(note);
     save();
+    scheduleSync();
     return note;
   }
 
@@ -126,6 +185,7 @@ window.Store = (function () {
       if (notes[i].id === noteId) {
         Object.keys(patch).forEach(function (k) { notes[i][k] = patch[k]; });
         save();
+        scheduleSync();
         return notes[i];
       }
     }
@@ -136,6 +196,7 @@ window.Store = (function () {
     var e = entry(uid);
     e.notes = e.notes.filter(function (n) { return n.id !== noteId; });
     save();
+    scheduleSync();
   }
 
   function toggleResolved(uid, noteId) {
@@ -144,6 +205,7 @@ window.Store = (function () {
       if (notes[i].id === noteId) {
         notes[i].resolved = !notes[i].resolved;
         save();
+        scheduleSync();
         return notes[i];
       }
     }
@@ -203,15 +265,16 @@ window.Store = (function () {
     }, null, 2);
   }
 
-  // Merges an export back in rather than replacing: two reviewers' comment sets
-  // combine instead of one overwriting the other. Notes are de-duplicated by id.
-  function importJSON(text) {
-    var data = JSON.parse(text);
-    if (!data || !data.items) throw new Error("Not a review export — no items found.");
-
+  // Shared by importJSON (a file someone hands you) and loadFromSheet (the
+  // background pull above) — merges an {items: {...}} map in rather than
+  // replacing: two reviewers' comment sets combine instead of one
+  // overwriting the other, de-duplicated by note id. Doesn't call save()
+  // itself; callers decide when (loadFromSheet batches it with the rest of
+  // its own bookkeeping).
+  function mergeItems(incomingItems) {
     var added = 0;
-    Object.keys(data.items).forEach(function (uid) {
-      var incoming = data.items[uid] || {};
+    Object.keys(incomingItems || {}).forEach(function (uid) {
+      var incoming = incomingItems[uid] || {};
       var mine = entry(uid);
       var seen = {};
       mine.notes.forEach(function (n) { seen[n.id] = true; });
@@ -222,7 +285,15 @@ window.Store = (function () {
         return String(a.created).localeCompare(String(b.created));
       });
     });
+    return added;
+  }
+
+  function importJSON(text) {
+    var data = JSON.parse(text);
+    if (!data || !data.items) throw new Error("Not a review export — no items found.");
+    var added = mergeItems(data.items);
     save();
+    scheduleSync();
     return added;
   }
 

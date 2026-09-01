@@ -136,8 +136,20 @@
   // Both buttons stay hidden — set in the HTML — unless config.js's
   // commentsSyncUrl is set, so a site that hasn't deployed the Apps Script
   // (design-review/apps-script/Code.gs) never shows a button that can't work.
+  // Either way, the page's own banner copy says plainly whether comments
+  // leave this browser automatically or only by manual export — see
+  // store.js's header for what "automatically" actually does.
   function bindSheetSync() {
+    var note = document.getElementById("pageNote");
     if (!window.SheetSync.configured()) return;
+
+    if (note) {
+      note.textContent = "Every comment and markup made in this browser, newest first. " +
+        "Comments here sync automatically with a shared Google Sheet — added or changed " +
+        "ones go out a couple seconds later, and anything saved elsewhere comes in " +
+        "whenever a page loads. This browser's own copy still lives in localStorage " +
+        "regardless, so Download JSON / Import Comments below keep working the same way.";
+    }
 
     var saveBtn = document.getElementById("saveSheet");
     var loadBtn = document.getElementById("loadSheet");

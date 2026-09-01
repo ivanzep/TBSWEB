@@ -16,6 +16,11 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     window.Viewer.init(function () { renderGrid(); });
+    // Covers a comment arriving from outside the viewer too — most notably
+    // store.js's own background load-from-sheet on init(), which the
+    // viewer's callback above has no way to know about since it only fires
+    // from mutations made through the viewer itself.
+    window.Store.subscribe(renderGrid);
 
     window.Drive.resolveProject(param("proj")).then(function (resolved) {
       project = resolved.project;

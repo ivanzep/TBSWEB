@@ -57,7 +57,8 @@ design-review/
       packages.js        ← Review sets for any project without a live Drive folder
       folder-tree.js     ← How those review sets nest under Drive subfolders
       drive.js           Drive URL builders + the two levels of live listing
-      store.js           Comments and markups (localStorage), namespaced per project
+      store.js           Comments and markups (localStorage), namespaced per project —
+                          also drives automatic sheet sync when configured, via sheet-sync.js
       common.js          Shared header/nav/scroll/reveal/modal + helpers
       sidebar.js          The collapsible Drive-folder sidebar (every project page)
       viewer.js          The carousel, the PDF viewer and the markup pins
@@ -69,8 +70,8 @@ design-review/
                           all-files.js so the two stay in lockstep
       all-files.js       Resolves ?proj=/?folder=, then hands off to items-grid.js
       review-log.js      Review log renderer + export/import
-      sheet-sync.js       Optional: talks to apps-script/Code.gs for the
-                          Review Log's Save/Load-to-Sheet buttons
+      sheet-sync.js       Optional: talks to apps-script/Code.gs — store.js calls it
+                          automatically, the Review Log's two buttons call it on demand
   apps-script/
     Code.gs               Google Apps Script Web App backing sheet-sync.js —
                             see "Saving comments to a spreadsheet" below
@@ -163,16 +164,34 @@ Keyboard: `←` `→` move, `M` markup, `+` `−` zoom, `0` reset, `Esc` close,
 
 ## Where comments live
 
-**In the reviewer's own browser (localStorage), not on a server**, and
-**namespaced per project** — a comment made on one project never shows up on
-another, even in the same browser, even though every project shares the same
-four page templates. This is a static site — there's no backend to sync to —
+**In the reviewer's own browser (localStorage) first, always** — every read
+and every write goes through the local copy, and nothing here ever blocks
+on a network round trip. This is a static site with no backend of its own,
 so:
 
-- Comments are private to that person, that browser, and that project.
+- Comments are private to that person, that browser, and that project — a
+  comment made on one project never shows up on another, even in the same
+  browser, even though every project shares the same four page templates.
 - Clearing site data deletes them. The **Clear All** button warns before
-  wiping, and only wipes the project you're currently on.
-- They travel by export, not automatically.
+  wiping, and only wipes the project you're currently on, and — see below —
+  never gets echoed out to the shared sheet even when sync is on.
+- Without `commentsSyncUrl` set (see "Saving comments to a spreadsheet"
+  below), that's the whole story: comments travel by export, not
+  automatically.
+
+**With `commentsSyncUrl` set, comments also sync automatically**, on top of
+that local copy, not instead of it:
+
+- Opening any project-scoped page pulls that project's comments from the
+  sheet in the background and merges in whatever this browser doesn't
+  already have — so a comment made elsewhere shows up here without anyone
+  exporting anything.
+- Adding, editing, resolving, or deleting a comment pushes the whole
+  project back out a couple of seconds later (debounced, so a burst of
+  edits sends once, not once per click).
+- Both directions merge by comment id — de-duplicated, never overwriting —
+  the exact same rule the manual Import Comments button already followed,
+  now just running automatically instead of only on click.
 
 On a project's **Review Log** page:
 
@@ -180,13 +199,12 @@ On a project's **Review Log** page:
   grouped by set and sheet, ready to paste into an email.
 - **Download JSON** — that project's full review file.
 - **Import Comments** — reads a JSON export back in, into the *current*
-  project. It *merges* rather than replaces, de-duplicating by comment id, so
-  two reviewers' files can be combined into one master set without either
-  overwriting the other.
-- **Save to Sheet** / **Load from Sheet** — the same idea as
-  Download/Import, but through a Google Sheet instead of passing files
-  around by hand. Optional and hidden until it's set up — see "Saving
-  comments to a spreadsheet" below.
+  project, merged the same way.
+- **Save to Sheet** / **Load from Sheet** — only shown once sync is set up.
+  The automatic behavior above already keeps things current; these two just
+  force it *right now* instead of waiting for the next edit or page load —
+  handy right after deploying the script, or to confirm a comment actually
+  made it out.
 
 Each log row links back to the exact item the comment is on, inside its
 project.
@@ -197,20 +215,14 @@ better fit than this site's own comment log for a particular file.
 
 ## Saving comments to a spreadsheet
 
-Optional, and off by default — the Review Log's **Save to Sheet** and
-**Load from Sheet** buttons only appear once `commentsSyncUrl` is set in
-`assets/js/config.js`. Without it, comments stay exactly as described
-above: local to the browser, shared by exporting a file. With it, those two
-buttons push/pull through a Google Apps Script Web App instead:
-
-- **Save to Sheet** replaces that project's rows in the sheet with the
-  browser's current full comment set — the same "export everything" snapshot
-  Download JSON already takes, just landing in a spreadsheet row per comment
-  instead of a file.
-- **Load from Sheet** pulls that project's rows back and merges them in the
-  same way Import Comments does — de-duplicated by comment id, so loading
-  never overwrites or duplicates a comment already in the browser, only adds
-  ones it doesn't have yet.
+Optional, and off by default — none of the automatic syncing above runs,
+and the Review Log's Save/Load-to-Sheet buttons stay hidden, until
+`commentsSyncUrl` is set in `assets/js/config.js`. Without it, comments stay
+exactly as described above: local to the browser, shared by exporting a
+file. With it, every page talks to a Google Apps Script Web App in the
+background (see `assets/js/store.js`'s header comment for exactly when),
+and the two Review Log buttons are there for forcing a push or pull on
+demand on top of that.
 
 This is how comments cross browsers or reach someone who wasn't the one who
 wrote them, without anyone manually passing a JSON file around.
@@ -237,7 +249,8 @@ commentsSyncUrl: "https://script.google.com/macros/s/…/exec",
 commentsSyncToken: "the same string you put in SYNC_TOKEN"
 ```
 
-The two Review Log buttons show up as soon as `commentsSyncUrl` is non-empty.
+As soon as `commentsSyncUrl` is non-empty, automatic sync is live on every
+page and the two Review Log buttons show up alongside it.
 
 ### 3. If you change the script later
 
