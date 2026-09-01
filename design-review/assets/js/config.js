@@ -70,7 +70,30 @@ window.SITE = {
   liveIgnore: ["_wip", "_archive", "working", ".DS_Store"],
 
   /* Shown in a project's hero when it has no cover image of its own yet. */
-  fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg"
+  fallbackHeroImage: "../clearview-deck/versions/v5-2b/assets/poolside-terrace.jpg",
+
+  /* ── Comments → Google Sheet (optional) ────────────────────────────────
+   * Lets the Review Log page's "Save to Sheet" / "Load from Sheet" buttons
+   * push/pull comments through a Google Apps Script Web App instead of
+   * only the manual Download JSON / Import Comments files. See
+   * design-review/apps-script/Code.gs and README.md → "Saving comments to
+   * a spreadsheet" for what to deploy and where these two values come from.
+   *
+   * commentsSyncUrl    The deployed Web App's /exec URL. Leave blank and
+   *                    the Save/Load-to-Sheet buttons just don't appear —
+   *                    Download JSON / Import Comments keep working either
+   *                    way, so this is purely additive.
+   * commentsSyncToken  A shared secret the script checks before it'll read
+   *                    or write anything — must match the SYNC_TOKEN
+   *                    Script Property set on the Apps Script project.
+   *                    Like driveApiKey above, this ships in public
+   *                    client-side source, so treat it as a spam deterrent
+   *                    (keeps a stray bot that finds the URL from writing
+   *                    junk into the sheet), not real access control —
+   *                    don't reuse a password-strength secret here.
+   */
+  commentsSyncUrl: "",
+  commentsSyncToken: ""
 };
 
 /* True while config still carries the shipped placeholder — the pages use this

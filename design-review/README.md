@@ -69,6 +69,11 @@ design-review/
                           all-files.js so the two stay in lockstep
       all-files.js       Resolves ?proj=/?folder=, then hands off to items-grid.js
       review-log.js      Review log renderer + export/import
+      sheet-sync.js       Optional: talks to apps-script/Code.gs for the
+                          Review Log's Save/Load-to-Sheet buttons
+  apps-script/
+    Code.gs               Google Apps Script Web App backing sheet-sync.js —
+                            see "Saving comments to a spreadsheet" below
 
 .github/
   workflows/sync-drive-sheet.yml   Regenerates the 3 manifest files above from
@@ -178,14 +183,80 @@ On a project's **Review Log** page:
   project. It *merges* rather than replaces, de-duplicating by comment id, so
   two reviewers' files can be combined into one master set without either
   overwriting the other.
+- **Save to Sheet** / **Load from Sheet** — the same idea as
+  Download/Import, but through a Google Sheet instead of passing files
+  around by hand. Optional and hidden until it's set up — see "Saving
+  comments to a spreadsheet" below.
 
 Each log row links back to the exact item the comment is on, inside its
 project.
 
-If comments ever need to be shared live instead of exported, that needs a
-backend (or Drive's own commenting) — the **Open original** link in the viewer
-goes straight to the file in Drive, where Drive's native comments work
-normally.
+The **Open original** link in the viewer goes straight to the file in Drive
+too, where Drive's own native commenting works normally, if that's ever a
+better fit than this site's own comment log for a particular file.
+
+## Saving comments to a spreadsheet
+
+Optional, and off by default — the Review Log's **Save to Sheet** and
+**Load from Sheet** buttons only appear once `commentsSyncUrl` is set in
+`assets/js/config.js`. Without it, comments stay exactly as described
+above: local to the browser, shared by exporting a file. With it, those two
+buttons push/pull through a Google Apps Script Web App instead:
+
+- **Save to Sheet** replaces that project's rows in the sheet with the
+  browser's current full comment set — the same "export everything" snapshot
+  Download JSON already takes, just landing in a spreadsheet row per comment
+  instead of a file.
+- **Load from Sheet** pulls that project's rows back and merges them in the
+  same way Import Comments does — de-duplicated by comment id, so loading
+  never overwrites or duplicates a comment already in the browser, only adds
+  ones it doesn't have yet.
+
+This is how comments cross browsers or reach someone who wasn't the one who
+wrote them, without anyone manually passing a JSON file around.
+
+### 1. Create the sheet and the script
+
+1. Create a new Google Sheet (or pick an existing one) to hold comments.
+2. **Extensions → Apps Script**. Delete the placeholder `Code.gs` content and
+   paste in `design-review/apps-script/Code.gs` from this repo.
+3. **Project Settings** (the gear icon) → **Script Properties** → add one:
+   key `SYNC_TOKEN`, value any string you make up (a password generator's
+   output is fine — see the security note below for what this does and
+   doesn't protect against). The script refuses every request until this is
+   set, on purpose.
+4. **Deploy → New deployment** → type **Web app** → Execute as **Me** →
+   Who has access **Anyone**. Deploy, and copy the `/exec` URL it gives you.
+
+### 2. Point the site at it
+
+In `assets/js/config.js`, set:
+
+```js
+commentsSyncUrl: "https://script.google.com/macros/s/…/exec",
+commentsSyncToken: "the same string you put in SYNC_TOKEN"
+```
+
+The two Review Log buttons show up as soon as `commentsSyncUrl` is non-empty.
+
+### 3. If you change the script later
+
+Apps Script doesn't republish an existing deployment just because you saved
+the file — **Deploy → Manage deployments → ✎ (edit) → New version → Deploy**
+after any code change, or the Web App keeps serving the old version. This is
+the most common "I edited the script and nothing changed" surprise with
+Apps Script generally, not something specific to this project.
+
+### Security note
+
+`commentsSyncToken` ships in this site's public client-side JS, the same as
+`driveApiKey` already does — anyone who opens dev tools can read it. It's a
+spam deterrent (stops a bot that stumbles on the Web App URL from writing
+junk into the sheet), not real access control, and it isn't trying to be:
+anyone who can already reach this site can already see every comment on it,
+so there's no confidentiality being protected here, only the sheet's
+integrity against garbage writes. Don't reuse a password you care about as
+this token.
 
 ## Adding a review set by hand
 

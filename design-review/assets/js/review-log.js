@@ -111,6 +111,8 @@
       file.value = "";
     });
 
+    bindSheetSync();
+
     document.getElementById("clearAll").addEventListener("click", function () {
       var total = window.Store.allNotes(packages).length;
       // Destructive and unrecoverable — localStorage has no undo — so name the
@@ -129,6 +131,58 @@
   function fileName(ext) {
     var day = new Date().toISOString().slice(0, 10);
     return project.slug + "-review-" + day + "." + ext;
+  }
+
+  // Both buttons stay hidden — set in the HTML — unless config.js's
+  // commentsSyncUrl is set, so a site that hasn't deployed the Apps Script
+  // (design-review/apps-script/Code.gs) never shows a button that can't work.
+  function bindSheetSync() {
+    if (!window.SheetSync.configured()) return;
+
+    var saveBtn = document.getElementById("saveSheet");
+    var loadBtn = document.getElementById("loadSheet");
+    saveBtn.hidden = false;
+    loadBtn.hidden = false;
+
+    // Disables the clicked button (and only that one — the other stays
+    // usable) for the length of the request, restoring its original label
+    // whether the request succeeds or fails, so a slow round trip can't be
+    // fired twice by an impatient double-click.
+    function withBusy(btn, busyLabel, run) {
+      var label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = busyLabel;
+      run().then(function () {
+        btn.disabled = false;
+        btn.textContent = label;
+      }, function (err) {
+        btn.disabled = false;
+        btn.textContent = label;
+        C.toast("Sheet sync failed — " + err.message);
+      });
+    }
+
+    saveBtn.addEventListener("click", function () {
+      withBusy(saveBtn, "Saving…", function () {
+        // Same full-state snapshot Download JSON exports — a save always
+        // replaces this project's sheet rows outright, so it must carry
+        // everything currently in the browser, not just what changed.
+        var data = JSON.parse(window.Store.exportJSON());
+        return window.SheetSync.save(project.slug, project.title, data.items).then(function (res) {
+          C.toast(res.saved + " comment" + (res.saved === 1 ? "" : "s") + " saved to the sheet");
+        });
+      });
+    });
+
+    loadBtn.addEventListener("click", function () {
+      withBusy(loadBtn, "Loading…", function () {
+        return window.SheetSync.load(project.slug).then(function (res) {
+          var added = window.Store.importJSON(JSON.stringify({ version: 1, items: res.items }));
+          C.toast(added + " comment" + (added === 1 ? "" : "s") + " loaded from the sheet");
+          render();
+        });
+      });
+    });
   }
 
   function fillPackageFilter() {
