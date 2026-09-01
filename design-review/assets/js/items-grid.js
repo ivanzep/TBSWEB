@@ -460,11 +460,6 @@ window.ItemsGrid = (function () {
         searchText = e.target.value.trim().toLowerCase();
         render();
       });
-
-      document.getElementById("openFirst").addEventListener("click", function () {
-        var items = visibleItems();
-        if (items.length) window.Viewer.open(items, 0);
-      });
     }
 
     window.Viewer.init(function () { render(); });

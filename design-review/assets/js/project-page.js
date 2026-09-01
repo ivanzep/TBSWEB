@@ -37,7 +37,6 @@
       C.initPage(project);
 
       renderHero();
-      bindDriveLink();
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         var tree = window.Drive.buildTree(project.slug, result.packages);
@@ -110,13 +109,5 @@
       if (hit) return window.Drive.fullUrl(hit);
     }
     return "";
-  }
-
-  function bindDriveLink() {
-    var el = document.querySelector("[data-project-drive-folder]");
-    if (!el) return;
-    var url = window.Drive.folderUrl(project.driveFolderId);
-    if (url) el.href = url;
-    else el.classList.add("is-disabled");
   }
 })();

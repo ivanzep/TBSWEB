@@ -54,9 +54,9 @@ window.SITE = {
 
   /* ── Google Drive ───────────────────────────────────────────────────────
    * driveFolderId  The MASTER folder — one subfolder per project. Powers the
-   *                landing page's project list and the "Open in Drive" link
-   *                there. Leave as the PLACEHOLDER string and the site runs
-   *                on the demo project in projects.js instead.
+   *                landing page's live project list. Leave as the PLACEHOLDER
+   *                string and the site runs on the demo project in
+   *                projects.js instead.
    * driveApiKey    Required to discover projects live. Without it the site
    *                can't list Drive at all and always shows the demo project,
    *                even if driveFolderId is set.

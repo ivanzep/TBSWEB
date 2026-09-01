@@ -29,7 +29,6 @@
       window.Store.init(project.slug, project.title);
       C.initPage(project);
       fixupNavLinks();
-      bindDriveLink();
 
       window.Drive.loadPackages(project.driveFolderId, project.slug).then(function (result) {
         var tree = window.Drive.buildTree(project.slug, result.packages);
@@ -97,14 +96,6 @@
   function fixupNavLinks() {
     document.querySelectorAll('a[href^="./project.html"], a[href^="./review-log.html"]')
       .forEach(function (a) { a.setAttribute("href", withProj(a.getAttribute("href"))); });
-  }
-
-  function bindDriveLink() {
-    var el = document.querySelector("[data-project-drive-folder]");
-    if (!el) return;
-    var url = window.Drive.folderUrl(project.driveFolderId);
-    if (url) el.href = url;
-    else el.classList.add("is-disabled");
   }
 
   // Only reachable if listProjects() somehow comes back completely empty —

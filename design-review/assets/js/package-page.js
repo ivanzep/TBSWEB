@@ -105,11 +105,6 @@
     var note = document.getElementById("pkgNote");
     if (pkg.note) note.textContent = pkg.note;
     else note.hidden = true;
-
-    var drive = document.getElementById("pkgDrive");
-    var url = window.Drive.folderUrl(pkg.driveFolderId || project.driveFolderId);
-    if (url) drive.href = url;
-    else drive.hidden = true;
   }
 
   // `packages` is null when the project itself couldn't be resolved at all
@@ -202,11 +197,6 @@
         });
         renderGrid();
       });
-    });
-
-    document.getElementById("openFirst").addEventListener("click", function () {
-      var items = visibleItems();
-      if (items.length) window.Viewer.open(items, 0);
     });
   }
 
