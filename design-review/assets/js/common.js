@@ -223,6 +223,32 @@ window.SiteCommon = (function () {
   // "file" type) reads as "Image" rather than showing nothing.
   function typeLabel(type) { return TYPE_LABELS[type] || "Image"; }
 
+  var NO_PREVIEW_LABELS = { pdf: "PDF — open to view", video: "Video — open to play" };
+  // What an item-card's .shot shows in place of a thumbnail — both when
+  // Drive.thumbUrl() never had one to offer (no Drive id) and, via
+  // bindThumbFallback() below, when it did but the image itself failed to
+  // load.
+  function noPreviewLabel(type) { return NO_PREVIEW_LABELS[type] || "No preview"; }
+
+  // Swaps a thumbnail <img> for the same placeholder its absence would have
+  // rendered, for whenever Drive's thumbnail endpoint fails to actually
+  // serve one — a stale/not-yet-generated thumbnail, a sharing hiccup —
+  // rather than leaving a browser's broken-image icon on screen. Video
+  // thumbnails hit this more often than image/PDF ones: Drive generates
+  // them later and less reliably. Callers pass the card grid's own host
+  // element right after rendering it; every <img data-fallback> inside
+  // gets one error listener, self-removing via {once:true} once it's fired.
+  function bindThumbFallback(host) {
+    host.querySelectorAll(".shot img[data-fallback]").forEach(function (img) {
+      img.addEventListener("error", function () {
+        var span = document.createElement("span");
+        span.className = "shot-empty";
+        span.textContent = img.getAttribute("data-fallback");
+        img.replaceWith(span);
+      }, { once: true });
+    });
+  }
+
   var toastTimer = null;
   function toast(message) {
     var el = document.getElementById("toast");
@@ -286,6 +312,8 @@ window.SiteCommon = (function () {
     formatDate: formatDate,
     formatDateTime: formatDateTime,
     typeLabel: typeLabel,
+    noPreviewLabel: noPreviewLabel,
+    bindThumbFallback: bindThumbFallback,
     toast: toast,
     copyText: copyText,
     downloadFile: downloadFile

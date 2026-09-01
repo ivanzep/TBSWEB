@@ -160,9 +160,9 @@
         C.escapeHtml(full) + '">';
       html += '<span class="shot">';
       html += thumb
-        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
-        : '<span class="shot-empty">' +
-            (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
+        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" data-fallback="' +
+            C.escapeHtml(C.noPreviewLabel(item.type)) + '" alt="">'
+        : '<span class="shot-empty">' + C.escapeHtml(C.noPreviewLabel(item.type)) + "</span>";
       html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
       if (state.notes.length) {
         html += '<span class="note-count">' + state.notes.length +
@@ -183,6 +183,7 @@
       });
     });
 
+    C.bindThumbFallback(host);
     C.revealWithin(host);
   }
 

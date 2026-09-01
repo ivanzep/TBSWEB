@@ -227,9 +227,9 @@ window.ItemsGrid = (function () {
         C.escapeHtml(full) + '">';
       html += '<span class="shot">';
       html += thumb
-        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
-        : '<span class="shot-empty">' +
-            (item.type === "pdf" ? "PDF — open to view" : "No preview") + "</span>";
+        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" data-fallback="' +
+            C.escapeHtml(C.noPreviewLabel(item.type)) + '" alt="">'
+        : '<span class="shot-empty">' + C.escapeHtml(C.noPreviewLabel(item.type)) + "</span>";
       html += '<span class="type-tag">' + C.typeLabel(item.type) + "</span>";
       if (notes.length) {
         html += '<span class="note-count">' + notes.length +
@@ -333,6 +333,7 @@ window.ItemsGrid = (function () {
       host.classList.remove("is-grouped");
       host.innerHTML = items.map(itemCardHtml).join("");
       bindItemClicks(host);
+      C.bindThumbFallback(host);
       C.revealWithin(host);
     }
 
@@ -346,6 +347,7 @@ window.ItemsGrid = (function () {
       host.innerHTML = renderGroupNodes(tree, map);
       bindGroupToggles(host);
       bindItemClicks(host);
+      C.bindThumbFallback(host);
       C.revealWithin(host);
     }
 

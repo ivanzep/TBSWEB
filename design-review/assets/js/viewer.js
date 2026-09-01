@@ -24,6 +24,10 @@ window.Viewer = (function () {
   var index = 0;
   var zoom = 1;
   var pan = { x: 0, y: 0 };
+  // Which element applyTransform() scales — the image wrap for images, the
+  // PDF/video iframe for everything else (see the comment on applyTransform()
+  // below). Kept in sync with the current item at the top of render().
+  var isImageItem = true;
   var markupMode = false;
   var pendingPin = null;
   var natural = { w: 0, h: 0 };
@@ -129,16 +133,19 @@ window.Viewer = (function () {
     var item = current();
     if (!item) return;
 
+    // Set before resetZoom() (not after) — it calls applyTransform(),
+    // which needs to already know which element it's resetting the
+    // transform on for the item about to display.
+    isImageItem = item.type === "image";
     resetZoom();
     pendingPin = null;
 
     els.counter.textContent = (index + 1) + " / " + items.length;
     els.title.textContent = item.sheet ? item.sheet + " — " + item.name : item.name;
 
-    var isImage = item.type === "image";
+    var isImage = isImageItem;
     els.overlay.classList.toggle("is-pdf", !isImage);
     els.markupBtn.hidden = !isImage;
-    els.zoomBox.hidden = !isImage;
 
     if (isImage) {
       els.embed.hidden = true;
@@ -242,9 +249,20 @@ window.Viewer = (function () {
     applyTransform();
   }
 
+  // Images pan AND zoom (drag support, wheel-zoom, markup pins that need to
+  // track the transform) via els.wrap. A PDF or video has none of that — it's
+  // Drive's own iframe, scrollable/interactive on its own — so it only ever
+  // gets scale(), no translate, applied to the iframe itself: enough for the
+  // zoom buttons and +/- keys to work there too (that's the whole fix this
+  // branch exists for — Drive's own in-iframe toolbar isn't reachable on a
+  // phone, so without this a mobile reviewer had no way to zoom a PDF at all).
   function applyTransform() {
-    els.wrap.style.transform =
-      "translate(" + pan.x + "px, " + pan.y + "px) scale(" + zoom + ")";
+    if (isImageItem) {
+      els.wrap.style.transform =
+        "translate(" + pan.x + "px, " + pan.y + "px) scale(" + zoom + ")";
+    } else {
+      els.frame.style.transform = "scale(" + zoom + ")";
+    }
     els.overlay.classList.toggle("is-zoomed", zoom > 1);
     document.getElementById("zoomLevel").textContent = Math.round(zoom * 100) + "%";
     // Markers are children of the scaled wrapper, so counter-scale them to hold
@@ -532,9 +550,10 @@ window.Viewer = (function () {
   function renderFilmstrip() {
     els.filmstrip.innerHTML = items.map(function (item, i) {
       var thumb = window.Drive.thumbUrl(item, 240);
+      var fallback = C.escapeHtml(String(item.sheet || (i + 1)));
       var inner = thumb
-        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" alt="">'
-        : '<span class="film-fallback">' + C.escapeHtml(item.sheet || (i + 1)) + "</span>";
+        ? '<img loading="lazy" src="' + C.escapeHtml(thumb) + '" data-fallback="' + fallback + '" alt="">'
+        : '<span class="film-fallback">' + fallback + "</span>";
       return '<button type="button" class="film" data-i="' + i + '" title="' +
         C.escapeHtml(item.name) + '">' + inner +
         '<span class="film-dot"></span></button>';
@@ -544,6 +563,18 @@ window.Viewer = (function () {
       btn.addEventListener("click", function () {
         goTo(Number(btn.getAttribute("data-i")));
       });
+    });
+    // Same "Drive never actually served a thumbnail" case items-grid.js's
+    // bindThumbFallback() covers for the main grid — hits video items more
+    // than image/PDF ones, so worth covering here too rather than leaving a
+    // broken-image icon in the strip.
+    els.filmstrip.querySelectorAll("img[data-fallback]").forEach(function (img) {
+      img.addEventListener("error", function () {
+        var span = document.createElement("span");
+        span.className = "film-fallback";
+        span.textContent = img.getAttribute("data-fallback");
+        img.replaceWith(span);
+      }, { once: true });
     });
     highlightFilmstrip();
   }
