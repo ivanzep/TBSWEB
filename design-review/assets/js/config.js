@@ -92,8 +92,8 @@ window.SITE = {
    *                    junk into the sheet), not real access control —
    *                    don't reuse a password-strength secret here.
    */
-  commentsSyncUrl: "",
-  commentsSyncToken: ""
+  commentsSyncUrl: "https://script.google.com/macros/s/AKfycbyRq9ZTvBxwPQVbW3VgQxI4Nhq1VqhAd47-atXRipwF3jv1l4WZZazXZ5HDtUJBZL2N/exec",
+  commentsSyncToken: "wMd8d08FxQV1OZSNiyjMg5Zhmt1m06SU"
 };
 
 /* True while config still carries the shipped placeholder — the pages use this
