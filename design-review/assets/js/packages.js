@@ -8,6 +8,22 @@
  * is overwritten on the next run.
  */
 window.PACKAGES = {
+  "hilltop-hotel": [
+    {
+      "slug": "exterior",
+      "title": "EXTERIOR",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "17Mgb29RFWVrmJ9qw5Sj5QYIgo_usQo9W",
+          "name": "2026-08-20 16-06-11 - Custom",
+          "type": "image"
+        }
+      ]
+    }
+  ],
   "clearview-deck": [
     {
       "slug": "20260821-v5-6",

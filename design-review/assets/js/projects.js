@@ -9,6 +9,18 @@
  */
 window.PROJECTS = [
   {
+    "slug": "hilltop-hotel",
+    "title": "HILLTOP HOTEL",
+    "client": "",
+    "location": "",
+    "scope": "",
+    "phase": "",
+    "year": "",
+    "summary": "",
+    "thumbnail": "https://drive.google.com/thumbnail?id=1Tr0xckI8DTeYY1UqZzkHwubDEhVWXbaU&sz=w1600",
+    "driveFolderId": ""
+  },
+  {
     "slug": "clearview-deck",
     "title": "CLEARVIEW DECK",
     "client": "",

@@ -8,6 +8,12 @@
  * is overwritten on the next run.
  */
 window.FOLDER_TREE = {
+  "hilltop-hotel": [
+    {
+      "title": "EXTERIOR",
+      "set": "exterior"
+    }
+  ],
   "clearview-deck": [
     {
       "title": "20260821",
