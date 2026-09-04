@@ -102,6 +102,41 @@ window.FOLDER_TREE = {
         {
           "title": "20260826-UNIT PLANS",
           "set": "bungalow-a-20260826-unit-plans"
+        },
+        {
+          "title": "20260903-BUNGALOW A",
+          "children": [
+            {
+              "title": "V27.3",
+              "children": [
+                {
+                  "title": "V27.3a",
+                  "set": "bungalow-a-20260903-bungalow-a-v27-3-v27-3a"
+                },
+                {
+                  "title": "V27.3b",
+                  "set": "bungalow-a-20260903-bungalow-a-v27-3-v27-3b"
+                },
+                {
+                  "title": "V27.3c",
+                  "set": "bungalow-a-20260903-bungalow-a-v27-3-v27-3c"
+                }
+              ]
+            },
+            {
+              "title": "V27.4",
+              "children": [
+                {
+                  "title": "V27.4a",
+                  "set": "bungalow-a-20260903-bungalow-a-v27-4-v27-4a"
+                },
+                {
+                  "title": "V27.4b",
+                  "set": "bungalow-a-20260903-bungalow-a-v27-4-v27-4b"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
