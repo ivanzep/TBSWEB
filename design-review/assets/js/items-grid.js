@@ -11,6 +11,12 @@ window.ItemsGrid = (function () {
 
   var C = window.SiteCommon;
 
+  // Every value a shareable-link param is allowed to carry — anything else
+  // (a hand-edited or stale URL) falls back to the same default the control
+  // itself starts at, rather than silently filtering to nothing or erroring.
+  var TYPE_FILTERS = ["all", "image", "pdf"];
+  var SORT_KEYS = ["folder", "set", "name", "sheet", "type", "comments", "modified"];
+
   // opts:
   //   project    resolved project ({slug, title, driveFolderId, ...})
   //   packages   this page's package list (already folder-scoped, if that's
@@ -26,15 +32,25 @@ window.ItemsGrid = (function () {
     var packages = opts.packages || [];
     var tree = opts.tree || [];
 
-    var typeFilter = "all";
-    var commentsOnly = false;
-    var setFilter = "";
+    // Filter/sort state seeds from the URL (see readUrlParams() below) so a
+    // copied link reproduces the exact view it was copied from — the same
+    // type/set/comments filter, sort, direction and search text — for
+    // anyone who opens it, including this same browser on reload. Every
+    // control's change handler calls syncUrlToState() to keep the address
+    // bar current as the state changes, via history.replaceState() (no new
+    // back-button entry per click — this is "what am I looking at right
+    // now," not a navigation).
+    var urlState = readUrlParams();
+
+    var typeFilter = urlState.type;
+    var commentsOnly = urlState.comments;
+    var setFilter = urlState.set;
     // Folder Order is the default view — it's also the grouped/collapsible
     // one, so the grid opens somewhere that reflects real Drive structure
     // rather than an arbitrary flattened list.
-    var sortKey = "folder";
-    var sortReverse = false;
-    var searchText = "";
+    var sortKey = urlState.sort;
+    var sortReverse = urlState.rev;
+    var searchText = urlState.q;
 
     // Collapse state for the grouped ("Folder Order") view, keyed by a tree
     // node's stable slug so it survives the re-renders Store.subscribe(render)
@@ -65,6 +81,48 @@ window.ItemsGrid = (function () {
         });
       });
       return out;
+    }
+
+    /* ── Shareable-link state ─────────────────────────────────────────────── */
+
+    function readUrlParams() {
+      var params = new URLSearchParams(location.search);
+      var type = params.get("type");
+      var sort = params.get("sort");
+      return {
+        type: TYPE_FILTERS.indexOf(type) !== -1 ? type : "all",
+        comments: params.get("comments") === "1",
+        set: params.get("set") || "",
+        sort: SORT_KEYS.indexOf(sort) !== -1 ? sort : "folder",
+        rev: params.get("rev") === "1",
+        q: (params.get("q") || "").toLowerCase()
+      };
+    }
+
+    // Called after every control change — rewrites just the params this
+    // module owns (type/comments/set/sort/rev/q), via replaceState so
+    // clicking through filters doesn't fill up the back button with one
+    // entry per click. Anything else already in the URL (?proj=, ?folder=,
+    // a future param neither page nor this module knows about) passes
+    // through untouched — this only ever edits its own six keys. A control
+    // at its default value omits that key entirely, so a plain, unfiltered
+    // view keeps the same short URL it always had.
+    function syncUrlToState() {
+      var params = new URLSearchParams(location.search);
+      function set(key, value, isDefault) {
+        if (isDefault) params.delete(key);
+        else params.set(key, value);
+      }
+      set("type", typeFilter, typeFilter === "all");
+      set("comments", "1", !commentsOnly);
+      set("set", setFilter, !setFilter);
+      set("sort", sortKey, sortKey === "folder");
+      set("rev", "1", !sortReverse);
+      set("q", searchText, !searchText);
+
+      var qs = params.toString();
+      var url = location.pathname + (qs ? "?" + qs : "") + location.hash;
+      history.replaceState(null, "", url);
     }
 
     function fillSetFilter() {
@@ -419,6 +477,7 @@ window.ItemsGrid = (function () {
           document.querySelectorAll("[data-filter]").forEach(function (b) {
             b.classList.toggle("is-active", b === btn);
           });
+          syncUrlToState();
           render();
         });
       });
@@ -427,16 +486,19 @@ window.ItemsGrid = (function () {
       commentsBtn.addEventListener("click", function () {
         commentsOnly = !commentsOnly;
         commentsBtn.classList.toggle("is-active", commentsOnly);
+        syncUrlToState();
         render();
       });
 
       document.getElementById("filterSet").addEventListener("change", function (e) {
         setFilter = e.target.value;
+        syncUrlToState();
         render();
       });
 
       document.getElementById("sortBy").addEventListener("change", function (e) {
         sortKey = e.target.value;
+        syncUrlToState();
         render();
       });
 
@@ -445,6 +507,7 @@ window.ItemsGrid = (function () {
         sortReverse = !sortReverse;
         reverseBtn.classList.toggle("is-active", sortReverse);
         reverseBtn.setAttribute("aria-pressed", sortReverse ? "true" : "false");
+        syncUrlToState();
         render();
       });
 
@@ -460,12 +523,49 @@ window.ItemsGrid = (function () {
 
       document.getElementById("filterText").addEventListener("input", function (e) {
         searchText = e.target.value.trim().toLowerCase();
+        syncUrlToState();
         render();
       });
+
+      var copyLinkBtn = document.getElementById("copyLink");
+      if (copyLinkBtn) {
+        copyLinkBtn.addEventListener("click", function () {
+          // The address bar is already kept current by syncUrlToState() on
+          // every control above, so there's nothing left to build here —
+          // whatever's showing right now is exactly what location.href says.
+          C.copyText(location.href).then(function () {
+            C.toast("Link copied — includes the current filters and sort");
+          }).catch(function () {
+            C.toast("Couldn't copy — copy the address bar instead");
+          });
+        });
+      }
+    }
+
+    // Puts every control's on-screen state in sync with whatever
+    // readUrlParams() seeded it with, so a shared link doesn't just apply
+    // the filters silently — the toolbar visibly shows why the grid looks
+    // the way it does. Must run after fillSetFilter() (the Set dropdown has
+    // no options, so nothing to select, until then) and before the first
+    // render() (which reads the underlying variables directly and doesn't
+    // need any of this — this is purely cosmetic, syncing the controls to
+    // state that's already correct).
+    function applyUrlStateToControls() {
+      document.querySelectorAll("[data-filter]").forEach(function (b) {
+        b.classList.toggle("is-active", b.getAttribute("data-filter") === typeFilter);
+      });
+      document.getElementById("filterComments").classList.toggle("is-active", commentsOnly);
+      document.getElementById("filterSet").value = setFilter;
+      document.getElementById("sortBy").value = sortKey;
+      var reverseBtn = document.getElementById("sortReverse");
+      reverseBtn.classList.toggle("is-active", sortReverse);
+      reverseBtn.setAttribute("aria-pressed", sortReverse ? "true" : "false");
+      document.getElementById("filterText").value = searchText;
     }
 
     window.Viewer.init(function () { render(); });
     fillSetFilter();
+    applyUrlStateToControls();
     bindControls();
     render();
 
