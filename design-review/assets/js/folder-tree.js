@@ -137,6 +137,10 @@ window.FOLDER_TREE = {
               ]
             }
           ]
+        },
+        {
+          "title": "20260910-BUNGALOW A",
+          "set": "bungalow-a-20260910-bungalow-a"
         }
       ]
     },
@@ -226,6 +230,14 @@ window.FOLDER_TREE = {
         {
           "title": "20260807-RESTAURANT",
           "set": "restaurant-20260807-restaurant"
+        },
+        {
+          "title": "20260909",
+          "set": "restaurant-20260909"
+        },
+        {
+          "title": "20260910-EXTERIOR",
+          "set": "restaurant-20260910-exterior"
         }
       ]
     }

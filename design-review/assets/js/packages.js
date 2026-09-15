@@ -241,6 +241,49 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "restaurant-20260910-exterior",
+      "title": "20260910-EXTERIOR",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1m4hyA5Y1WzAmUpTiYDhuTSjMGtPCYs-B",
+          "name": "LA COSTA-20260910-REST-V49-01",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "restaurant-20260909",
+      "title": "20260909",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1cfnh87FtnRPkhOeXDcMzMX4wIEAiBpLF",
+          "name": "LA COSTA-20260909-V48-1-RESTAURANT - FLOOR PLAN - 1",
+          "type": "pdf"
+        },
+        {
+          "id": "1X_OfhS26pErME-WXsT-t5dVYi5uhoP6z",
+          "name": "LA COSTA-20260909-V48-2-RESTAURANT - FLOOR PLAN - L2",
+          "type": "pdf"
+        },
+        {
+          "id": "1Mb2goPxp64ijoxbJLID07RtzHJMTB8JR",
+          "name": "LA COSTA-20260909-V48-7-ENLARGED RESTAURANT - FLOOR PLAN - 1",
+          "type": "pdf"
+        },
+        {
+          "id": "1AqybhJwYzRusKA7oKqjYm0qoMdoFC4V-",
+          "name": "LA COSTA-20260909-V48-8-ENLARGED RESTAURANT - FLOOR PLAN - 2",
+          "type": "pdf"
+        }
+      ]
+    },
+    {
       "slug": "restaurant-20260807-restaurant",
       "title": "20260807-RESTAURANT",
       "issued": "",
@@ -1309,6 +1352,50 @@ window.PACKAGES = {
           "id": "11eLzCVG9f97G7VH_tEZhVhEBRxBVkqQ0",
           "name": "LA COSTA-BUNGALOW B-EXTERIOR 5-20260416",
           "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260910-bungalow-a",
+      "title": "20260910-BUNGALOW A",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1NIooy0pZRkaJLLgBfkBsu5P-kzHxI9Nv",
+          "name": "LA COSTA-20260910-BA-V30-01",
+          "type": "image"
+        },
+        {
+          "id": "1U7GCJ-BQDBg3L6u-lM8DsNJDBpRbl6eC",
+          "name": "LA COSTA-20260910-BA-V30-02",
+          "type": "image"
+        },
+        {
+          "id": "1hT_FpAbqVxqZf-Qs3nVIFIOcchzv93pg",
+          "name": "LA COSTA-20260910-BA-V30-03",
+          "type": "image"
+        },
+        {
+          "id": "1L51sQpsoRbzx53Yr_tHA0eG1Kvl7ZZMm",
+          "name": "LA COSTA-20260910-BA-V30-04",
+          "type": "image"
+        },
+        {
+          "id": "1ZhawJpgtHJ6ptgdgtr-wAcOjKFPGdpbN",
+          "name": "LA COSTA-20260910-BA-V30-05",
+          "type": "image"
+        },
+        {
+          "id": "1Ocpqm4-fjThevMJp72ZIQUJewqmQ6VOd",
+          "name": "LA COSTA-20260910-BA-V30-06",
+          "type": "image"
+        },
+        {
+          "id": "17PIh1O6F73JSlQbS7-WjrtcYXuQVAHtA",
+          "name": "Thumbs",
+          "type": "file"
         }
       ]
     },

@@ -41,7 +41,7 @@ window.PROJECTS = [
     "phase": "",
     "year": "",
     "summary": "",
-    "thumbnail": "https://drive.google.com/thumbnail?id=1NHVqH2glmUHtkCLSYli7b2lf0wRVPf3Q&sz=w1600",
+    "thumbnail": "https://drive.google.com/thumbnail?id=1Pv_K7Osha-NunQ-fhFiNLPHfVRTVrK3n&sz=w1600",
     "driveFolderId": ""
   }
 ];
