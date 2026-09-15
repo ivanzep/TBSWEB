@@ -241,6 +241,20 @@ window.PACKAGES = {
   ],
   "la-costa": [
     {
+      "slug": "restaurant-20260914-rest",
+      "title": "20260914-REST",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1SmOMOR4qCoMFwvQJmIuD47xxL8f1_qPs",
+          "name": "LA COSTA-20260914-V49-1-RESTAURANT - FLOOR PLAN - 1",
+          "type": "pdf"
+        }
+      ]
+    },
+    {
       "slug": "restaurant-20260910-exterior",
       "title": "20260910-EXTERIOR",
       "issued": "",
@@ -1352,6 +1366,35 @@ window.PACKAGES = {
           "id": "11eLzCVG9f97G7VH_tEZhVhEBRxBVkqQ0",
           "name": "LA COSTA-BUNGALOW B-EXTERIOR 5-20260416",
           "type": "image"
+        }
+      ]
+    },
+    {
+      "slug": "bungalow-a-20260914-bungalow-a",
+      "title": "20260914-BUNGALOW A",
+      "issued": "",
+      "note": "",
+      "driveFolderId": "",
+      "items": [
+        {
+          "id": "1izPRE0o7OxMq3KO9khqSfx6ZGzIsbDS6",
+          "name": "LA COSTA-20260914-BA-V30-01",
+          "type": "image"
+        },
+        {
+          "id": "1D4xXpGHe1gGyo_WwFe6SI4gCd38cija0",
+          "name": "LA COSTA-20260914-BA-V30-02",
+          "type": "image"
+        },
+        {
+          "id": "1Wq9FCw4zbAAZOcXrQlLLodmZq-7lAOPG",
+          "name": "LA COSTA-20260914-BA-V30-03",
+          "type": "image"
+        },
+        {
+          "id": "1Vi6hqgSigMr70UnBiTfskNi00_bZrGKD",
+          "name": "Thumbs",
+          "type": "file"
         }
       ]
     },
