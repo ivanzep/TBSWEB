@@ -1,0 +1,642 @@
+[
+ {
+  "n": 1,
+  "title": "Cover",
+  "section": "Cover"
+ },
+ {
+  "n": 2,
+  "title": "Section: Team",
+  "section": "Cover"
+ },
+ {
+  "n": 3,
+  "title": "Company Chart",
+  "section": "Company",
+  "num": {
+   "x0": 1177.3745,
+   "y0": 755.8803,
+   "x1": 1182.9345,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 4,
+  "title": "About The Brown Studio",
+  "section": "Company",
+  "num": {
+   "x0": 1177.3745,
+   "y0": 755.8803,
+   "x1": 1182.9345,
+   "y1": 769.5303,
+   "bg": "#F7F2EE"
+  }
+ },
+ {
+  "n": 5,
+  "title": "Section: Design Studio",
+  "section": "Design Studio"
+ },
+ {
+  "n": 6,
+  "title": "Lindsay Brown",
+  "section": "Design Studio",
+  "num": {
+   "x0": 583.3745,
+   "y0": 755.8803,
+   "x1": 588.9345,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 7,
+  "title": "Rory Brown",
+  "section": "Design Studio",
+  "num": {
+   "x0": 1177.4464,
+   "y0": 755.8803,
+   "x1": 1183.0064,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 8,
+  "title": "We Are North County",
+  "section": "Design Studio",
+  "num": {
+   "x0": 1177.4464,
+   "y0": 755.8803,
+   "x1": 1183.0064,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 9,
+  "title": "We Are Local In Many Areas",
+  "section": "Design Studio",
+  "num": {
+   "x0": 1177.4464,
+   "y0": 755.8803,
+   "x1": 1183.0064,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 10,
+  "title": "Section: Construction",
+  "section": "Construction"
+ },
+ {
+  "n": 11,
+  "title": "Brown Bag Builders",
+  "section": "Construction",
+  "num": {
+   "x0": 1172.5552,
+   "y0": 755.8803,
+   "x1": 1182.9352,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 12,
+  "title": "The Foundry (intro)",
+  "section": "Construction"
+ },
+ {
+  "n": 13,
+  "title": "The Foundry",
+  "section": "Construction",
+  "num": {
+   "x0": 1171.813,
+   "y0": 755.8803,
+   "x1": 1182.933,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 14,
+  "title": "Section: Retail",
+  "section": "Retail"
+ },
+ {
+  "n": 15,
+  "title": "SOTA",
+  "section": "Retail",
+  "num": {
+   "x0": 577.813,
+   "y0": 755.8803,
+   "x1": 588.933,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 16,
+  "title": "Section: Work Samples",
+  "section": "Work Samples"
+ },
+ {
+  "n": 17,
+  "title": "4 Seasons",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 18,
+  "title": "260 Broadway",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 19,
+  "title": "Clearview",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 20,
+  "title": "Neptune 1316",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 21,
+  "title": "Miradoro",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 22,
+  "title": "Basecamp",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 23,
+  "title": "Freewyld",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 24,
+  "title": "SHFT Hotel",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 25,
+  "title": "Carson Master Plan / Urban Surf Resort",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 26,
+  "title": "Chamonix",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 27,
+  "title": "Hotel 101",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 28,
+  "title": "Hygeia Lot 3",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 29,
+  "title": "La Costa Hotel",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 30,
+  "title": "Rue Adriane",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 31,
+  "title": "Burgundy 2",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 32,
+  "title": "4th St",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 33,
+  "title": "Moonlight Bluff 1",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 34,
+  "title": "Moonlight Bluff 2",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 35,
+  "title": "Sanford SFR",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 36,
+  "title": "Andrew 241",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 37,
+  "title": "Tamarack",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 38,
+  "title": "Church",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 39,
+  "title": "Grays Crossing",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 40,
+  "title": "St. Croix Residence",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 41,
+  "title": "Wood Dr.",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 42,
+  "title": "Mammoth MF",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 43,
+  "title": "Moab ADU",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 44,
+  "title": "Summit (Cardiff)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 45,
+  "title": "Sheridan 2054",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 46,
+  "title": "The Palisades (1)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 47,
+  "title": "The Palisades (2)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 48,
+  "title": "The Palisades (3)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 49,
+  "title": "Summit (Squaw Valley) (1)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 50,
+  "title": "Summit (Squaw Valley) (2)",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 51,
+  "title": "Mountainside",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 52,
+  "title": "Passiflora",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 53,
+  "title": "Rancho Diegueño",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 54,
+  "title": "Summit - Lot 2",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 55,
+  "title": "Sanford MF",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 56,
+  "title": "Santa Fe",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 57,
+  "title": "Summit Cardiff",
+  "section": "Work Samples",
+  "num": {
+   "x0": 1171.877,
+   "y0": 755.8803,
+   "x1": 1182.997,
+   "y1": 769.5303,
+   "bg": "#FFFFFF"
+  }
+ },
+ {
+  "n": 58,
+  "title": "Thank You",
+  "section": "Closing"
+ }
+]
