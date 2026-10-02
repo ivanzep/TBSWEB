@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LB-MAKER · Leave-Behind Assembler</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="assets/logo.png" alt="the brown studio"><span>LB-MAKER</span></div>
+  <nav class="tabs" role="tablist">
+    <button class="tab on" data-view="assemble" role="tab">1 · Assemble</button>
+    <button class="tab" data-view="project" role="tab">2 · Add project</button>
+  </nav>
+  <div class="export">
+    <span id="count" class="count"></span>
+    <button id="exportBtn" class="btn primary">Export PDF</button>
+  </div>
+</header>
+
+<main>
+<!-- ============ ASSEMBLE ============ -->
+<section id="view-assemble" class="view on">
+  <div class="toolbar">
+    <div class="chips" id="chips"></div>
+    <div class="tools">
+      <button class="btn" id="selAll">Select all shown</button>
+      <button class="btn" id="selNone">Clear shown</button>
+      <button class="btn ghost" id="resetOrder" title="Restore original page order">Reset order</button>
+    </div>
+  </div>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="optRenumber" checked> Update page numbers</label>
+    <label class="opt">First page is number <input type="number" id="optStart" min="0" value="1"></label>
+    <label class="opt">Date label <input type="text" id="optDate" value="OCT 2026" maxlength="14"></label>
+    <span class="hint">Tick the pages to include. Use ◀ ▶ to reorder. Numbers shown on each card are the new page numbers.</span>
+  </div>
+  <div id="grid" class="grid"></div>
+</section>
+
+<!-- ============ ADD PROJECT ============ -->
+<section id="view-project" class="view">
+  <div class="split">
+    <form id="pform" class="pform" autocomplete="off">
+      <h2 id="pformTitle">Add a project</h2>
+      <p class="hint">Fills the same "Work Samples" page format used in the PDF.</p>
+      <label>Project name<input name="name" required placeholder="e.g. 4 SEASONS"></label>
+      <div class="row3">
+        <label>Location<input name="location" placeholder="ASPEN, CO"></label>
+        <label>Type<input name="type" placeholder="SINGLE FAMILY RESIDENCE"></label>
+        <label>Role<input name="role" placeholder="DESIGN / ARCHITECT"></label>
+      </div>
+      <label>Description <small>one paragraph per line</small><textarea name="description" rows="7"></textarea></label>
+      <label>Program overview <small>one item per line (optional)</small><textarea name="program" rows="4" placeholder="1 Bedroom Units: 50&#10;On-site parking: 99 spaces"></textarea></label>
+
+      <fieldset>
+        <legend>Layout</legend>
+        <div id="layouts" class="layouts"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Photos <small>first photo is the hero</small></legend>
+        <input type="file" id="photoIn" accept="image/*" multiple>
+        <div id="photoList" class="photolist"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Plan / site map <small>optional · shown under the text</small></legend>
+        <div class="row2">
+          <input type="file" id="leftIn" accept="image/*">
+          <input name="leftLabel" placeholder="Label (SITE MAP)">
+        </div>
+        <div id="leftList" class="photolist"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Callout <small>optional · italic quote at bottom-left</small></legend>
+        <input name="calloutHead" placeholder="Heading (blue), e.g. Four Seasons Flagship:">
+        <textarea name="calloutBody" rows="3" placeholder="Body text"></textarea>
+      </fieldset>
+
+      <label>Insert position
+        <select name="after" id="afterSel"></select>
+      </label>
+
+      <div class="formbtns">
+        <button class="btn primary" type="submit" id="pSubmit">Add to deck</button>
+        <button class="btn" type="button" id="pCancel" hidden>Cancel edit</button>
+      </div>
+    </form>
+
+    <aside class="previewcol">
+      <div class="pvhead">Live preview <span id="pvNum" class="muted"></span></div>
+      <canvas id="pv" width="1224" height="792"></canvas>
+      <ul id="pvWarn" class="warn"></ul>
+    </aside>
+  </div>
+</section>
+</main>
+
+<div id="lightbox" class="lightbox" hidden>
+  <button class="lbx" aria-label="Close">×</button>
+  <div class="lbbody"><img id="lbImg" alt=""></div>
+  <div class="lbcap" id="lbCap"></div>
+</div>
+<div id="busy" class="busy" hidden><div class="busybox"><div class="spin"></div><div id="busyMsg">Working…</div></div></div>
+
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="vendor/fontkit.umd.min.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
