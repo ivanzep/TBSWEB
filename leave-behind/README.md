@@ -16,7 +16,12 @@ leave-behind/
   assets/img/             logo.png + project images (below)
 ```
 
-## Adding images (from the PDF)
+## Images
+
+Images were extracted from the compressed company-profiles PDF (`pdfimages -j -p`) and mapped to projects by page.
+Grays Crossing has no photo in the PDF and shows a placeholder. Section photos live in `assets/img/sections/`.
+
+## Adding or replacing images
 
 Images are detected automatically by filename — no code changes needed. Projects without
 images show a placeholder tile.
