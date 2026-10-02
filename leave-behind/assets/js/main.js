@@ -116,12 +116,14 @@
     if (p.link) { link.href = p.link; link.textContent = p.linkLabel || "View project"; }
 
     var gal = document.getElementById("modalGallery"); gal.textContent = "";
-    var ph = el("div", "ph-slide"); paint(ph, p); gal.appendChild(ph);
+    var track = el("div", "car-track"); gal.appendChild(track);
+    var carousel = window.LB_carousel(gal);
+    var ph = el("figure", "car-slide ph-slide"); paint(ph, p); track.appendChild(ph); carousel.refresh();
     var first = true;
     function add(u) {
-      var im = new Image(); im.src = u; im.alt = p.name; im.loading = "lazy";
-      if (first) { gal.textContent = ""; first = false; }
-      gal.appendChild(im);
+      if (first) { track.textContent = ""; first = false; }
+      var f = el("figure", "car-slide"), im = new Image(); im.src = u; im.alt = p.name;
+      f.appendChild(im); track.appendChild(f); carousel.refresh();
     }
     probe(cover(p), function (u) {
       add(u);

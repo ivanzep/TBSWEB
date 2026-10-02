@@ -19,7 +19,7 @@ leave-behind/
 ## Images
 
 Images were extracted from the compressed company-profiles PDF (`pdfimages -j -p`) and mapped to projects by page.
-Grays Crossing has no photo in the PDF and shows a placeholder. Section photos live in `assets/img/sections/`.
+Location maps (North County, Tahoe) are cropped from PDF page 8–9 into `assets/img/maps/`; Grays Crossing, 260 Broadway, Palisades and Santa Fe include site plans cropped from their pages. Section photos live in `assets/img/sections/`.
 
 ## Adding or replacing images
 
