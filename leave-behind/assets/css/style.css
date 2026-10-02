@@ -27,8 +27,8 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.08; margin: 0 0 0.5em; }
-h2 { font-size: clamp(2rem, 4.5vw, 3.6rem); max-width: 18ch; }
-h3 { font-size: 1.35rem; margin-top: 2.5rem; }
+h2 { font-size: clamp(2.6rem, 7vw, 5.6rem); max-width: 16ch; line-height: 1; margin-bottom: 0.35em; }
+h3 { font-size: 1.05rem; letter-spacing: 0.12em; margin-top: 2.5rem; color: var(--color-accent); }
 p { margin: 0 0 1.1em; }
 .wrap { width: min(1180px, 100% - 48px); margin: 0 auto; }
 .center { text-align: center; }
@@ -74,7 +74,7 @@ p { margin: 0 0 1.1em; }
 .section { padding: clamp(72px, 12vw, 160px) 0; position: relative; }
 .section-alt { background: var(--color-bg-alt); }
 .section-dark { background: var(--color-dark); color: var(--color-on-dark); }
-.section-dark .eyebrow { color: var(--color-accent-soft); }
+.section-dark .eyebrow, .section-dark h3 { color: var(--color-accent-soft); }
 .section-image { background: linear-gradient(rgba(20,18,14,0.82), rgba(20,18,14,0.82)), linear-gradient(135deg, #4a3d2b, #1a1611); color: var(--color-on-dark); background-size: cover; background-position: center; }
 .section-image .eyebrow { color: var(--color-accent-soft); }
 .two-col { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(32px, 6vw, 96px); margin-top: 2.5rem; align-items: start; }
@@ -94,26 +94,39 @@ p { margin: 0 0 1.1em; }
 .steps li { counter-increment: s; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-family: var(--font-display); text-transform: uppercase; font-size: 1.25rem; letter-spacing: 0.04em; }
 .steps li::before { content: "0" counter(s); color: var(--color-accent-soft); margin-right: 20px; font-size: 0.85rem; }
 
-/* org chart */
-.org { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-.org-card { background: var(--color-card); padding: 26px 24px; border-top: 3px solid var(--color-accent); box-shadow: var(--shadow-soft); transition: transform 0.4s var(--ease); }
+/* org chart diagram */
+.org-tree { --line: var(--color-accent); display: flex; flex-direction: column; align-items: center; margin-top: 1.5rem; }
+.org-root { background: var(--color-ink); color: #fff; padding: 20px 44px; text-align: center; position: relative; }
+.org-root h4 { margin: 0; font-size: 1.5rem; }
+.org-root .org-tag { color: var(--color-accent-soft); }
+.org-root::after { content: ""; position: absolute; left: 50%; top: 100%; width: 2px; height: 32px; background: var(--line); }
+.org-branches { list-style: none; margin: 32px 0 0; padding: 0; display: flex; gap: 16px; width: 100%; position: relative; }
+.org-branches::before { content: ""; position: absolute; top: 0; height: 2px; background: var(--line); left: calc(10% - 8px); right: calc(10% - 8px); }
+.org-card { flex: 1 1 0; min-width: 0; background: var(--color-card); padding: 26px 20px 20px; margin-top: 32px; position: relative; box-shadow: var(--shadow-soft); border-bottom: 3px solid var(--color-accent); transition: transform 0.4s var(--ease); }
+.org-card::before { content: ""; position: absolute; left: 50%; bottom: 100%; width: 2px; height: 32px; background: var(--line); }
 .org-card:hover { transform: translateY(-6px); }
-.org-card h4 { font-size: 1.3rem; margin-bottom: 4px; }
-.org-tag { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-accent); }
-.org-card ul { list-style: none; padding: 0; margin: 16px 0 0; font-size: 0.9rem; color: var(--color-ink-soft); }
+.org-card h4 { margin-bottom: 4px; }
+.org-tag { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-accent); }
+.org-card ul { list-style: none; padding: 0; margin: 14px 0 0; font-size: 0.85rem; color: var(--color-ink-soft); }
 .org-card li { padding: 6px 0; border-top: 1px solid var(--color-line); }
+@media (max-width: 960px) {
+  .org-branches { flex-direction: column; padding-left: 22px; margin-top: 32px; }
+  .org-branches::before { left: 0; right: auto; top: -32px; bottom: 0; width: 2px; height: auto; }
+  .org-card { margin-top: 0; }
+  .org-root { align-self: flex-start; }
+  .org-root::after { left: 0; }
+  .org-card::before { left: -22px; top: 28px; bottom: auto; width: 22px; height: 2px; }
+}
 
 /* team */
 .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); margin-top: 3rem; }
 .portrait { aspect-ratio: 4 / 3; margin-bottom: 24px; background: linear-gradient(135deg, #3a3023, #1c1812); display: grid; place-items: center; background-size: cover; background-position: center; }
 .portrait::before { content: attr(data-initials); font-family: var(--font-display); font-size: 5rem; color: var(--color-accent-soft); opacity: 0.6; }
 .portrait.has-img::before { display: none; }
-.person h3 { margin-top: 0; font-size: 2rem; }
+.person h3 { margin-top: 0; font-size: 1.6rem; letter-spacing: 0.04em; color: inherit; }
 .role { color: var(--color-accent-soft); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.78rem; }
 .meta { font-size: 0.9rem; opacity: 0.8; }
-details { margin-top: 1rem; }
-summary { cursor: pointer; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.78rem; color: var(--color-accent-soft); padding: 8px 0; }
-details p { font-size: 0.95rem; opacity: 0.9; }
+.bio-full p { opacity: 0.9; }
 
 /* north county list */
 .nc-list { margin: 0; padding: 0; list-style: none; counter-reset: nc; columns: 2; column-gap: 28px; font-size: 0.9rem; }
@@ -153,7 +166,7 @@ details p { font-size: 0.95rem; opacity: 0.9; }
 .modal-gallery > * { flex: 0 0 100%; aspect-ratio: 16 / 9; scroll-snap-align: start; object-fit: cover; }
 .modal-gallery .ph-slide { background: linear-gradient(135deg, var(--ph-a, #4a3d2b), var(--ph-b, #1a1611)); }
 .modal-body { padding: 32px clamp(20px, 4vw, 48px) 40px; }
-.modal-body h3 { margin-top: 0; font-size: 2.2rem; }
+.modal-body h3 { margin-top: 0; font-size: 1.9rem; letter-spacing: 0.03em; color: var(--color-ink); }
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 22px; margin: 0 0 1.4em; font-size: 0.9rem; }
 dt { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.72rem; color: var(--color-accent); padding-top: 3px; font-weight: 600; }
 dd { margin: 0; }
